@@ -11,18 +11,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Review {
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String content;
-    private int rating;
+    private int id;
+    private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "product_id") // Foreign key column in the Review table
-    private Product product; // Many reviews can belong to one product
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }
-
-

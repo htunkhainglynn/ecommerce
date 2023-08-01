@@ -19,19 +19,41 @@ import static java.util.stream.Collectors.toList;
 @NoArgsConstructor
 @Builder
 @Entity
-public class User implements UserDetails {
+public class Customer implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8_bin")
     private String username;
     private String password;
 
+    private String address;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @OneToMany(mappedBy = "customer",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Order> order;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "role", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private List<Role> roles;
+
+    @OneToMany(mappedBy = "customer",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Cart> cart;
+
+    @OneToOne(mappedBy = "customer",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private WishList wishList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

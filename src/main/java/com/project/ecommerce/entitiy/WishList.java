@@ -6,23 +6,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Review {
+public class WishList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
-    private int rating;
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id") // Foreign key column in the Review table
-    private Product product; // Many reviews can belong to one product
+    @OneToMany(mappedBy = "wishList", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products;
 }
-
-
