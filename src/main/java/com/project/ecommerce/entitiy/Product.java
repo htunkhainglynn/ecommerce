@@ -1,5 +1,6 @@
 package com.project.ecommerce.entitiy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,10 +26,12 @@ public class Product {
     private double price;
     private String imageUrl;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id") // Foreign key column in the Product table
     private Category category; // Many products can belong to one category
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>(); // One product can have multiple reviews
     @OneToMany(mappedBy = "product",
@@ -37,12 +40,14 @@ public class Product {
     )
     private List<Cart> cart;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     private List<OrderItem> orderItem;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "wishlist_id")
     private WishList wishList;

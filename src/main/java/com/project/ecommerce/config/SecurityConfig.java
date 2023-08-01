@@ -35,10 +35,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(request -> {
                     request
-                            .requestMatchers("/auth/signin").permitAll()
-                            .requestMatchers("/hello/user/**").hasAnyAuthority(Role.User.name(), Role.Admin.name())
-                            .requestMatchers("/hello/admin/**").hasAuthority(Role.Admin.name())
-                            .anyRequest().denyAll();
+//                            .requestMatchers("/auth/signin").permitAll()
+//                            .requestMatchers("/api/v1/**").permitAll()
+                            .anyRequest().permitAll();
                 });
 
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

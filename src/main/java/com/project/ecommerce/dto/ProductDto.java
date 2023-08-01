@@ -3,10 +3,12 @@ package com.project.ecommerce.dto;
 import com.project.ecommerce.entitiy.Category;
 import com.project.ecommerce.entitiy.Review;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @Data
+@NoArgsConstructor
 public class ProductDto {
     private Long id;
 

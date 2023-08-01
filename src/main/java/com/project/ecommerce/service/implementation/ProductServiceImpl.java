@@ -1,8 +1,10 @@
 package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.ProductDto;
+import com.project.ecommerce.entitiy.Product;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.service.ProductService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,30 +15,31 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
+    ModelMapper mapper;
+    @Autowired
     private ProductRepository repo;
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return null;
+        List<Product> products = repo.findAll();
+        return products.stream().map(product -> mapper.map(product, ProductDto.class)).toList();
     }
 
     @Override
-    public Optional<ProductDto> getProduct(Long id) {
-        return Optional.empty();
+    public Optional<ProductDto> getProductById(Long id) {
+        Optional<Product> optionalProduct = repo.findById(id);
+        Optional<ProductDto> productDto = optionalProduct.map(product -> mapper.map(product, ProductDto.class));
+        return productDto;
     }
 
     @Override
-    public ProductDto addProduct(ProductDto product) {
-        return null;
-    }
-
-    @Override
-    public ProductDto updateProduct(Long id) {
-        return null;
+    public ProductDto saveProduct(ProductDto productDto) {
+        Product product = mapper.map(productDto, Product.class);
+        return mapper.map(repo.save(product), ProductDto.class);
     }
 
     @Override
     public void deleteProduct(Long id) {
-
+        repo.deleteById(id);
     }
 }
