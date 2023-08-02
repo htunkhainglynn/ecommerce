@@ -1,12 +1,14 @@
 package com.project.ecommerce.controller;
 
 import com.project.ecommerce.dto.ReviewDto;
+import com.project.ecommerce.service.ProductService;
 import com.project.ecommerce.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +26,7 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReviewDto> getReviewById(Long id) {
+    public ResponseEntity<ReviewDto> getReviewById(@PathVariable Long id) {
         Optional<ReviewDto> result = reviewService.getReviewById(id);
         if(result.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -33,13 +35,15 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<ReviewDto> createReview(ReviewDto review) {
+    public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDto review) {
         ReviewDto result = reviewService.saveReview(review);
-        return ResponseEntity.ok(result);
+        return ResponseEntity
+                .created(URI.create("/api/v1/reviews/%d".formatted(result.getId())))
+                .body(result);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReviewDto> updateReview(Long id, ReviewDto review) {
+    public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewDto review) {
         Optional<ReviewDto> reviewDto = reviewService.getReviewById(id);
         if(reviewDto.isPresent()) {
             review.setId(id);
@@ -50,7 +54,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReview(Long id) {
+    public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
         return ResponseEntity.ok().build();
     }
