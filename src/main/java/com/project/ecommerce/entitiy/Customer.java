@@ -44,12 +44,6 @@ public class Customer implements UserDetails {
     @Enumerated(EnumType.STRING)
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "customer",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private List<Cart> cart;
-
     @OneToOne(mappedBy = "customer",
             cascade = CascadeType.ALL,
             orphanRemoval = true)

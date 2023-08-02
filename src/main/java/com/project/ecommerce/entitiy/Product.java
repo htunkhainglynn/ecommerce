@@ -33,11 +33,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Review> reviews;// One product can have multiple reviews
-    @OneToMany(mappedBy = "product",
-              cascade = CascadeType.ALL,
-              fetch = FetchType.LAZY
-    )
-    private List<Cart> cart;
 
     @JsonIgnore
     @OneToMany(mappedBy = "product",

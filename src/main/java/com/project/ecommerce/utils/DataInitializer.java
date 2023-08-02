@@ -37,8 +37,5 @@ public class DataInitializer {
                 .roles(Arrays.asList(Role.Admin))
                 .build()
         );
-
-        log.debug("printing all users...");
-//        this.users.findAll().forEach(v -> log.debug(" User :" + v.toString()));
     }
 }
