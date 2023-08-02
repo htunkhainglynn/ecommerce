@@ -6,21 +6,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Cart {
-
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int quantity;
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    private Long id;
+    private LocalDate date;
+    private String method;
+    private double amount;
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Order> orders;
 }

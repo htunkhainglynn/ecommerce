@@ -29,4 +29,10 @@ public class Order {
     private Customer customer;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems;
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+    @ManyToOne
+    @JoinColumn(name = "shipping_id")
+    private Shipping shipping;
 }

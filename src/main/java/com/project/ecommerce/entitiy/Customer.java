@@ -54,6 +54,16 @@ public class Customer implements UserDetails {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private WishList wishList;
+    @OneToMany(mappedBy = "customer",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Payment> payment;
+    @OneToMany(mappedBy = "customer",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Shipping> shipping;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

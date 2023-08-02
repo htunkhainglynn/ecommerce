@@ -20,6 +20,7 @@ public class OrderItem {
     private LocalDate orderDate;
     @Column(name = "total_price")
     private double totalPrice;
+    private int quantity;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
