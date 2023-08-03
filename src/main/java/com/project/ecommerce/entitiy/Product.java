@@ -16,16 +16,28 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private String description;
     private double price;
     private String imageUrl;
-
+    private int stock;
+    @ManyToMany
+    @JoinTable(
+            name = "product_size",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "size_id")
+    )
+    private List<Size> sizes;
+    @ManyToMany
+    @JoinTable(
+            name = "product_color",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "color_id")
+    )
+    private List<Color> colors;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id") // Foreign key column in the Product table
@@ -45,4 +57,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "wishlist_id")
     private WishList wishList;
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 }

@@ -27,6 +27,14 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products = new ArrayList<>(); // One category can have multiple products
 
+    @ManyToMany
+    @JoinTable(
+            name = "category_brand",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "brand_id")
+    )
+    private List<Brand> brands;
+
     public void addProduct(Product product) {
         products.add(product);
         product.setCategory(this);
