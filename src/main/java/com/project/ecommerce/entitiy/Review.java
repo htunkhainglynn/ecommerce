@@ -25,6 +25,7 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "product_id") // Foreign key column in the Review table
     private Product product; // Many reviews can belong to one product
+
 }
 
 

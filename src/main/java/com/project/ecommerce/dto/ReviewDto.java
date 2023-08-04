@@ -1,5 +1,6 @@
 package com.project.ecommerce.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.ecommerce.entitiy.Review;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ public class ReviewDto {
     private Long id;
     private String content;
     private int rating;
+    @JsonIgnore
     private Long product_id;
 
     public ReviewDto(Review review) {

@@ -34,8 +34,8 @@ public class ReviewController {
         return  ResponseEntity.ok(result.get());
     }
 
-    @PostMapping
-    public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDto review) {
+    @PostMapping("/product/{productId}")
+    public ResponseEntity<ReviewDto> createReviewByProductId(@PathVariable Long productId, @RequestBody ReviewDto review) {
         ReviewDto result = reviewService.saveReview(review);
         return ResponseEntity
                 .created(URI.create("/api/v1/reviews/%d".formatted(result.getId())))

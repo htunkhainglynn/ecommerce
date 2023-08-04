@@ -1,5 +1,6 @@
 package com.project.ecommerce.dto;
 
+import com.project.ecommerce.entitiy.Brand;
 import com.project.ecommerce.entitiy.Category;
 import com.project.ecommerce.entitiy.Review;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class ProductDto {
     private String description;
     private double price;
     private MultipartFile imageUrl;
-    private Category category;
-    private List<Review> reviews;
+    private CategoryDto category;
+    private BrandDto brand;
+    private List<ReviewDto> reviews;
 }

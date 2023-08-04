@@ -1,13 +1,23 @@
 package com.project.ecommerce.service;
 
-import com.project.ecommerce.dto.ProductDto;
+import com.project.ecommerce.dto.*;
+import com.project.ecommerce.paginated.response.PaginatedResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
 
-    public List<ProductDto> getAllProducts();
+    public Page<ProductDto> getAllProducts(String name,
+                                           String category,
+                                           List<String> brands,
+                                           Integer minPrice,
+                                           Integer maxPrice,
+                                           List<String> productSizes,
+                                           List<Integer> ratings,
+                                           Optional<Integer> page,
+                                           Optional<Integer> size);
     public Optional<ProductDto> getProductById(Long id);
     public ProductDto saveProduct(ProductDto product);
     public void deleteProduct(Long id);

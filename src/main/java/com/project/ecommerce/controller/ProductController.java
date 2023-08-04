@@ -1,9 +1,11 @@
 package com.project.ecommerce.controller;
 
-import com.project.ecommerce.dto.ProductDto;
+import com.project.ecommerce.dto.*;
+import com.project.ecommerce.paginated.response.PaginatedResponse;
 import com.project.ecommerce.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,20 +22,28 @@ public class ProductController {
 
     // Endpoint to get all products
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
-        log.info("Get all products");
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<Page<ProductDto>> getAllProducts(
+                            @RequestParam(required = false) String name,
+                            @RequestParam(required = false) String category,
+                            @RequestParam(required = false) List<String> brands,
+                            @RequestParam(required = false) Integer minPrice,
+                            @RequestParam(required = false) Integer maxPrice,
+                            @RequestParam(required = false) List<String> productSizes,
+                            @RequestParam(required = false) List<Integer> ratings,
+                            @RequestParam Optional<Integer> page,
+                            @RequestParam Optional<Integer> size) {
+        Page<ProductDto> result = productService.getAllProducts(
+                name, category, brands, minPrice, maxPrice, productSizes, ratings, page, size);
+
+
+        return ResponseEntity.ok(result);
     }
 
     // Endpoint to get a product by ID
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         Optional<ProductDto> result = productService.getProductById(id);
-        if (result.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(result.get());
-        }
+        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Endpoint to create a new product

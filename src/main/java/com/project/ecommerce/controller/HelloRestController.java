@@ -1,6 +1,7 @@
 package com.project.ecommerce.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,8 @@ public class HelloRestController {
 
     @GetMapping("user")
     public String helloUser() {
-        return "Hello User";
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return username;
     }
 
     @GetMapping("admin")
