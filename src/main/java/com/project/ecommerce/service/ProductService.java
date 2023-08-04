@@ -1,7 +1,6 @@
 package com.project.ecommerce.service;
 
 import com.project.ecommerce.dto.*;
-import com.project.ecommerce.paginated.response.PaginatedResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

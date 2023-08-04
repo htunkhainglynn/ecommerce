@@ -30,8 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Optional<CategoryDto> getCategoryById(Long id) {
         Optional<Category> optionalCategory = repo.findById(id);
-        Optional<CategoryDto> categoryDto = optionalCategory.map(category -> mapper.map(category, CategoryDto.class));
-        return categoryDto;
+        return optionalCategory.map(category -> mapper.map(category, CategoryDto.class));
     }
 
     @Override

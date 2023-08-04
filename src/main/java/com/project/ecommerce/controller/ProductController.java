@@ -1,7 +1,6 @@
 package com.project.ecommerce.controller;
 
 import com.project.ecommerce.dto.*;
-import com.project.ecommerce.paginated.response.PaginatedResponse;
 import com.project.ecommerce.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -35,11 +35,13 @@ public class AuthController {
             String token = jwtTokenProvider
                     .createToken(username,
                             this.users.findOneByUsername(username)
-                                    .get()
-                                    .getRoles()
-                                    .stream()
-                                    .map(Role::name)
-                                    .collect(Collectors.toList()));
+                                    .isPresent()?
+                                    this.users.findOneByUsername(username)
+                                            .get()
+                                            .getRoles()
+                                            .stream()
+                                            .map(Role::name)
+                                            .collect(Collectors.toList()) : null);
 
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);

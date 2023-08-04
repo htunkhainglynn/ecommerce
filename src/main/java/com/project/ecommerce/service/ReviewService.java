@@ -1,7 +1,6 @@
 package com.project.ecommerce.service;
 
 import com.project.ecommerce.dto.ReviewDto;
-import com.project.ecommerce.entitiy.Review;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,9 +1,7 @@
 package com.project.ecommerce.config;
 
-import com.project.ecommerce.entitiy.Role;
 import com.project.ecommerce.security.JwtTokenFilter;
 import com.project.ecommerce.security.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,24 +20,21 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
     @Bean
-    SecurityFilterChain config(HttpSecurity http) throws Exception {
+    SecurityFilterChain config(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
         http.cors(cors -> corsFilter());
         http.httpBasic(httpBasic -> httpBasic.disable());
         http.csrf(csrf -> csrf.disable());
         http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http
-                .authorizeHttpRequests(request -> {
+                .authorizeHttpRequests(request ->
                     request
                             .requestMatchers("/auth/signin").permitAll()
                             .requestMatchers("/hello/user").authenticated()
 //                            .requestMatchers("/api/v1/**").permitAll()
-                            .anyRequest().permitAll();
-                });
+                            .anyRequest().permitAll()
+                );
 
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
