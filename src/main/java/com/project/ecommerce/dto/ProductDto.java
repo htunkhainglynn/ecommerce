@@ -1,8 +1,6 @@
 package com.project.ecommerce.dto;
 
-import com.project.ecommerce.entitiy.Brand;
-import com.project.ecommerce.entitiy.Category;
-import com.project.ecommerce.entitiy.Review;
+import com.project.ecommerce.entitiy.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,5 +18,9 @@ public class ProductDto {
     private MultipartFile imageUrl;
     private CategoryDto category;
     private BrandDto brand;
-    private List<ReviewDto> reviews;
+
+    private List<Size> sizes;
+
+    private List<Color> colors;
+    private List<Review> reviews;
 }

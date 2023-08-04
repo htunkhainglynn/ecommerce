@@ -1,5 +1,6 @@
 package com.project.ecommerce.controller;
 
+import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.dto.ReviewDto;
 import com.project.ecommerce.service.ProductService;
 import com.project.ecommerce.service.ReviewService;
@@ -20,6 +21,9 @@ public class ReviewController {
     @Autowired
     ReviewService reviewService;
 
+    @Autowired
+    ProductService productService;
+
     @GetMapping
     public ResponseEntity<List<ReviewDto>> getAllReviews() {
         return ResponseEntity.ok(reviewService.getAllReviews());
@@ -36,10 +40,15 @@ public class ReviewController {
 
     @PostMapping("/product/{productId}")
     public ResponseEntity<ReviewDto> createReviewByProductId(@PathVariable Long productId, @RequestBody ReviewDto review) {
-        ReviewDto result = reviewService.saveReview(review);
-        return ResponseEntity
-                .created(URI.create("/api/v1/reviews/%d".formatted(result.getId())))
-                .body(result);
+        Optional<ProductDto> product = productService.getProductById(productId);
+        if (product.isPresent()) {
+            review.setProductId(productId);
+            ReviewDto result = reviewService.saveReview(review);
+            return ResponseEntity
+                    .created(URI.create("/api/v1/reviews/%d".formatted(result.getId())))
+                    .body(result);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")

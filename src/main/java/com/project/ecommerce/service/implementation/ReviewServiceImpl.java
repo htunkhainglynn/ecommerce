@@ -40,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewDto saveReview(ReviewDto review) {
-        Optional<Product> product = productRepo.findById(review.getProduct_id());
+        Optional<Product> product = productRepo.findById(review.getProductId());
         if(product.isPresent()) {
             Review reviewEntity = mapper.map(review, Review.class);
             reviewEntity.setProduct(product.get());

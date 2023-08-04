@@ -12,12 +12,11 @@ public class ReviewDto {
     private String content;
     private int rating;
     @JsonIgnore
-    private Long product_id;
+    private Long productId;
 
     public ReviewDto(Review review) {
         this.id = review.getId();
         this.content = review.getContent();
         this.rating = review.getRating();
-        this.product_id = review.getProduct().getId();
     }
 }

@@ -43,10 +43,11 @@ public class ProductServiceImpl implements ProductService {
 
         PageRequest pageRequest = PageRequest.of(
                 page.orElse(0),
-                size.orElse(5));  // custom rating
+                size.orElse(5),
+                Sort.by("price").descending());  // custom rating
 
         Specification<Product> specification = (root, query, cb) -> {
-            return cb.conjunction();
+            return cb.conjunction();  // select * from product;
         };
 
         if(StringUtils.hasLength(name)) {
