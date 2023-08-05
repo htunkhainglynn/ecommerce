@@ -1,6 +1,6 @@
 package com.project.ecommerce.controller;
 
-import com.project.ecommerce.dto.*;
+import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +28,12 @@ public class ProductController {
                             @RequestParam(required = false) Integer minPrice,
                             @RequestParam(required = false) Integer maxPrice,
                             @RequestParam(required = false) List<String> productSizes,
-                            @RequestParam(required = false) List<Integer> ratings,
+                            @RequestParam(required = false) List<Double> ratings,
                             @RequestParam Optional<Integer> page,
                             @RequestParam Optional<Integer> size) {
+
         Page<ProductDto> result = productService.getAllProducts(
                 name, category, brands, minPrice, maxPrice, productSizes, ratings, page, size);
-
 
         return ResponseEntity.ok(result);
     }

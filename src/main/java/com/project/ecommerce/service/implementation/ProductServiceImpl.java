@@ -1,14 +1,17 @@
 package com.project.ecommerce.service.implementation;
 
-import com.project.ecommerce.dto.*;
+import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.entitiy.Product;
+import com.project.ecommerce.entitiy.Review;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.service.ProductService;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
@@ -32,14 +36,13 @@ public class ProductServiceImpl implements ProductService {
             Integer minPrice,
             Integer maxPrice,
             List<String> productSizes,
-            List<Integer> ratings,
+            List<Double> ratings,
             Optional<Integer> page,
             Optional<Integer> size) {
 
         PageRequest pageRequest = PageRequest.of(
                 page.orElse(0),
-                size.orElse(5),
-                Sort.by("price").descending());  // custom rating
+                size.orElse(5));  // custom rating
 
         Specification<Product> specification = (root, query, cb) -> cb.conjunction();
 
@@ -76,8 +79,17 @@ public class ProductServiceImpl implements ProductService {
         }
 
         if (null != ratings) {
-            specification = specification.and((root, query, cb)
-                    -> root.get("rating").in(ratings));
+            double minRating = ratings.stream().min(Double::compareTo).get();
+            double maxRating = ratings.stream().max(Double::compareTo).get();
+            specification = specification.and((root, query, cb) ->{
+
+                Subquery<Double> subquery = query.subquery(Double.class);  // select -> type: Double (single value)
+                Root<Review> subRoot = subquery.from(Review.class); // from review r
+                subquery.select(cb.avg(subRoot.get("rating").as(Double.class))); // complete select -> select avg(rating)
+                subquery.where(cb.equal(subRoot.get("product"), root)); // where r.product_id = p.id(root is product)
+
+                return cb.between(subquery.getSelection(), minRating, maxRating); // subquery.getSelection() gets avg
+            });
         }
 
         return repo.findAll(specification, pageRequest)

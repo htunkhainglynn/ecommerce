@@ -1,15 +1,12 @@
 package com.project.ecommerce.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,6 +28,7 @@ public class Product {
             name = "product_size",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "size_id")
+
     )
     private List<Size> sizes;
     @ManyToMany
@@ -62,4 +60,16 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private Brand brand;
+
+    @Transient
+    private double averageRating;  // for json return
+
+    @PostLoad
+    private void calculateAverageRating() {
+        if (reviews != null && !reviews.isEmpty()) {
+            averageRating = reviews.stream().mapToDouble(Review::getRating).sum() / reviews.size();
+        } else {
+            averageRating = 0.0; // Or any other default value when no reviews are available
+        }
+    }
 }

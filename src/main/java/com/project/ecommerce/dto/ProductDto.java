@@ -15,12 +15,14 @@ public class ProductDto {
     private String name;
     private String description;
     private double price;
+    private int stock;
     private MultipartFile imageUrl;
     private CategoryDto category;
-    private BrandDto brand;
+    private Brand brand;
 
     private List<Size> sizes;
 
     private List<Color> colors;
     private List<Review> reviews;
+    private double averageRating;
 }

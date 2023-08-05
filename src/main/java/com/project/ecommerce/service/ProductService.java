@@ -1,6 +1,6 @@
 package com.project.ecommerce.service;
 
-import com.project.ecommerce.dto.*;
+import com.project.ecommerce.dto.ProductDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public interface ProductService {
                                            Integer minPrice,
                                            Integer maxPrice,
                                            List<String> productSizes,
-                                           List<Integer> ratings,
+                                           List<Double> ratings,
                                            Optional<Integer> page,
                                            Optional<Integer> size);
     public Optional<ProductDto> getProductById(Long id);

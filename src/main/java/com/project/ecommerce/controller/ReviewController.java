@@ -54,6 +54,7 @@ public class ReviewController {
     @PutMapping("/{id}")
     public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewDto review) {
         Optional<ReviewDto> reviewDto = reviewService.getReviewById(id);
+        log.info("ProductId: ", review.getProductId());
         if(reviewDto.isPresent()) {
             review.setId(id);
             ReviewDto result = reviewService.saveReview(review);
