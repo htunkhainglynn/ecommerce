@@ -1,0 +1,7 @@
+
+L
+java:S3740"/Provide the parametrized type for this generic.(áŞµ÷8Ë¸Îˆœ1
+m
+java:S3655'"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(ñŸ¡Å8Ø¸Îˆœ1
+o
+java:S6204,"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(óæç8ã¸Îˆœ1
