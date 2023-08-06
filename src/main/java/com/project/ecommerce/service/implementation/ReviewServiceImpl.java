@@ -6,6 +6,7 @@ import com.project.ecommerce.entitiy.Review;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ReviewRepository;
 import com.project.ecommerce.service.ReviewService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
         return optionalReview.map(ReviewDto::new);
     }
 
+    @Transactional
     @Override
     public ReviewDto saveReview(ReviewDto review) {
         Optional<Product> product = productRepo.findById(review.getProductId());

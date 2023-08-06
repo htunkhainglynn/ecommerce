@@ -24,6 +24,6 @@ public class Category {
     private String name;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "category")
-    private Organization organization; // Many categories can belong to one organization
+    @OneToMany(mappedBy = "category")
+    private List<Organization> organization; // Many categories can belong to one organization
 }

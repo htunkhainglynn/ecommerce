@@ -12,24 +12,25 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class ProductDto {
+
     private Long id;
+
     private String name;
+
     private String description;
-    private double price;
-    private int stock;
+
     private String imageUrl;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Long category_id;
 
-    private Category category;
-    private String brand;
+    private boolean inStock;
 
-    private String size;
+    private boolean available;
 
-    private String color;
+    private List<ProductVariant> productVariants;
 
-    private int variants;
+    private Organization organization;
+
     private List<Review> reviews;
+
     private double averageRating;
 
 }

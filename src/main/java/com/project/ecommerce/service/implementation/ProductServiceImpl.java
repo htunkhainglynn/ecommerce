@@ -3,9 +3,12 @@ package com.project.ecommerce.service.implementation;
 import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.entitiy.Category;
 import com.project.ecommerce.entitiy.Product;
+import com.project.ecommerce.entitiy.ProductVariant;
 import com.project.ecommerce.entitiy.Review;
 import com.project.ecommerce.repo.CategoryRepository;
+import com.project.ecommerce.repo.OrganizationRepository;
 import com.project.ecommerce.repo.ProductRepository;
+import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.service.ProductService;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
@@ -31,7 +34,13 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository repo;
 
     @Autowired
+    private OrganizationRepository organizationRepository;
+
+    @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductVariantRepository productVariantRepository;
 
     @Override
     public Page<ProductDto> getAllProducts(
@@ -116,10 +125,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto saveProduct(ProductDto productDto) {
-        Optional<Category> category = categoryRepository.findById(productDto.getCategory_id());
-        productDto.setCategory(category.get());
+        organizationRepository.save(productDto.getOrganization());
         Product product = mapper.map(productDto, Product.class);
-        return mapper.map(repo.save(product), ProductDto.class);
+        product = repo.save(product);
+        saveProductVariants(product, product.getProductVariants());
+        return mapper.map(product, ProductDto.class);
+    }
+
+    private void saveProductVariants(Product product, List<ProductVariant> productVariants) {
+    	productVariants.forEach(productVariant -> productVariant.setProduct(product));
+    	productVariants.forEach(productVariantRepository::save);
     }
 
     @Override

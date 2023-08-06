@@ -29,7 +29,11 @@ public class Product {
 
     private String imageUrl;
 
+    @Column(columnDefinition = "boolean default false")
     private boolean available;
+
+    @Column(columnDefinition = "boolean default true")
+    private boolean inStock;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductVariant> productVariants;

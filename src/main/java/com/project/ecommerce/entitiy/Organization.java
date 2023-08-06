@@ -1,5 +1,6 @@
 package com.project.ecommerce.entitiy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -23,9 +24,10 @@ public class Organization {
     @NotNull
     private String vendor;
 
-    @OneToOne
+    @ManyToOne
     private Category category;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "organization")
     private List<Product> products;
 }
