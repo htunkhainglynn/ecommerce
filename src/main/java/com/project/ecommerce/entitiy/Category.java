@@ -24,15 +24,6 @@ public class Category {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products; // One category can have multiple products
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "category_brand",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "brand_id")
-    )
-    private List<Brand> brands;
+    @OneToOne(mappedBy = "category")
+    private Organization organization; // Many categories can belong to one organization
 }

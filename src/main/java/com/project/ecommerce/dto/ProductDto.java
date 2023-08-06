@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductDto {
     private Long id;
-    private String code;
     private String name;
     private String description;
     private double price;
@@ -28,26 +27,9 @@ public class ProductDto {
     private String size;
 
     private String color;
+
+    private int variants;
     private List<Review> reviews;
     private double averageRating;
 
-    @Override
-    public String toString() {
-        return "ProductDto{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", stock=" + stock +
-                ", imageUrl=" + imageUrl +
-                ", category_id=" + category_id +
-                ", category=" + category +
-                ", brand='" + brand + '\'' +
-                ", size='" + size + '\'' +
-                ", color='" + color + '\'' +
-                ", reviews=" + reviews +
-                ", averageRating=" + averageRating +
-                '}';
-    }
 }

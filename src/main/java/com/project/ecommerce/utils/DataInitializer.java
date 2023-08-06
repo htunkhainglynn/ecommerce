@@ -1,10 +1,8 @@
 package com.project.ecommerce.utils;
 
-import com.project.ecommerce.entitiy.Brand;
 import com.project.ecommerce.entitiy.Category;
 import com.project.ecommerce.entitiy.Customer;
 import com.project.ecommerce.entitiy.Role;
-import com.project.ecommerce.repo.BrandRepository;
 import com.project.ecommerce.repo.CategoryRepository;
 import com.project.ecommerce.repo.CustomerRepository;
 import jakarta.annotation.PostConstruct;
@@ -24,13 +22,7 @@ public class DataInitializer {
 
     @Autowired
     CustomerRepository userRepo;
-//    @Autowired
-//    ColorRepository colorRepo;
-//    @Autowired
-//    SizeRepository sizeRepo;
 
-    @Autowired
-    BrandRepository brandRepo;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -82,18 +74,5 @@ public class DataInitializer {
 //                    .build());
 //        });
 
-        List<String> brands = new ArrayList<>(List.of(
-                "Nike", "Adidas", "Puma", "Reebok", "Vans",
-                "Converse", "New Balance", "Fila", "Under Armour", "Skechers",
-                "Apple", "Samsung", "Huawei", "Xiaomi", "Oppo", "Vivo", "Realme", "OnePlus",
-                "Sony", "LG", "Panasonic", "Toshiba", "Sharp", "Philips", "Hisense", "Skyworth",
-                "Canon", "Nikon", "Sony", "Fujifilm", "Panasonic", "Olympus", "Leica", "GoPro",
-                "Dell", "HP", "Lenovo", "Asus", "Acer", "Microsoft", "MSI", "Razer"
-        ));
-        brands.forEach(brand -> {
-            brandRepo.save(Brand.builder()
-                    .name(brand)
-                    .build());
-        });
     }
 }

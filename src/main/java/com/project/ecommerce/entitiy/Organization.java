@@ -1,7 +1,7 @@
 package com.project.ecommerce.entitiy;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,13 +14,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Brand {
+public class Organization {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
+    private int id;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "brands")
-    private List<Category> categories;
+    @NotNull
+    private String vendor;
+
+    @OneToOne
+    private Category category;
+
+    @OneToMany(mappedBy = "organization")
+    private List<Product> products;
 }

@@ -2,6 +2,7 @@ package com.project.ecommerce.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,42 +16,36 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, updatable = false)
-    private String code;
+    @NotNull
     private String name;
+
+    @NotNull
     private String description;
-    private double price;
+
     private String imageUrl;
-    private int stock;
 
-    private String size;
+    private boolean available;
 
-    private String color;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ProductVariant> productVariants;
+
+    @NotNull
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "category_id") // Foreign key column in the Product table
-    private Category category; // Many products can belong to one category
+    private Organization organization; // Many products can belong to one category
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Review> reviews;// One product can have multiple reviews
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
-    )
-    private List<OrderItem> orderItem;
-
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "wishlist_id")
     private WishList wishList;
-
-    private String brand;
 
     @Transient
     private double averageRating;  // for json return

@@ -25,6 +25,7 @@ public class ProductController {
                             @RequestParam(required = false) String name,
                             @RequestParam(required = false) String category,
                             @RequestParam(required = false) List<String> brands,
+                            @RequestParam(required = false) String color,
                             @RequestParam(required = false) Integer minPrice,
                             @RequestParam(required = false) Integer maxPrice,
                             @RequestParam(required = false) List<String> productSizes,
@@ -33,7 +34,7 @@ public class ProductController {
                             @RequestParam Optional<Integer> size) {
 
         Page<ProductDto> result = productService.getAllProducts(
-                name, category, brands, minPrice, maxPrice, productSizes, ratings, page, size);
+                name, category, brands, color, minPrice, maxPrice, productSizes, ratings, page, size);
 
         return ResponseEntity.ok(result);
     }
@@ -43,12 +44,6 @@ public class ProductController {
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         Optional<ProductDto> result = productService.getProductById(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/code/{code}")
-    public ResponseEntity<List<ProductDto>> getProductByCode(@PathVariable String code) {
-        List<ProductDto> result = productService.getProductByCode(code);
-        return ResponseEntity.ok(result);
     }
 
     // Endpoint to create a new product

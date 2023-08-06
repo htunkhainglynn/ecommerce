@@ -11,6 +11,7 @@ public interface ProductService {
     public Page<ProductDto> getAllProducts(String name,
                                            String category,
                                            List<String> brands,
+                                           String color,
                                            Integer minPrice,
                                            Integer maxPrice,
                                            List<String> productSizes,
@@ -21,5 +22,4 @@ public interface ProductService {
     public ProductDto saveProduct(ProductDto product);
     public void deleteProduct(Long id);
 
-    public List<ProductDto> getProductByCode(String code);
 }

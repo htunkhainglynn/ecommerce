@@ -38,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
             String name,
             String category,
             List<String> brands,
+            String color,
             Integer minPrice,
             Integer maxPrice,
             List<String> productSizes,
@@ -67,6 +68,11 @@ public class ProductServiceImpl implements ProductService {
         if(null != brands) {
             specification = specification.and((root, query, cb)
                     -> root.get("brand").get("name").in(brands));
+        }
+
+        if (StringUtils.hasLength(color)) {
+            specification = specification.and((root, query, cb)
+                    -> cb.like(cb.lower(root.get("color")), color.toLowerCase().concat("%")));
         }
 
         if (minPrice != null) {
@@ -121,11 +127,4 @@ public class ProductServiceImpl implements ProductService {
         repo.deleteById(id);
     }
 
-    @Override
-    public List<ProductDto> getProductByCode(String code) {
-        List<Product> products = repo.findByCodeLike(code.concat("%"));
-        return products.stream()
-                .map(product -> mapper.map(product, ProductDto.class))
-                .toList();
-    }
 }
