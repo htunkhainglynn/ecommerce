@@ -1,7 +1,7 @@
 # Ecommerce
 
-#Sample Data 
-##insert to database
+# SampleData 
+## insert to database
 
 INSERT INTO category (name) VALUES ('Electronics');
 INSERT INTO category (name) VALUES ('Fashion');
