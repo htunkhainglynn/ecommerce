@@ -1,8 +1,10 @@
 package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.ProductDto;
+import com.project.ecommerce.entitiy.Category;
 import com.project.ecommerce.entitiy.Product;
 import com.project.ecommerce.entitiy.Review;
+import com.project.ecommerce.repo.CategoryRepository;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.service.ProductService;
 import jakarta.persistence.criteria.Root;
@@ -28,6 +30,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository repo;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     public Page<ProductDto> getAllProducts(
             String name,
@@ -44,8 +49,9 @@ public class ProductServiceImpl implements ProductService {
                 page.orElse(0),
                 size.orElse(5));  // custom rating
 
-        Specification<Product> specification = (root, query, cb) -> cb.conjunction();
-
+        Specification<Product> specification = (root, query, cb) ->
+//                cb.like(cb.lower(root.get("code")), "%" + "#0");
+                  cb.conjunction();
 
         if(StringUtils.hasLength(name)) {
             specification = specification.and((root, query, cb)
@@ -104,6 +110,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto saveProduct(ProductDto productDto) {
+        Optional<Category> category = categoryRepository.findById(productDto.getCategory_id());
+        productDto.setCategory(category.get());
         Product product = mapper.map(productDto, Product.class);
         return mapper.map(repo.save(product), ProductDto.class);
     }
@@ -111,5 +119,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         repo.deleteById(id);
+    }
+
+    @Override
+    public List<ProductDto> getProductByCode(String code) {
+        List<Product> products = repo.findByCodeLike(code.concat("%"));
+        return products.stream()
+                .map(product -> mapper.map(product, ProductDto.class))
+                .toList();
     }
 }

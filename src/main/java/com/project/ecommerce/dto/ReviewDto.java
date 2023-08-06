@@ -13,7 +13,7 @@ public class ReviewDto {
     private String content;
     private int rating;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // use only for post
     private Long productId;
 
     public ReviewDto(Review review) {

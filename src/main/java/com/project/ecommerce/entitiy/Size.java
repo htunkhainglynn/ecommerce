@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class Size {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String name;
-    @JsonIgnore
-    @ManyToMany(mappedBy = "sizes")
-    private List<Product> product;
-}
+//@Entity
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Builder
+//public class Size {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
+//    private String name;
+//    @JsonIgnore
+////    @OneToOne(mappedBy = "size")
+//    private Product product;
+//}

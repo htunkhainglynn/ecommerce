@@ -27,6 +27,7 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products; // One category can have multiple products
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "category_brand",

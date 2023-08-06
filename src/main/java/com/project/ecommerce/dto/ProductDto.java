@@ -1,5 +1,6 @@
 package com.project.ecommerce.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecommerce.entitiy.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,17 +13,41 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductDto {
     private Long id;
+    private String code;
     private String name;
     private String description;
     private double price;
     private int stock;
-    private MultipartFile imageUrl;
-    private CategoryDto category;
-    private Brand brand;
+    private String imageUrl;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long category_id;
 
-    private List<Size> sizes;
+    private Category category;
+    private String brand;
 
-    private List<Color> colors;
+    private String size;
+
+    private String color;
     private List<Review> reviews;
     private double averageRating;
+
+    @Override
+    public String toString() {
+        return "ProductDto{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", imageUrl=" + imageUrl +
+                ", category_id=" + category_id +
+                ", category=" + category +
+                ", brand='" + brand + '\'' +
+                ", size='" + size + '\'' +
+                ", color='" + color + '\'' +
+                ", reviews=" + reviews +
+                ", averageRating=" + averageRating +
+                '}';
+    }
 }

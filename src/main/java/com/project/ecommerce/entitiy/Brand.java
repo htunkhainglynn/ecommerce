@@ -21,10 +21,6 @@ public class Brand {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "brand")
-    private List<Product> products;
-
-    @JsonIgnore
     @ManyToMany(mappedBy = "brands")
     private List<Category> categories;
 }

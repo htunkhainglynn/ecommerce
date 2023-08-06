@@ -21,4 +21,5 @@ public interface ProductService {
     public ProductDto saveProduct(ProductDto product);
     public void deleteProduct(Long id);
 
+    public List<ProductDto> getProductByCode(String code);
 }

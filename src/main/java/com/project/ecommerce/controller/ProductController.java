@@ -45,9 +45,16 @@ public class ProductController {
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/code/{code}")
+    public ResponseEntity<List<ProductDto>> getProductByCode(@PathVariable String code) {
+        List<ProductDto> result = productService.getProductByCode(code);
+        return ResponseEntity.ok(result);
+    }
+
     // Endpoint to create a new product
     @PostMapping
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto product) {
+        log.info("productDto", product);
         ProductDto result = productService.saveProduct(product);
         return ResponseEntity.ok(result);
     }
