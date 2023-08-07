@@ -1,17 +1,12 @@
 package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.ProductDto;
-import com.project.ecommerce.entitiy.Category;
 import com.project.ecommerce.entitiy.Product;
 import com.project.ecommerce.entitiy.ProductVariant;
-import com.project.ecommerce.entitiy.Review;
-import com.project.ecommerce.repo.CategoryRepository;
 import com.project.ecommerce.repo.OrganizationRepository;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.service.ProductService;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +32,9 @@ public class ProductServiceImpl implements ProductService {
     private OrganizationRepository organizationRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
     private ProductVariantRepository productVariantRepository;
 
+    /*
     @Override
     public Page<ProductDto> getAllProducts(
             String name,
@@ -111,6 +104,46 @@ public class ProductServiceImpl implements ProductService {
 
                 return cb.between(subquery.getSelection(), minRating, maxRating); // subquery.getSelection() gets avg
             });
+        }
+
+        return repo.findAll(specification, pageRequest)
+                .map(product -> mapper.map(product, ProductDto.class));
+    }
+     */
+
+
+    @Override
+    public Page<ProductDto> getAllProducts(String keyword,
+                                           boolean isAvailable,
+                                           Optional<Integer> page,
+                                           Optional<Integer> size) {
+
+        PageRequest pageRequest = PageRequest.of(
+                page.orElse(0),
+                size.orElse(5));
+
+        Specification<Product> specification = (root, query, cb) -> cb.conjunction();
+
+        if (StringUtils.hasLength(keyword)) {
+            specification = specification.and((root, query, cb) ->
+                    cb.or(
+                            cb.like(cb.lower(root.get("name")), keyword.toLowerCase().concat("%")),
+                            cb.like(cb.lower(root.get("organization").get("vendor")), keyword.toLowerCase().concat("%")),
+                            cb.like(cb.lower(root.get("organization").get("category")), keyword.toLowerCase().concat("%"))
+                    )
+            );
+        }
+
+        if (isAvailable) {
+            specification = specification.and((root, query, cb) ->
+                    cb.equal(root.get("available"), true)
+            );
+        }
+
+        if(!isAvailable) {
+            	specification = specification.and((root, query, cb) ->
+                        cb.equal(root.get("available"), false)
+                );
         }
 
         return repo.findAll(specification, pageRequest)

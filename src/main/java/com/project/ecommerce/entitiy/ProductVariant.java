@@ -25,8 +25,8 @@ public class ProductVariant{
 
     private String color;
 
-    @Column(columnDefinition = "int default 0")
-    private int stock;
+    @Column(columnDefinition = "int default 1")
+    private int quantity;
 
     @Column(columnDefinition = "double default 0.0")
     private double price;

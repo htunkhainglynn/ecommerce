@@ -24,8 +24,7 @@ public class Organization {
     @NotNull
     private String vendor;
 
-    @ManyToOne
-    private Category category;
+    private String category;
 
     @JsonIgnore
     @OneToMany(mappedBy = "organization")

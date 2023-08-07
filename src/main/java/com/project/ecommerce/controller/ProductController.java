@@ -19,7 +19,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    // Endpoint to get all products
+    /*
     @GetMapping
     public ResponseEntity<Page<ProductDto>> getAllProducts(
                             @RequestParam(required = false) String name,
@@ -38,6 +38,19 @@ public class ProductController {
 
         return ResponseEntity.ok(result);
     }
+     */
+
+    @GetMapping
+    public ResponseEntity<Page<ProductDto>> getAllProducts
+            (@RequestParam(required = false) String keyword,
+             @RequestParam(required = false) boolean isAvailable,
+             @RequestParam Optional<Integer> page,
+             @RequestParam Optional<Integer> size) {
+
+        Page<ProductDto> result = productService.getAllProducts(keyword, isAvailable, page, size);
+        return ResponseEntity.ok(result);
+    }
+
 
     // Endpoint to get a product by ID
     @GetMapping("/{id}")

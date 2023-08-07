@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
-
+    /*
     public Page<ProductDto> getAllProducts(String name,
                                            String category,
                                            List<String> brands,
@@ -17,6 +17,10 @@ public interface ProductService {
                                            List<String> productSizes,
                                            List<Double> ratings,
                                            Optional<Integer> page,
+                                           Optional<Integer> size);
+
+     */
+    public Page<ProductDto> getAllProducts(String keyword, boolean isAvailable, Optional<Integer> page,
                                            Optional<Integer> size);
     public Optional<ProductDto> getProductById(Long id);
     public ProductDto saveProduct(ProductDto product);

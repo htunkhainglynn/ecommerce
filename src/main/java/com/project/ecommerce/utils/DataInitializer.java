@@ -1,9 +1,7 @@
 package com.project.ecommerce.utils;
 
-import com.project.ecommerce.entitiy.Category;
 import com.project.ecommerce.entitiy.Customer;
 import com.project.ecommerce.entitiy.Role;
-import com.project.ecommerce.repo.CategoryRepository;
 import com.project.ecommerce.repo.CustomerRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -12,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Component
 @Slf4j
@@ -26,8 +22,6 @@ public class DataInitializer {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Autowired
-    CategoryRepository categoryRepository;
 
     @Transactional
     @PostConstruct
@@ -46,14 +40,14 @@ public class DataInitializer {
                 .build()
         );
 
-        List<String> categories = new ArrayList<>(List.of(
-                "Electronics", "Fashion", "Home", "Appliances", "Toys", "Beauty", "Sports", "Automotive", "Other"
-        ));
-        categories.forEach(category -> {
-            categoryRepository.save(Category.builder()
-                    .name(category)
-                    .build());
-        });
+//        List<String> categories = new ArrayList<>(List.of(
+//                "Electronics", "Fashion", "Home", "Appliances", "Toys", "Beauty", "Sports", "Automotive", "Other"
+//        ));
+//        categories.forEach(category -> {
+//            categoryRepository.save(Category.builder()
+//                    .name(category)
+//                    .build());
+//        });
 
 //        List<String> colors = new ArrayList<>(List.of(
 //                "Red", "Green", "Blue", "Yellow", "Black", "White", "Orange", "Purple", "Brown", "Pink"
