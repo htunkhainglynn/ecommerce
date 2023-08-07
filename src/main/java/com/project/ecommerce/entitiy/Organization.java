@@ -17,6 +17,7 @@ import java.util.List;
 @Builder
 public class Organization {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
