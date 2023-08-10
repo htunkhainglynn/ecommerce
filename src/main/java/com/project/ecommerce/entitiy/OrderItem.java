@@ -6,25 +6,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class OrderItem {
-    @EmbeddedId
-    private OrderItemId id;
-    @Column(name = "order_date")
-    private LocalDate orderDate;
-    @Column(name = "total_price")
-    private double totalPrice;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private int quantity;
+
+    @OneToOne
+    private ProductVariant productVariant;
+
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private ProductVariant product;
-    @ManyToOne
-    @JoinColumn(name = "order_id", insertable=false, updatable=false)
+    @JoinColumn(name = "order_id")
     private Order order;
+
+    public OrderItem(ProductVariant productVariant, int quantity, Order order) {
+        this.productVariant = productVariant;
+        this.quantity = quantity;
+        this.order = order;
+    }
 }

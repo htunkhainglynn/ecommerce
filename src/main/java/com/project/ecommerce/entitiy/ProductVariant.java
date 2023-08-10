@@ -19,7 +19,7 @@ public class ProductVariant{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String size;
 
@@ -36,10 +36,7 @@ public class ProductVariant{
     private Product product;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
-    )
-    private List<OrderItem> orderItem;
+    @OneToOne(mappedBy = "productVariant", cascade = CascadeType.ALL)
+    private OrderItem orderItem;
 
 }

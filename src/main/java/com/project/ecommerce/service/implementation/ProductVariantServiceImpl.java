@@ -40,26 +40,33 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
-    public ProductVariantDto createProductVariant(ProductVariantDto productVariantDto) {
+    public ProductVariantDto saveProductVariant(ProductVariantDto productVariantDto) {
         Optional<Product> product = productRepo.findById(productVariantDto.getProduct_id());
+        log.info("Saving product variant with product id: {}", productVariantDto.getProduct_id());
         if (product.isPresent()) {
             ProductVariant productVariant = modelMapper.map(productVariantDto, ProductVariant.class);
             productVariant.setProduct(product.get());
-            return modelMapper.map(repo.save(productVariant), ProductVariantDto.class);
+            return new ProductVariantDto(repo.save(productVariant));
         }
         throw new ProductException("Product not found");
     }
 
     @Override
     public void cacheProductVariant(ProductVariantCache productVariantCache) {
-        log.info("Caching product variant with id: {}", productVariantCache.getId());
-        String key = "ProductVariant:" + productVariantCache.getId();
+        log.info("Caching product variant with id: {}", productVariantCache.getProduct_id());
+        String key = "ProductVariant:" + productVariantCache.getProduct_id();
         redisTemplate.opsForValue().set(key, productVariantCache);
     }
 
     @Override
-    public List<ProductVariantCache> getAllProductVariantCache() {
-        Set<String> keys = redisTemplate.keys("ProductVariant:*");
+    public List<ProductVariantCache> getAllProductVariantCache(Integer id) {
+        Set<String> keys = redisTemplate.keys("ProductVariant:" + id);
         return redisTemplate.opsForValue().multiGet(keys);
+    }
+
+    @Override
+    public Optional<ProductVariantDto> getProductVariantById(Integer id) {
+        return repo.findById(id)
+                .map(ProductVariantDto::new);
     }
 }

@@ -20,9 +20,5 @@ public class Payment {
     private LocalDate date;
     private String method;
     private double amount;
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
-    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Order> orders;
+
 }

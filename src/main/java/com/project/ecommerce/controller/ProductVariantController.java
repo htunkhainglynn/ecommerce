@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
+
 
 @RestController
 @Slf4j
@@ -28,19 +28,20 @@ public class ProductVariantController {
         return ResponseEntity.ok(productVariantService.getAllProductVariants());
     }
 
-    @PostMapping
+    @PostMapping  // I use for update too sorry
     public ProductVariantDto createProductVariant(@RequestBody ProductVariantDto productVariantDto){
-        return productVariantService.createProductVariant(productVariantDto);
+        log.info("ProductVariantDto: {}", productVariantDto);
+        return productVariantService.saveProductVariant(productVariantDto);
     }
 
     @PostMapping("/cache")
     public void addProductVariantToCache(@RequestBody ProductVariantCache productVariantCache) {
+        log.info("ProductVariantDto: {}", productVariantCache);
         productVariantService.cacheProductVariant(productVariantCache);
     }
 
-    @GetMapping("/cache")
-    public ResponseEntity<List<ProductVariantCache>> getAllProductVariantCache() {
-        return ResponseEntity.ok(productVariantService.getAllProductVariantCache());
+    @GetMapping("/cache/{id}")
+    public ResponseEntity<List<ProductVariantCache>> getAllProductVariantCache(@PathVariable Integer id) {
+        return ResponseEntity.ok(productVariantService.getAllProductVariantCache(id));
     }
-
 }

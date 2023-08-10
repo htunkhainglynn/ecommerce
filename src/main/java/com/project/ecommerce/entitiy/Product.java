@@ -35,7 +35,7 @@ public class Product {
     @Column(columnDefinition = "boolean default true")
     private boolean inStock;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.DETACH}, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductVariant> productVariants;
 
     @NotNull

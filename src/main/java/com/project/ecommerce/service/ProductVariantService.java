@@ -4,14 +4,16 @@ import com.project.ecommerce.dto.ProductVariantCache;
 import com.project.ecommerce.dto.ProductVariantDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductVariantService {
-    ProductVariantDto createProductVariant(ProductVariantDto productVariantDto);
+    ProductVariantDto saveProductVariant(ProductVariantDto productVariantDto);
 
     void cacheProductVariant(ProductVariantCache productVariantCache);
 
     List<ProductVariantDto> getAllProductVariants();
 
-    List<ProductVariantCache> getAllProductVariantCache();
+    List<ProductVariantCache> getAllProductVariantCache(Integer id);
 
+    Optional<ProductVariantDto> getProductVariantById(Integer id);
 }

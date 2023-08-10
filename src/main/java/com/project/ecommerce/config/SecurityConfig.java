@@ -44,7 +44,7 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedMethod("*"); // Allow all methods (GET, POST, PUT, DELETE, etc.)
         config.addAllowedHeader("*"); // Allow all headers
         source.registerCorsConfiguration("/**", config);
