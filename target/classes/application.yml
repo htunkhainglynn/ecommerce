@@ -20,7 +20,6 @@ spring:
     cors:
       allowed-origins=http://localhost:3000
 
-
 security:
   jwt:
     token:
