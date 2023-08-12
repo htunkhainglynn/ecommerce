@@ -17,8 +17,16 @@ spring:
       port: 6379
       timeout: 60000ms
   mvc:
-    cors:
-      allowed-origins=http://localhost:3000
+    cors: allowed-origins=http://localhost:3000
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    template:
+      exchange: ecommerce-exchange
+      queue: ecommerce-queue
 
 security:
   jwt:

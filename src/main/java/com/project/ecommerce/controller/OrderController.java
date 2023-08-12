@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.ecommerce.dto.OrderDto;
 import com.project.ecommerce.service.OrderService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+    private RabbitTemplate rabbitTemplate;
 
     @GetMapping
     public ResponseEntity<List<OrderDto>> getAllOrders() {
@@ -39,8 +39,9 @@ public class OrderController {
 
         // change map to json
         ObjectMapper objectMapper = new ObjectMapper();
-        String jacksonData = objectMapper.writeValueAsString(notification);
-        messagingTemplate.convertAndSend("/topic/notifications", jacksonData);
+        String jsonNotification = objectMapper.writeValueAsString(notification);
+
+        rabbitTemplate.convertAndSend("ecommerce-exchange", "customer-admin", jsonNotification);
         return ok(result);
     }
 }
