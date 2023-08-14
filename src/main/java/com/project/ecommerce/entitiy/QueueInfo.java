@@ -6,23 +6,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WishList {
+@Entity
+public class QueueInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "queue_name")
+    private String queueName;
 
-    @OneToMany(mappedBy = "wishList", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products;
+    @Column(name = "routing_key")
+    private String routingKey;
+
+    @OneToOne
+    private User user;
 }

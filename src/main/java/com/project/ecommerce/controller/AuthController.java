@@ -2,7 +2,7 @@ package com.project.ecommerce.controller;
 
 import com.project.ecommerce.dto.AuthenticationRequest;
 import com.project.ecommerce.entitiy.Role;
-import com.project.ecommerce.repo.CustomerRepository;
+import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class AuthController {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
     @Autowired
-    CustomerRepository users;
+    UserRepository users;
     @PostMapping("/signin")
     public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
         try {

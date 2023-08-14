@@ -10,7 +10,7 @@ import javax.annotation.processing.Generated;
 public abstract class WishList_ {
 
 	public static volatile SingularAttribute<WishList, Long> id;
-	public static volatile SingularAttribute<WishList, Customer> customer;
+	public static volatile SingularAttribute<WishList, User> customer;
 	public static volatile ListAttribute<WishList, Product> products;
 
 	public static final String ID = "id";

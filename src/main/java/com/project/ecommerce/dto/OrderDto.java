@@ -25,12 +25,18 @@ public class OrderDto {
 
     private List<OrderItemDto> orderItems;
 
+    private Status status;
+
+    private Long user_id;
+
     public OrderDto(Order order) {
         this.orderId = order.getId();
         this.orderDate = order.getOrderDate();
         this.subTotal = order.getSubTotal();
         this.totalPrice = order.getTotalPrice();
         this.orderItems = new ArrayList<>();
+        this.status = order.getStatus();
+        this.user_id = order.getUser().getId();
         for(OrderItem orderItem : order.getOrderItems()) {
             this.orderItems.add(new OrderItemDto(orderItem));
         }

@@ -24,9 +24,7 @@ spring:
     port: 5672
     username: guest
     password: guest
-    template:
-      exchange: ecommerce-exchange
-      queue: ecommerce-queue
+    virtual-host: /
 
 security:
   jwt:

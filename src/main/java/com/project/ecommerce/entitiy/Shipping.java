@@ -28,8 +28,8 @@ public class Shipping {
     @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
     @OneToMany(mappedBy = "shipping",
         cascade = {CascadeType.PERSIST, CascadeType.MERGE},
         fetch = FetchType.LAZY)

@@ -30,8 +30,8 @@ public class Order {
     private double totalPrice;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "order", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
@@ -40,6 +40,6 @@ public class Order {
     @JoinColumn(name = "shipping_id")
     private Shipping shipping;
 
-    @Column(columnDefinition = "boolean default false")
-    private boolean status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }

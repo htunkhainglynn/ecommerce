@@ -16,7 +16,7 @@ public abstract class Order_ {
 	public static volatile SingularAttribute<Order, Payment> payment;
 	public static volatile SingularAttribute<Order, LocalDate> orderDate;
 	public static volatile ListAttribute<Order, OrderItem> orderItems;
-	public static volatile SingularAttribute<Order, Customer> customer;
+	public static volatile SingularAttribute<Order, User> customer;
 
 	public static final String SHIPPING = "shipping";
 	public static final String ORDER_ID = "orderId";

@@ -19,7 +19,7 @@ public abstract class Shipping_ {
 	public static volatile SingularAttribute<Shipping, Long> id;
 	public static volatile SingularAttribute<Shipping, String> state;
 	public static volatile SingularAttribute<Shipping, Status> status;
-	public static volatile SingularAttribute<Shipping, Customer> customer;
+	public static volatile SingularAttribute<Shipping, User> customer;
 
 	public static final String DATE = "date";
 	public static final String ZIP_CODE = "zipCode";

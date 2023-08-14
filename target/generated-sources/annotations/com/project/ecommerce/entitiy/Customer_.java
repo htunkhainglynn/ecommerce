@@ -6,19 +6,19 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 import javax.annotation.processing.Generated;
 
 @Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
-@StaticMetamodel(Customer.class)
+@StaticMetamodel(User.class)
 public abstract class Customer_ {
 
-	public static volatile SingularAttribute<Customer, WishList> wishList;
-	public static volatile SingularAttribute<Customer, String> password;
-	public static volatile SingularAttribute<Customer, String> address;
-	public static volatile SingularAttribute<Customer, String> phoneNumber;
-	public static volatile ListAttribute<Customer, Shipping> shipping;
-	public static volatile ListAttribute<Customer, Role> roles;
-	public static volatile ListAttribute<Customer, Payment> payment;
-	public static volatile SingularAttribute<Customer, Integer> id;
-	public static volatile SingularAttribute<Customer, String> username;
-	public static volatile ListAttribute<Customer, Order> order;
+	public static volatile SingularAttribute<User, WishList> wishList;
+	public static volatile SingularAttribute<User, String> password;
+	public static volatile SingularAttribute<User, String> address;
+	public static volatile SingularAttribute<User, String> phoneNumber;
+	public static volatile ListAttribute<User, Shipping> shipping;
+	public static volatile ListAttribute<User, Role> roles;
+	public static volatile ListAttribute<User, Payment> payment;
+	public static volatile SingularAttribute<User, Integer> id;
+	public static volatile SingularAttribute<User, String> username;
+	public static volatile ListAttribute<User, Order> order;
 
 	public static final String WISH_LIST = "wishList";
 	public static final String PASSWORD = "password";

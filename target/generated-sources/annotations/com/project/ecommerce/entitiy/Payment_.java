@@ -15,7 +15,7 @@ public abstract class Payment_ {
 	public static volatile SingularAttribute<Payment, String> method;
 	public static volatile ListAttribute<Payment, Order> orders;
 	public static volatile SingularAttribute<Payment, Long> id;
-	public static volatile SingularAttribute<Payment, Customer> customer;
+	public static volatile SingularAttribute<Payment, User> customer;
 
 	public static final String DATE = "date";
 	public static final String AMOUNT = "amount";

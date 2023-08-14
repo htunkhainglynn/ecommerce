@@ -1,6 +1,6 @@
 package com.project.ecommerce.security;
 
-import com.project.ecommerce.repo.CustomerRepository;
+import com.project.ecommerce.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class MyUserDetails implements UserDetailsService {
 
     @Autowired
-    private CustomerRepository userRepo;
+    private UserRepository userRepo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

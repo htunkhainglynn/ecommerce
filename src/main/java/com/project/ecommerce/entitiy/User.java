@@ -19,11 +19,11 @@ import static java.util.stream.Collectors.toList;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Customer implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8_bin")
     private String username;
     private String password;
@@ -32,7 +32,7 @@ public class Customer implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer",
+    @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
@@ -44,16 +44,21 @@ public class Customer implements UserDetails {
     @Enumerated(EnumType.STRING)
     private List<Role> roles;
 
-    @OneToOne(mappedBy = "customer",
+    @OneToOne(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private WishList wishList;
 
-    @OneToMany(mappedBy = "customer",
+    @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
     private List<Shipping> shipping;
+
+    @OneToOne(mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true)
+    private QueueInfo queueInfo;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
