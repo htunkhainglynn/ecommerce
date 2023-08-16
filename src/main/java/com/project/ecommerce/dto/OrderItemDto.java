@@ -13,4 +13,9 @@ public class OrderItemDto {
     private Integer product_id;
 
     private int quantity;
+
+    public OrderItemDto(OrderItem orderItem) {
+        this.product_id = orderItem.getProductVariant().getId();
+        this.quantity = orderItem.getQuantity();
+    }
 }

@@ -1,10 +1,7 @@
 package com.project.ecommerce.entitiy;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
@@ -18,7 +15,7 @@ public class OrderItem {
 
     private int quantity;
 
-    @OneToOne
+    @ManyToOne
     private ProductVariant productVariant;
 
     @ManyToOne

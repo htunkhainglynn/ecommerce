@@ -32,7 +32,7 @@ public class SecurityConfig {
                     request
                             .requestMatchers("/auth/signin").permitAll()
                             .requestMatchers("/hello/user").authenticated()
-//                            .requestMatchers("/api/v1/**").permitAll()
+                            .requestMatchers("/api/v1/orders/**").authenticated()
                             .anyRequest().permitAll()
                 );
 

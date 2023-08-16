@@ -2,10 +2,7 @@ package com.project.ecommerce.entitiy;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,16 +30,16 @@ public class Order {
     private double totalPrice;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany(mappedBy = "order", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
 
     @ManyToOne
     @JoinColumn(name = "shipping_id")
     private Shipping shipping;
 
-    @Column(columnDefinition = "boolean default false")
-    private boolean status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }

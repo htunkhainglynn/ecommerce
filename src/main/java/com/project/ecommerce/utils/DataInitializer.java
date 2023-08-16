@@ -1,44 +1,78 @@
 package com.project.ecommerce.utils;
 
-import com.project.ecommerce.entitiy.Customer;
+import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.entitiy.Role;
-import com.project.ecommerce.repo.CustomerRepository;
+import com.project.ecommerce.repo.UserRepository;
+import com.project.ecommerce.service.DynamicQueueManager;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @Slf4j
 public class DataInitializer {
 
     @Autowired
-    CustomerRepository userRepo;
+    UserRepository userRepo;
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    DynamicQueueManager dynamicQueueManager;
+
+    private final DirectExchange directExchange;
+    private final FanoutExchange fanoutExchange;
+    private final TopicExchange topicExchange;
+
+    private Exchange[] exchanges;
+
+    public DataInitializer(DirectExchange directExchange, FanoutExchange fanoutExchange, TopicExchange topicExchange) {
+        this.directExchange = directExchange;
+        this.fanoutExchange = fanoutExchange;
+        this.topicExchange = topicExchange;
+
+        this.exchanges = new Exchange[] {directExchange, fanoutExchange, topicExchange};
+    }
 
     @Transactional
     @PostConstruct
     public void initializeUser() {
 
-        this.userRepo.save(Customer.builder()
+        this.userRepo.save(User.builder()
                 .username("user")
                 .password(this.passwordEncoder.encode("password"))
                 .roles(Arrays.asList(Role.User))
                 .build()
         );
-        this.userRepo.save(Customer.builder()
+        dynamicQueueManager.createQueueForUser("user");
+
+
+        this.userRepo.save(User.builder()
                 .username("admin")
                 .password(this.passwordEncoder.encode("password"))
-                .roles(Arrays.asList(Role.Admin))
+                .roles(Arrays.asList(Role.Admin, Role.Editor))
                 .build()
         );
+        dynamicQueueManager.createQueueForUser("admin");
+
+        this.userRepo.save(User.builder()
+                .username("editor")
+                .password(this.passwordEncoder.encode("password"))
+                .roles(Arrays.asList(Role.Editor))
+                .build()
+        );
+        dynamicQueueManager.createQueueForUser("editor");
 
 //        List<String> categories = new ArrayList<>(List.of(
 //                "Electronics", "Fashion", "Home", "Appliances", "Toys", "Beauty", "Sports", "Automotive", "Other"
