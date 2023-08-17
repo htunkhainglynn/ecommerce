@@ -1,5 +1,6 @@
 package com.project.ecommerce.entitiy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,6 +19,7 @@ public class OrderItem {
     @ManyToOne
     private ProductVariant productVariant;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

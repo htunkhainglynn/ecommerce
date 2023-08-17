@@ -31,19 +31,15 @@ public class DataInitializer {
     @Autowired
     DynamicQueueManager dynamicQueueManager;
 
-    private final DirectExchange directExchange;
-    private final FanoutExchange fanoutExchange;
-    private final TopicExchange topicExchange;
+    @Autowired
+    private DirectExchange directExchange;
 
-    private Exchange[] exchanges;
+    @Autowired
+    private FanoutExchange fanoutExchange;
 
-    public DataInitializer(DirectExchange directExchange, FanoutExchange fanoutExchange, TopicExchange topicExchange) {
-        this.directExchange = directExchange;
-        this.fanoutExchange = fanoutExchange;
-        this.topicExchange = topicExchange;
+    @Autowired
+    private TopicExchange topicExchange;
 
-        this.exchanges = new Exchange[] {directExchange, fanoutExchange, topicExchange};
-    }
 
     @Transactional
     @PostConstruct
@@ -51,28 +47,35 @@ public class DataInitializer {
 
         this.userRepo.save(User.builder()
                 .username("user")
+                .email("user@gmail.com")
+                .active(true)
                 .password(this.passwordEncoder.encode("password"))
-                .roles(Arrays.asList(Role.User))
+                .roles(List.of(Role.User))
                 .build()
         );
         dynamicQueueManager.createQueueForUser("user");
 
+        this.userRepo.save(User.builder()
+                .username("user2")
+                .email("user2@gmail.com")
+                .active(true)
+                .password(this.passwordEncoder.encode("password"))
+                .roles(List.of(Role.User))
+                .build()
+        );
+        dynamicQueueManager.createQueueForUser("user2");
+
 
         this.userRepo.save(User.builder()
                 .username("admin")
+                .email("admin@gmail.com")
+                .active(true)
                 .password(this.passwordEncoder.encode("password"))
                 .roles(Arrays.asList(Role.Admin, Role.Editor))
                 .build()
         );
         dynamicQueueManager.createQueueForUser("admin");
 
-        this.userRepo.save(User.builder()
-                .username("editor")
-                .password(this.passwordEncoder.encode("password"))
-                .roles(Arrays.asList(Role.Editor))
-                .build()
-        );
-        dynamicQueueManager.createQueueForUser("editor");
 
 //        List<String> categories = new ArrayList<>(List.of(
 //                "Electronics", "Fashion", "Home", "Appliances", "Toys", "Beauty", "Sports", "Automotive", "Other"

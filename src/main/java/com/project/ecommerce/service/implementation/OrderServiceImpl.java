@@ -1,5 +1,6 @@
 package com.project.ecommerce.service.implementation;
 
+import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.dto.OrderDto;
 import com.project.ecommerce.dto.OrderItemDto;
 import com.project.ecommerce.entitiy.Order;
@@ -15,12 +16,16 @@ import com.project.ecommerce.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Service
 @Slf4j
@@ -42,36 +47,67 @@ public class OrderServiceImpl implements OrderService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<OrderDto> getAllOrders() {
-        return orderRepository.findAll()
-                .stream()
-                .map(order -> new OrderDto(order))
+    public List<OrderDto> getAllOrders(
+                            String keyword,
+                            Optional<Integer> page,
+                            Optional<Integer> size) {
+        PageRequest pageRequest = PageRequest.of(
+                page.orElse(0),
+                size.orElse(10));
+
+        Specification<Order> specification = (root, query, cb) -> cb.conjunction();
+
+        Predicate<String> isDouble = s -> {
+            try {
+                Double.parseDouble(s);
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        };
+
+        if (keyword != null && !isDouble.test(keyword)) {
+            specification = specification.and((root, query, cb) ->
+                    cb.or(
+                            cb.like(root.get("user").get("name"), "%" + keyword + "%"),
+                            cb.like(root.get("status"), "%" + keyword + "%")
+                    ));
+        }
+
+        if (StringUtils.hasLength(keyword) && isDouble.test(keyword)) {
+            specification = specification.and((root, query, cb) ->
+                cb.greaterThanOrEqualTo(root.get("totalPrice"), Double.parseDouble(keyword))
+            );
+        }
+
+        return orderRepository.findAll(specification, pageRequest)
+                .map(OrderDto::new)
                 .toList();
     }
 
     @Override
-    public Optional<OrderDto> getOrderById(Long id) {
+    public Optional<OrderDetailDto> getOrderById(Long id) {
         return orderRepository.findById(id)
-                .map(order -> new OrderDto(order));
+                .map(OrderDetailDto::new);
     }
 
 
     @Override
-    public OrderDto saveOrder(OrderDto orderDto) {
+    public OrderDetailDto saveOrder(OrderDetailDto orderDetailDto) {
 
         // get user from security context holder
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         log.info("username: {}", username);
 
-        Order order = modelMapper.map(orderDto, Order.class);
+        Order order = modelMapper.map(orderDetailDto, Order.class);
 
         // set user to order
         userRepository.findOneByUsername(username)
                 .ifPresent(order::setUser);
 
         // check if product exists in order
-        for (OrderItemDto o : orderDto.getOrderItems()) {
+        for (OrderItemDto o : orderDetailDto.getOrderItems()) {
             Optional<ProductVariant> p = productVariantRepository.findById(o.getProduct_id());
             if (p.isEmpty()) {
                 throw new ProductException("Product not found");
@@ -79,20 +115,20 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // check if order items is empty
-        if(orderDto.getOrderItems().isEmpty()) {
+        if(orderDetailDto.getOrderItems().isEmpty()) {
             throw new ProductException("Order items cannot be empty");
         }
 
         // set status if order is new
-        if (orderDto.getStatus() == null) {
+        if (orderDetailDto.getStatus() == null) {
             order.setStatus(Status.PENDING);
         }
 
         // save order
         orderRepository.save(order);
-        saveOrderItems(order, orderDto.getOrderItems());
+        saveOrderItems(order, orderDetailDto.getOrderItems());
 
-        return new OrderDto(order);
+        return new OrderDetailDto(order);
     }
 
     private void saveOrderItems(Order order, List<OrderItemDto> orderItems) {

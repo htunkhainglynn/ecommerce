@@ -1,15 +1,15 @@
 package com.project.ecommerce.service;
 
+import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.dto.OrderDto;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
-    OrderDto saveOrder(OrderDto orderDto);
+    OrderDetailDto saveOrder(OrderDetailDto orderDetailDto);
 
-    List<OrderDto> getAllOrders();
+    List<OrderDto> getAllOrders(String keyword, Optional<Integer> page, Optional<Integer> size);
 
-    Optional<OrderDto> getOrderById(Long id);
+    Optional<OrderDetailDto> getOrderById(Long id);
 }

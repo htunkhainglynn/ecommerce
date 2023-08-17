@@ -1,5 +1,6 @@
 package com.project.ecommerce.entitiy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,12 +25,16 @@ public class Shipping {
     private String state;
     private String zipCode;
     private String country;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "shipping",
         cascade = {CascadeType.PERSIST, CascadeType.MERGE},
         fetch = FetchType.LAZY)

@@ -120,7 +120,7 @@ public class ProductServiceImpl implements ProductService {
 
         PageRequest pageRequest = PageRequest.of(
                 page.orElse(0),
-                size.orElse(5));
+                size.orElse(10));
 
         Specification<Product> specification = (root, query, cb) -> cb.conjunction();
 

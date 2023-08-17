@@ -7,7 +7,6 @@ import com.project.ecommerce.repo.UserRepository;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,7 +49,6 @@ public class DynamicQueueManager {
                 .build());
 
         // Create binding between queue and exchange
-        Binding binding = BindingBuilder.bind(queue).to(directExchange).with(routingKey);
-        rabbitAdmin.declareBinding(binding);
+        rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(directExchange).with(routingKey));
     }
 }

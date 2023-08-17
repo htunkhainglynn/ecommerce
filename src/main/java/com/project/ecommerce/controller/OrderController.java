@@ -2,6 +2,7 @@ package com.project.ecommerce.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.dto.OrderDto;
 import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.service.OrderService;
@@ -43,27 +44,29 @@ public class OrderController {
     private TopicExchange topicExchange;
 
     @GetMapping
-    public ResponseEntity<List<OrderDto>> getAllOrders() {
-        return ok(orderService.getAllOrders());
+    public List<OrderDto> getAllOrders(@RequestParam(required = false) String keyword,
+                                       @RequestParam Optional<Integer> page,
+                                       @RequestParam Optional<Integer> size) {
+        return orderService.getAllOrders(keyword, page, size);
     }
 
     @PostMapping
-    public ResponseEntity<OrderDto> addOrder(@RequestBody OrderDto orderDto) throws JsonProcessingException {
-        OrderDto result = orderService.saveOrder(orderDto);
+    public ResponseEntity<OrderDetailDto> addOrder(@RequestBody OrderDetailDto orderDto) throws JsonProcessingException {
+        OrderDetailDto result = orderService.saveOrder(orderDto);
         String routingKey = getAdminRoutingKey();
         sendNotification(result, "New order arrived!", routingKey);
         return ok(result);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDto> getOrderById(@PathVariable Long id) {
-        Optional<OrderDto> result = orderService.getOrderById(id);
+    public ResponseEntity<OrderDetailDto> getOrderById(@PathVariable Long id) {
+        Optional<OrderDetailDto> result = orderService.getOrderById(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderDto> updateOrderStatus(@PathVariable Long id) throws JsonProcessingException {
-        Optional<OrderDto> result = orderService.getOrderById(id);
+    public ResponseEntity<OrderDetailDto> updateOrderStatus(@PathVariable Long id) throws JsonProcessingException {
+        Optional<OrderDetailDto> result = orderService.getOrderById(id);
         if (result.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -92,7 +95,7 @@ public class OrderController {
         return queueInfoService.getRoutingKeyByUsername("admin");
     }
 
-    private void sendNotification(OrderDto order, String message, String routingKey) throws JsonProcessingException {
+    private void sendNotification(OrderDetailDto order, String message, String routingKey) throws JsonProcessingException {
         // send notification to admin
         Map<String, Object> notification = new HashMap<>();
         notification.put("message", message);
@@ -104,6 +107,5 @@ public class OrderController {
 
         // send notification to admins using topic exchange
         rabbitTemplate.convertAndSend(topicExchange.getName(), routingKey, jsonNotification);
-
     }
 }
