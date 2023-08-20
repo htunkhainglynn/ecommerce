@@ -16,6 +16,8 @@ public class UserDto {
 
     private String name;
 
+    private String username;
+
     private String email;
 
     private String phone;
@@ -28,7 +30,8 @@ public class UserDto {
 
     public UserDto(User entity) {
         this.id = entity.getId();
-        this.name = entity.getUsername();
+        this.username = entity.getUsername();
+        this.name = entity.getName();
         this.email = entity.getEmail();
         this.phone = entity.getPhoneNumber();
         this.active = entity.isActive();

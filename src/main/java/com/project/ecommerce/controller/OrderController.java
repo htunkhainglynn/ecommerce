@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.dto.OrderDto;
+import com.project.ecommerce.entitiy.Notification;
 import com.project.ecommerce.entitiy.Status;
+import com.project.ecommerce.service.NotificationService;
 import com.project.ecommerce.service.OrderService;
 import com.project.ecommerce.service.QueueInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Autowired
     private QueueInfoService queueInfoService;
@@ -99,11 +104,14 @@ public class OrderController {
         // send notification to admin
         Map<String, Object> notification = new HashMap<>();
         notification.put("message", message);
-        notification.put("orderId", order.getOrderId());
+        notification.put("order", order);
 
         // change map to json
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonNotification = objectMapper.writeValueAsString(notification);
+
+        // save notification to database
+        notificationService.saveNotification(Notification.builder().order(order).message(message).build());
 
         // send notification to admins using topic exchange
         rabbitTemplate.convertAndSend(topicExchange.getName(), routingKey, jsonNotification);

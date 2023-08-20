@@ -16,6 +16,7 @@ public class OrderItem {
 
     private int quantity;
 
+    @JsonIgnore
     @ManyToOne
     private ProductVariant productVariant;
 

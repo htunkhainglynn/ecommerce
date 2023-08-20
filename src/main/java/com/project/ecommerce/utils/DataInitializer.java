@@ -48,6 +48,7 @@ public class DataInitializer {
         this.userRepo.save(User.builder()
                 .username("user")
                 .email("user@gmail.com")
+                .name("Ko User")
                 .active(true)
                 .password(this.passwordEncoder.encode("password"))
                 .roles(List.of(Role.User))
@@ -57,6 +58,7 @@ public class DataInitializer {
 
         this.userRepo.save(User.builder()
                 .username("user2")
+                .name("Ma User")
                 .email("user2@gmail.com")
                 .active(true)
                 .password(this.passwordEncoder.encode("password"))
@@ -68,6 +70,7 @@ public class DataInitializer {
 
         this.userRepo.save(User.builder()
                 .username("admin")
+                .name("Admin")
                 .email("admin@gmail.com")
                 .active(true)
                 .password(this.passwordEncoder.encode("password"))

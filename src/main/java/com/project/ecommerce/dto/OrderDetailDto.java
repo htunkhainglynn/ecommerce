@@ -1,5 +1,9 @@
 package com.project.ecommerce.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.project.ecommerce.entitiy.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +20,8 @@ public class OrderDetailDto {
 
     private Long orderId;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate orderDate;
 
     private double subTotal;

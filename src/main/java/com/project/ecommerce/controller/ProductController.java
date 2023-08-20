@@ -62,7 +62,6 @@ public class ProductController {
     // Endpoint to create a new product
     @PostMapping
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto product) {
-        log.info("productDto", product);
         ProductDto result = productService.saveProduct(product);
         return ResponseEntity.ok(result);
     }

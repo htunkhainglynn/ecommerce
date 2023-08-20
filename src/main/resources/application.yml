@@ -16,6 +16,9 @@ spring:
       host: localhost
       port: 6379
       timeout: 60000ms
+    mongodb:
+      uri: mongodb://localhost:27017/ecommerce
+
   mvc:
     cors: allowed-origins=http://localhost:3000
 
@@ -30,9 +33,6 @@ security:
   jwt:
     token:
       secret-key: 67898682BE68ED0DC883CB5B5C96D2BCDF8B4670435AA20FABFEB9846E077760
-
-
-
 
 
 

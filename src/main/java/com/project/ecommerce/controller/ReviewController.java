@@ -32,10 +32,7 @@ public class ReviewController {
     @GetMapping("/{id}")
     public ResponseEntity<ReviewDto> getReviewById(@PathVariable Long id) {
         Optional<ReviewDto> result = reviewService.getReviewById(id);
-        if(result.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return  ResponseEntity.ok(result.get());
+        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/product/{productId}")
@@ -54,7 +51,6 @@ public class ReviewController {
     @PutMapping("/{id}")
     public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewDto review) {
         Optional<ReviewDto> reviewDto = reviewService.getReviewById(id);
-        log.info("ProductId: ", review.getProductId());
         if(reviewDto.isPresent()) {
             review.setId(id);
             ReviewDto result = reviewService.saveReview(review);

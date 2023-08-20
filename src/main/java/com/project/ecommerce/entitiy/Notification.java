@@ -1,20 +1,24 @@
 package com.project.ecommerce.entitiy;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.ecommerce.dto.OrderDetailDto;
+import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@RedisHash("Notification")
+@Document("notification")
 @Data
+@Builder
 public class Notification {
 
-    private Long id;
+    @Id
+    private String id;
 
     private String message;
 
-    @Column(name = "order_id")
-    private Long orderId;
+    private OrderDetailDto order;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @JsonIgnore
+    private String username;
 }

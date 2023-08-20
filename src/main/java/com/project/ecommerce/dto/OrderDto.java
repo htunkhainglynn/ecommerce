@@ -5,10 +5,12 @@ import com.project.ecommerce.entitiy.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Slf4j
 public class OrderDto {
     private Long id;
     private String orderDate;
@@ -20,6 +22,7 @@ public class OrderDto {
         this.id = entity.getId();
         this.orderDate = entity.getOrderDate().toString();
         this.name = entity.getUser().getName();
+        log.info("name: {}", this.name);
         this.totalPrice = entity.getTotalPrice();
         this.status = entity.getStatus();
     }

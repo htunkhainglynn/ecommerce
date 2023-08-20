@@ -1,5 +1,7 @@
 package com.project.ecommerce.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.ecommerce.dto.ProductVariantCache;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +41,4 @@ public class ApplicationConfig {
             template.setConnectionFactory(redisConnectionFactory);
             return template;
         }
-
-
 }
