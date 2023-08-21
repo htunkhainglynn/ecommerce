@@ -19,4 +19,10 @@ public class QueueInfoServiceImpl implements QueueInfoService {
         return queueInfoRepository.findRoutingKeyByUsername(username).orElseThrow(() -> new RuntimeException("User not found."));
     }
 
+    @Override
+    public String getQueueNameByUsername(String username) {
+        return queueInfoRepository.findQueueNameByUsername(username);
+    }
+
+
 }

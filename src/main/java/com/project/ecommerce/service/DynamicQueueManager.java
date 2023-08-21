@@ -4,6 +4,7 @@ import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.entitiy.QueueInfo;
 import com.project.ecommerce.repo.QueueInfoRepository;
 import com.project.ecommerce.repo.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class DynamicQueueManager {
         this.directExchange = directExchange;
     }
 
+    @Transactional
     public void createQueueForUser(String username) {
 
         // create queue name

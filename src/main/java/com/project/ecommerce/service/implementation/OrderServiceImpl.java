@@ -13,6 +13,7 @@ import com.project.ecommerce.repo.OrderRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.service.OrderService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderDetailDto::new);
     }
 
-
+    @Transactional
     @Override
     public OrderDetailDto saveOrder(OrderDetailDto orderDetailDto) {
 
@@ -131,6 +132,7 @@ public class OrderServiceImpl implements OrderService {
         return new OrderDetailDto(order);
     }
 
+    @Transactional
     private void saveOrderItems(Order order, List<OrderItemDto> orderItems) {
         List<OrderItem> orderItemList = new ArrayList<>();
         orderItems.forEach(orderItemDto -> {

@@ -51,7 +51,7 @@ public class DataInitializer {
                 .name("Ko User")
                 .active(true)
                 .password(this.passwordEncoder.encode("password"))
-                .roles(List.of(Role.User))
+                .roles(List.of(Role.USER))
                 .build()
         );
         dynamicQueueManager.createQueueForUser("user");
@@ -62,7 +62,7 @@ public class DataInitializer {
                 .email("user2@gmail.com")
                 .active(true)
                 .password(this.passwordEncoder.encode("password"))
-                .roles(List.of(Role.User))
+                .roles(List.of(Role.USER))
                 .build()
         );
         dynamicQueueManager.createQueueForUser("user2");
@@ -74,7 +74,7 @@ public class DataInitializer {
                 .email("admin@gmail.com")
                 .active(true)
                 .password(this.passwordEncoder.encode("password"))
-                .roles(Arrays.asList(Role.Admin, Role.Editor))
+                .roles(Arrays.asList(Role.ADMIN, Role.EDITOR))
                 .build()
         );
         dynamicQueueManager.createQueueForUser("admin");

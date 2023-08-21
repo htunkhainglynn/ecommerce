@@ -1,7 +1,6 @@
 package com.project.ecommerce.controller;
 
-import com.project.ecommerce.entitiy.Notification;
-import com.project.ecommerce.service.NotificationService;
+import com.project.ecommerce.service.QueueInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,18 +8,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/v1/notifications")
-public class NotificationController {
+@RequestMapping("/api/v1/queue")
+public class QueueController {
 
     @Autowired
-    private NotificationService notificationService;
+    private QueueInfoService queueInfoService;
 
     @GetMapping
-    public ResponseEntity<List<Notification>> getNotificationByUser() {
+    public ResponseEntity<String> getQueueInfo() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return ResponseEntity.ok(notificationService.getNotificationByUserName(username));
+        return ResponseEntity.ok(queueInfoService.getQueueNameByUsername(username));
     }
 }

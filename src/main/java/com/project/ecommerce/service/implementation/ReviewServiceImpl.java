@@ -52,6 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
         return new ReviewDto();
     }
 
+    @Transactional
     @Override
     public void deleteReview(Long id) {
         reviewRepo.deleteById(id);

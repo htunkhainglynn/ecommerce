@@ -12,4 +12,6 @@ public interface QueueInfoRepository extends JpaRepository<QueueInfo, Long> {
     @Query("SELECT q.routingKey FROM QueueInfo q WHERE q.user.username = :username")
     Optional<String> findRoutingKeyByUsername(String username);
 
+    @Query("SELECT q.queueName FROM QueueInfo q WHERE q.user.username = :username")
+    String findQueueNameByUsername(String username);
 }

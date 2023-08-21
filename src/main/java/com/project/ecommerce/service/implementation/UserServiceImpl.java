@@ -7,10 +7,12 @@ import com.project.ecommerce.entitiy.Order;
 import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.exceprion.UserException;
 import com.project.ecommerce.repo.UserRepository;
+import com.project.ecommerce.service.DynamicQueueManager;
 import com.project.ecommerce.service.UserService;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper mapper;
+
+    @Autowired
+    private DynamicQueueManager dynamicQueueManager;
 
     @Override
     public Page<UserDto> getAllUsers(String keyword, Optional<Integer> page, Optional<Integer> size) {
@@ -94,6 +99,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).map(UserDetailDto::new);
     }
 
+    @Transactional
     @Override
     public void saveUser(SignUpDto signUpDto) {
         Optional<User> optionalUser = userRepository.findOneByUsername(signUpDto.getUsername());
@@ -103,8 +109,12 @@ public class UserServiceImpl implements UserService {
         signUpDto.setActive(true);
         signUpDto.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
         userRepository.save(mapper.map(signUpDto, User.class));
+
+        // create queue for user
+        dynamicQueueManager.createQueueForUser(signUpDto.getUsername());
     }
 
+    @Transactional
     @Override
     public UserDetailDto updateUser(UserDetailDto userDetailDto) {
         return userRepository.findById(userDetailDto.getId())
