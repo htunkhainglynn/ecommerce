@@ -68,6 +68,7 @@ public class User implements UserDetails {
             fetch = FetchType.LAZY)
     private List<Shipping> shipping;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true)

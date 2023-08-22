@@ -1,16 +1,14 @@
 package com.project.ecommerce.entitiy;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
+@EqualsAndHashCode(exclude = "user")
 public class QueueInfo {
 
     @Id

@@ -40,7 +40,6 @@ public class OrderController {
 
     private final DirectExchange directExchange;
 
-    private final TopicExchange topicExchange;
 
     @Autowired
     public OrderController(OrderService orderService, NotificationService notificationService, QueueInfoService queueInfoService, RabbitTemplate rabbitTemplate, DirectExchange directExchange, TopicExchange topicExchange) {
@@ -49,7 +48,6 @@ public class OrderController {
         this.queueInfoService = queueInfoService;
         this.rabbitTemplate = rabbitTemplate;
         this.directExchange = directExchange;
-        this.topicExchange = topicExchange;
     }
 
     @GetMapping
@@ -114,10 +112,12 @@ public class OrderController {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonNotification = objectMapper.writeValueAsString(notification);
 
+        Notification.builder().order(order).message(message).build();
+
         // save notification to database
         notificationService.saveNotification(Notification.builder().order(order).message(message).build());
 
         // send notification to admins using topic exchange
-        rabbitTemplate.convertAndSend(topicExchange.getName(), routingKey, jsonNotification);
+        rabbitTemplate.convertAndSend(directExchange.getName(), routingKey, jsonNotification);
     }
 }
