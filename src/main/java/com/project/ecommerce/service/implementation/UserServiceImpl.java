@@ -33,17 +33,25 @@ import java.util.function.Predicate;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    private final ModelMapper mapper;
+
+    private final DynamicQueueManager dynamicQueueManager;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
-    private ModelMapper mapper;
-
-    @Autowired
-    private DynamicQueueManager dynamicQueueManager;
+    public UserServiceImpl(UserRepository userRepository,
+                           BCryptPasswordEncoder passwordEncoder,
+                           ModelMapper mapper,
+                           DynamicQueueManager dynamicQueueManager) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.mapper = mapper;
+        this.dynamicQueueManager = dynamicQueueManager;
+    }
 
     @Override
     public Page<UserDto> getAllUsers(String keyword, Optional<Integer> page, Optional<Integer> size) {

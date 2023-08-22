@@ -30,23 +30,27 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/api/v1/orders")
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+
+    private final NotificationService notificationService;
+
+    private final QueueInfoService queueInfoService;
+
+    private final RabbitTemplate rabbitTemplate;
+
+    private final DirectExchange directExchange;
+
+    private final TopicExchange topicExchange;
 
     @Autowired
-    private NotificationService notificationService;
-
-    @Autowired
-    private QueueInfoService queueInfoService;
-
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
-    private DirectExchange directExchange;
-
-    @Autowired
-    private TopicExchange topicExchange;
+    public OrderController(OrderService orderService, NotificationService notificationService, QueueInfoService queueInfoService, RabbitTemplate rabbitTemplate, DirectExchange directExchange, TopicExchange topicExchange) {
+        this.orderService = orderService;
+        this.notificationService = notificationService;
+        this.queueInfoService = queueInfoService;
+        this.rabbitTemplate = rabbitTemplate;
+        this.directExchange = directExchange;
+        this.topicExchange = topicExchange;
+    }
 
     @GetMapping
     public List<OrderDto> getAllOrders(@RequestParam(required = false) String keyword,

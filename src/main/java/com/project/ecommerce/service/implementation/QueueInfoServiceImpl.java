@@ -11,8 +11,12 @@ import java.util.List;
 @Service
 public class QueueInfoServiceImpl implements QueueInfoService {
 
+    private final QueueInfoRepository queueInfoRepository;
+
     @Autowired
-    QueueInfoRepository queueInfoRepository;
+    public QueueInfoServiceImpl(QueueInfoRepository queueInfoRepository) {
+        this.queueInfoRepository = queueInfoRepository;
+    }
 
     @Override
     public String getRoutingKeyByUsername(String username) {

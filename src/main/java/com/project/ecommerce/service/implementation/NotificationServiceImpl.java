@@ -13,8 +13,12 @@ import java.util.List;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
+    private final NotificationRepo notificationRepo;
+
     @Autowired
-    private NotificationRepo notificationRepo;
+    public NotificationServiceImpl(NotificationRepo notificationRepo) {
+        this.notificationRepo = notificationRepo;
+    }
 
     private String getUsername(){
         return SecurityContextHolder.getContext().getAuthentication().getName();

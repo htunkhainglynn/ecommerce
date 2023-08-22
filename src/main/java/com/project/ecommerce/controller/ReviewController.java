@@ -18,11 +18,15 @@ import java.util.Optional;
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
 
-    @Autowired
-    ReviewService reviewService;
+    private final ReviewService reviewService;
+
+    private final ProductService productService;
 
     @Autowired
-    ProductService productService;
+    public ReviewController(ReviewService reviewService, ProductService productService) {
+        this.reviewService = reviewService;
+        this.productService = productService;
+    }
 
     @GetMapping
     public ResponseEntity<List<ReviewDto>> getAllReviews() {

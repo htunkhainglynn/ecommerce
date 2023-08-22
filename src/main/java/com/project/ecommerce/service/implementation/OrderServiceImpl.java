@@ -32,20 +32,28 @@ import java.util.function.Predicate;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+
+    private final ProductVariantRepository productVariantRepository;
+
+    private final UserRepository userRepository;
+
+    private final OrderItemRepository orderItemRepository;
+
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ProductVariantRepository productVariantRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private OrderItemRepository orderItemRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            ProductVariantRepository productVariantRepository,
+                            UserRepository userRepository,
+                            OrderItemRepository orderItemRepository,
+                            ModelMapper modelMapper) {
+        this.orderRepository = orderRepository;
+        this.productVariantRepository = productVariantRepository;
+        this.userRepository = userRepository;
+        this.orderItemRepository = orderItemRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public List<OrderDto> getAllOrders(

@@ -17,14 +17,20 @@ import java.util.Optional;
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
-    @Autowired
-    ReviewRepository reviewRepo;
+    private final ReviewRepository reviewRepo;
+
+    private final ProductRepository productRepo;
+
+    private final ModelMapper mapper;
 
     @Autowired
-    ProductRepository productRepo;
-
-    @Autowired
-    ModelMapper mapper;
+    public ReviewServiceImpl(ReviewRepository reviewRepo,
+                             ProductRepository productRepo,
+                             ModelMapper mapper) {
+        this.reviewRepo = reviewRepo;
+        this.productRepo = productRepo;
+        this.mapper = mapper;
+    }
 
     @Override
     public List<ReviewDto> getAllReviews() {

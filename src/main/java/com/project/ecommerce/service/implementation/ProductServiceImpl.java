@@ -26,16 +26,24 @@ import java.util.Optional;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class ProductServiceImpl implements ProductService {
 
-    @Autowired
-    ModelMapper mapper;
-    @Autowired
-    private ProductRepository repo;
+    private final ModelMapper mapper;
+
+    private final ProductRepository repo;
+
+    private final OrganizationRepository organizationRepository;
+
+    private final ProductVariantRepository productVariantRepository;
 
     @Autowired
-    private OrganizationRepository organizationRepository;
-
-    @Autowired
-    private ProductVariantRepository productVariantRepository;
+    public ProductServiceImpl(ModelMapper mapper,
+                              ProductRepository repo,
+                              OrganizationRepository organizationRepository,
+                              ProductVariantRepository productVariantRepository) {
+        this.mapper = mapper;
+        this.repo = repo;
+        this.organizationRepository = organizationRepository;
+        this.productVariantRepository = productVariantRepository;
+    }
 
     @Override
     public Page<ProductDto> getAllProducts(String keyword,

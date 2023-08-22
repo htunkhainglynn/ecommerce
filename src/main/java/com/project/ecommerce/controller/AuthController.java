@@ -21,27 +21,34 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    private final UserRepository users;
+
     @Autowired
-    AuthenticationManager authenticationManager;
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
-    @Autowired
-    UserRepository users;
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.users = users;
+    }
+
     @PostMapping("/signin")
-    public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
+    public ResponseEntity<Map<Object, Object>> signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             String token = jwtTokenProvider
                     .createToken(username,
                             this.users.findOneByUsername(username)
-                                    .isPresent()?
-                                    this.users.findOneByUsername(username)
-                                            .get()
-                                            .getRoles()
-                                            .stream()
-                                            .map(Role::name)
-                                            .collect(Collectors.toList()) : null);
+                                    .isEmpty() ? null : this.users.findOneByUsername(username)
+                                    .get()
+                                    .getRoles()
+                                    .stream()
+                                    .map(Role::name)
+                                    .toList());
 
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);

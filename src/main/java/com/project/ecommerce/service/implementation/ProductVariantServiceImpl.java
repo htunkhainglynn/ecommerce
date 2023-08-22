@@ -22,14 +22,25 @@ import java.util.Set;
 @Slf4j
 public class ProductVariantServiceImpl implements ProductVariantService {
 
+
+    private final ModelMapper modelMapper;
+
+    private final ProductVariantRepository repo;
+
+    private final ProductRepository productRepo;
+
+    private final RedisTemplate<String, ProductVariantCache> redisTemplate;
+
     @Autowired
-    ModelMapper modelMapper;
-    @Autowired
-    ProductVariantRepository repo;
-    @Autowired
-    ProductRepository productRepo;
-    @Autowired
-    RedisTemplate<String, ProductVariantCache> redisTemplate;
+    public ProductVariantServiceImpl(ModelMapper modelMapper,
+                                     ProductVariantRepository repo,
+                                     ProductRepository productRepo,
+                                     RedisTemplate<String, ProductVariantCache> redisTemplate) {
+        this.modelMapper = modelMapper;
+        this.repo = repo;
+        this.productRepo = productRepo;
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public List<ProductVariantDto> getAllProductVariants() {

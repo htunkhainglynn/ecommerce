@@ -16,29 +16,12 @@ import java.util.Optional;
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
+    private final ProductService productService;
+
     @Autowired
-    private ProductService productService;
-
-    /*
-    @GetMapping
-    public ResponseEntity<Page<ProductDto>> getAllProducts(
-                            @RequestParam(required = false) String name,
-                            @RequestParam(required = false) String category,
-                            @RequestParam(required = false) List<String> brands,
-                            @RequestParam(required = false) String color,
-                            @RequestParam(required = false) Integer minPrice,
-                            @RequestParam(required = false) Integer maxPrice,
-                            @RequestParam(required = false) List<String> productSizes,
-                            @RequestParam(required = false) List<Double> ratings,
-                            @RequestParam Optional<Integer> page,
-                            @RequestParam Optional<Integer> size) {
-
-        Page<ProductDto> result = productService.getAllProducts(
-                name, category, brands, color, minPrice, maxPrice, productSizes, ratings, page, size);
-
-        return ResponseEntity.ok(result);
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
-     */
 
     @GetMapping
     public ResponseEntity<Page<ProductDto>> getAllProducts

@@ -13,16 +13,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class DynamicQueueManager {
 
-    @Autowired
-    private RabbitAdmin rabbitAdmin;
+    private final RabbitAdmin rabbitAdmin;
     private final QueueInfoRepository queueInfoRepository;
     private final UserRepository userRepository;
     private final DirectExchange directExchange;
 
     @Autowired
-    public DynamicQueueManager(QueueInfoRepository queueInfoRepository,
+    public DynamicQueueManager(RabbitAdmin rabbitAdmin,
+                               QueueInfoRepository queueInfoRepository,
                                UserRepository userRepository,
                                DirectExchange directExchange) {
+        this.rabbitAdmin = rabbitAdmin;
         this.queueInfoRepository = queueInfoRepository;
         this.userRepository = userRepository;
         this.directExchange = directExchange;

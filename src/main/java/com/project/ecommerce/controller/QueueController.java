@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/queue")
 public class QueueController {
 
+    private final QueueInfoService queueInfoService;
+
     @Autowired
-    private QueueInfoService queueInfoService;
+    public QueueController(QueueInfoService queueInfoService) {
+        this.queueInfoService = queueInfoService;
+    }
 
     @GetMapping
     public ResponseEntity<String> getQueueInfo() {
