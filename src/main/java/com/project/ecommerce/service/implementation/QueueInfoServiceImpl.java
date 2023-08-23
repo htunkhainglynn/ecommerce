@@ -1,13 +1,12 @@
 package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.repo.QueueInfoRepository;
-import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.service.QueueInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
+@Transactional
 @Service
 public class QueueInfoServiceImpl implements QueueInfoService {
 
@@ -18,11 +17,13 @@ public class QueueInfoServiceImpl implements QueueInfoService {
         this.queueInfoRepository = queueInfoRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public String getRoutingKeyByUsername(String username) {
         return queueInfoRepository.findRoutingKeyByUsername(username).orElseThrow(() -> new RuntimeException("User not found."));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public String getQueueNameByUsername(String username) {
         return queueInfoRepository.findQueueNameByUsername(username);

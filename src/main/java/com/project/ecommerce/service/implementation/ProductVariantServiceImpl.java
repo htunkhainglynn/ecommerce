@@ -13,13 +13,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
-@Slf4j
 public class ProductVariantServiceImpl implements ProductVariantService {
 
 
@@ -53,7 +53,6 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     @Override
     public ProductVariantDto saveProductVariant(ProductVariantDto productVariantDto) {
         Optional<Product> product = productRepo.findById(productVariantDto.getProduct_id());
-        log.info("Saving product variant with product id: {}", productVariantDto.getProduct_id());
         if (product.isPresent()) {
             ProductVariant productVariant = modelMapper.map(productVariantDto, ProductVariant.class);
             productVariant.setProduct(product.get());
@@ -64,7 +63,6 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     public void cacheProductVariant(ProductVariantCache productVariantCache) {
-        log.info("Caching product variant with id: {}", productVariantCache.getProduct_id());
         String key = "ProductVariant:" + productVariantCache.getProduct_id();
         redisTemplate.opsForValue().set(key, productVariantCache);
     }

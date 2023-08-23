@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class DynamicQueueManager {
 
     private final RabbitAdmin rabbitAdmin;
@@ -29,7 +30,6 @@ public class DynamicQueueManager {
         this.directExchange = directExchange;
     }
 
-    @Transactional
     public void createQueueForUser(String username) {
 
         // create queue name

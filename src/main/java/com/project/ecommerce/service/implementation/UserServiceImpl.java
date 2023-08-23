@@ -12,23 +12,21 @@ import com.project.ecommerce.service.UserService;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
-import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
 @Service
-@Slf4j
+@Transactional
 public class UserServiceImpl implements UserService {
 
 
@@ -51,6 +49,7 @@ public class UserServiceImpl implements UserService {
         this.dynamicQueueManager = dynamicQueueManager;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<UserDto> getAllUsers(String keyword, Optional<Integer> page, Optional<Integer> size) {
         PageRequest pageRequest = PageRequest.of(
@@ -68,44 +67,41 @@ public class UserServiceImpl implements UserService {
             }
         };
 
-        if (StringUtils.hasLength(keyword) && !isDouble.test(keyword)) {
-            log.info("keyword: {}", 0);
-            specification = specification.and((root, query, cb) ->
-                    cb.or(
-                            cb.like(cb.lower(root.get("username")), "%" + keyword.toLowerCase() + "%"),
-                            cb.like(cb.lower(root.get("email")), "%" + keyword.toLowerCase() + "%"),
-                            cb.like(root.get("phoneNumber"), "%" + keyword + "%")
-                    )
-            );
-        }
+        specification = StringUtils.hasLength(keyword) && !isDouble.test(keyword)
+                ? specification.and((root, query, cb) ->
+                cb.or(
+                        cb.like(cb.lower(root.get("username")), "%" + keyword.toLowerCase() + "%"),
+                        cb.like(cb.lower(root.get("email")), "%" + keyword.toLowerCase() + "%"),
+                        cb.like(root.get("phoneNumber"), "%" + keyword + "%")
+                ))
+                : specification;
 
-        if (StringUtils.hasLength(keyword) && isDouble.test(keyword)) {
-            specification = specification.and((root, query, cb) -> {
-                Subquery<Long> subquery = query.subquery(Long.class);
-                Root<Order> subRoot = subquery.from(Order.class);
+        specification = StringUtils.hasLength(keyword) && isDouble.test(keyword)
+                ? specification.and((root, query, cb) -> {
+            Subquery<Long> subquery = query.subquery(Long.class);
+            Root<Order> subRoot = subquery.from(Order.class);
 
-                Expression<Long> userIdExpression = subRoot.get("user").get("id");
-                Expression<Double> totalSpentExpression = cb.sum(subRoot.get("totalPrice"));
+            Expression<Long> userIdExpression = subRoot.get("user").get("id");
+            Expression<Double> totalSpentExpression = cb.sum(subRoot.get("totalPrice"));
 
-                subquery.select(userIdExpression)
-                        .groupBy(userIdExpression)
-                        .having(cb.greaterThanOrEqualTo(totalSpentExpression, Double.parseDouble(keyword)));
+            subquery.select(userIdExpression)
+                    .groupBy(userIdExpression)
+                    .having(cb.greaterThanOrEqualTo(totalSpentExpression, Double.parseDouble(keyword)));
 
-                return cb.in(root.get("id")).value(subquery);
-            });
-
-        }
+            return cb.in(root.get("id")).value(subquery);
+        })
+                : specification;
 
         return userRepository.findAll(specification, pageRequest)
                 .map(UserDto::new);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<UserDetailDto> getUserById(Long id) {
         return userRepository.findById(id).map(UserDetailDto::new);
     }
 
-    @Transactional
     @Override
     public void saveUser(SignUpDto signUpDto) {
         Optional<User> optionalUser = userRepository.getReferenceByUsername(signUpDto.getUsername());
@@ -120,7 +116,6 @@ public class UserServiceImpl implements UserService {
         dynamicQueueManager.createQueueForUser(signUpDto.getUsername());
     }
 
-    @Transactional
     @Override
     public UserDetailDto updateUser(UserDetailDto userDetailDto) {
         return userRepository.findById(userDetailDto.getId())

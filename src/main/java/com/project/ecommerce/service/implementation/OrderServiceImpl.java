@@ -13,8 +13,6 @@ import com.project.ecommerce.repo.OrderRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.service.OrderService;
-import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @Service
-@Slf4j
+@Transactional
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -56,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
         this.modelMapper = modelMapper;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<OrderDto> getAllOrders(
                             String keyword,
@@ -94,20 +94,18 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderDto::new);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<OrderDetailDto> getOrderById(Long id) {
         return orderRepository.findById(id)
                 .map(OrderDetailDto::new);
     }
 
-    @Transactional
     @Override
     public OrderDetailDto saveOrder(OrderDetailDto orderDetailDto) {
 
         // get user from security context holder
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        log.info("username: {}", username);
 
         Order order = modelMapper.map(orderDetailDto, Order.class);
 

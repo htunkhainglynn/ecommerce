@@ -6,16 +6,17 @@ import com.project.ecommerce.entitiy.Review;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ReviewRepository;
 import com.project.ecommerce.service.ReviewService;
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepo;
@@ -33,6 +34,7 @@ public class ReviewServiceImpl implements ReviewService {
         this.mapper = mapper;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ReviewDto> getAllReviews() {
         return reviewRepo.findAll().stream()
@@ -40,13 +42,13 @@ public class ReviewServiceImpl implements ReviewService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<ReviewDto> getReviewById(Long id) {
         Optional<Review> optionalReview = reviewRepo.findById(id);
         return optionalReview.map(ReviewDto::new);
     }
 
-    @Transactional
     @Override
     public ReviewDto saveReview(ReviewDto review) {
         Product product = productRepo.getReferenceById(review.getProductId());
