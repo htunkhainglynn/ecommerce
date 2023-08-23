@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Slf4j
 public class ProductDto {
 
     private Long id;
@@ -23,18 +26,33 @@ public class ProductDto {
 
     private String description;
 
-    private String imageUrl;
-
     private boolean inStock;
 
     private boolean available;
 
-    private List<ProductVariant> productVariants;
+    private List<ProductVariantDto> productVariants = new ArrayList<>();
 
     private Organization organization;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Review> reviews;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private double averageRating;
+
+    public ProductDto(Product entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.description = entity.getDescription();
+        this.inStock = entity.isInStock();
+        this.available = entity.isAvailable();
+        this.organization = entity.getOrganization();
+        this.reviews = entity.getReviews();
+        this.averageRating = entity.getAverageRating();
+        entity.getProductVariants().forEach(productVariant -> {
+            log.info("productVariant: {}", productVariant.getId());
+            this.productVariants.add(new ProductVariantDto(productVariant));
+        });
+    }
 
 }

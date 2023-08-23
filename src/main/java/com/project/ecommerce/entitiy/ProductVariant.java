@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class ProductVariant{
     @Column(columnDefinition = "double default 0.0")
     private double price;
 
+    private String image;
+
     @JsonIgnore
     @ManyToOne
     private Product product;
@@ -36,5 +39,4 @@ public class ProductVariant{
     @JsonIgnore
     @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL)
     private List<OrderItem> orderItem;
-
 }

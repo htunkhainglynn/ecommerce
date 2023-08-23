@@ -27,8 +27,6 @@ public class Product {
     @NotNull
     private String description;
 
-    private String imageUrl;
-
     @Column(columnDefinition = "boolean default false")
     private boolean available;
 
