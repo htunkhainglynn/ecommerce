@@ -5,7 +5,7 @@ import com.project.ecommerce.dto.UserDetailDto;
 import com.project.ecommerce.dto.UserDto;
 import com.project.ecommerce.entitiy.Order;
 import com.project.ecommerce.entitiy.User;
-import com.project.ecommerce.exceprion.UserException;
+import com.project.ecommerce.exception.UserException;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.service.DynamicQueueManager;
 import com.project.ecommerce.service.UserService;
@@ -19,14 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 @Service
@@ -36,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private final ModelMapper mapper;
 
@@ -44,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           BCryptPasswordEncoder passwordEncoder,
+                           PasswordEncoder passwordEncoder,
                            ModelMapper mapper,
                            DynamicQueueManager dynamicQueueManager) {
         this.userRepository = userRepository;
@@ -110,7 +108,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void saveUser(SignUpDto signUpDto) {
-        Optional<User> optionalUser = userRepository.findOneByUsername(signUpDto.getUsername());
+        Optional<User> optionalUser = userRepository.getReferenceByUsername(signUpDto.getUsername());
         if (optionalUser.isPresent()) {
             throw new UserException("User already exists");
         }

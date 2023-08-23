@@ -9,6 +9,7 @@ import com.project.ecommerce.service.ReviewService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,14 +49,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public ReviewDto saveReview(ReviewDto review) {
-        Optional<Product> product = productRepo.findById(review.getProductId());
-        if(product.isPresent()) {
-            Review reviewEntity = mapper.map(review, Review.class);
-            reviewEntity.setProduct(product.get());
-            reviewRepo.save(reviewEntity);
-            return new ReviewDto(reviewEntity);
-        }
-        return new ReviewDto();
+        Product product = productRepo.getReferenceById(review.getProductId());
+
+        Review reviewEntity = mapper.map(review, Review.class);
+        reviewEntity.setProduct(product);
+        reviewRepo.save(reviewEntity);
+        return new ReviewDto(reviewEntity);
     }
 
     @Transactional

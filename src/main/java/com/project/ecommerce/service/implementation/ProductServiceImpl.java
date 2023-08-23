@@ -95,14 +95,14 @@ public class ProductServiceImpl implements ProductService {
         organizationRepository.save(productDto.getOrganization());
         Product product = mapper.map(productDto, Product.class);
         product = repo.save(product);
-        saveProductVariants(product, product.getProductVariants());
+        saveProductVariants(repo.getReferenceById(product.getId()), product.getProductVariants());
         return mapper.map(product, ProductDto.class);
     }
 
-    @Transactional
+
     private void saveProductVariants(Product product, List<ProductVariant> productVariants) {
     	productVariants.forEach(productVariant -> productVariant.setProduct(product));
-    	productVariants.forEach(productVariantRepository::save);
+        productVariantRepository.saveAll(productVariants);
     }
 
     @Transactional

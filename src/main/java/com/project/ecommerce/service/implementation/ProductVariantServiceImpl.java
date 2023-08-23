@@ -4,7 +4,7 @@ import com.project.ecommerce.dto.ProductVariantCache;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.entitiy.Product;
 import com.project.ecommerce.entitiy.ProductVariant;
-import com.project.ecommerce.exceprion.ProductException;
+import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.service.ProductVariantService;

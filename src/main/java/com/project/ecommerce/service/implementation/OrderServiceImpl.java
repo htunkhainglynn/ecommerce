@@ -7,7 +7,7 @@ import com.project.ecommerce.entitiy.Order;
 import com.project.ecommerce.entitiy.OrderItem;
 import com.project.ecommerce.entitiy.ProductVariant;
 import com.project.ecommerce.entitiy.Status;
-import com.project.ecommerce.exceprion.ProductException;
+import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.repo.OrderItemRepository;
 import com.project.ecommerce.repo.OrderRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> getAllOrders(
+    public Page<OrderDto> getAllOrders(
                             String keyword,
                             Optional<Integer> page,
                             Optional<Integer> size) {
@@ -90,8 +91,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return orderRepository.findAll(specification, pageRequest)
-                .map(OrderDto::new)
-                .toList();
+                .map(OrderDto::new);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = modelMapper.map(orderDetailDto, Order.class);
 
         // set user to order
-        userRepository.findOneByUsername(username)
+        userRepository.getReferenceByUsername(username)
                 .ifPresent(order::setUser);
 
         // check if product exists in order
@@ -140,7 +140,6 @@ public class OrderServiceImpl implements OrderService {
         return new OrderDetailDto(order);
     }
 
-    @Transactional
     private void saveOrderItems(Order order, List<OrderItemDto> orderItems) {
         List<OrderItem> orderItemList = new ArrayList<>();
         orderItems.forEach(orderItemDto -> {

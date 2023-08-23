@@ -14,6 +14,7 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderDto> getAllOrders(@RequestParam(required = false) String keyword,
+    public Page<OrderDto> getAllOrders(@RequestParam(required = false) String keyword,
                                        @RequestParam Optional<Integer> page,
                                        @RequestParam Optional<Integer> size) {
         return orderService.getAllOrders(keyword, page, size);

@@ -42,7 +42,7 @@ public class DynamicQueueManager {
         rabbitAdmin.declareQueue(queue);
 
         // find customer
-        User user = userRepository.findOneByUsername(username).orElseThrow(() -> new RuntimeException("User not found."));
+        User user = userRepository.getReferenceByUsername(username).orElseThrow(() -> new RuntimeException("User not found."));
 
         // save the queue info
         queueInfoRepository.save(QueueInfo.builder()

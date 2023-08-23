@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -42,8 +41,8 @@ public class AuthController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             String token = jwtTokenProvider
                     .createToken(username,
-                            this.users.findOneByUsername(username)
-                                    .isEmpty() ? null : this.users.findOneByUsername(username)
+                            this.users.getReferenceByUsername(username)
+                                    .isEmpty() ? null : this.users.getReferenceByUsername(username)
                                     .get()
                                     .getRoles()
                                     .stream()

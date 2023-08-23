@@ -1,0 +1,13 @@
+
+f
+java:S11925"IDefine a constant instead of duplicating this literal "password" 3 times.(Á§ıó8Ûª’ 1
+S
+java:S64375"6Revoke and change this password, as it is compromised.(Á§ıó8õ‚¶ 1
+S
+java:S6437@"6Revoke and change this password, as it is compromised.(Á§ıó8ö‚¶ 1
+S
+java:S6437L"6Revoke and change this password, as it is compromised.(Á§ıó8·™œ¡1
+X	java:S125U"<This block of commented-out lines of code should be removed.(·ÌÄû8·™œ¡1
+X	java:S125^"<This block of commented-out lines of code should be removed.(·ÌÄû8·™œ¡1
+`
+java:S1128"CRemove this unused import 'org.springframework.amqp.core.Exchange'.(¸°ğ8ü‡³¡1

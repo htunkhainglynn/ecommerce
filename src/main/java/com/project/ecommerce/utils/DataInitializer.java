@@ -78,35 +78,5 @@ public class DataInitializer {
                 .build()
         );
         dynamicQueueManager.createQueueForUser("admin");
-
-
-//        List<String> categories = new ArrayList<>(List.of(
-//                "Electronics", "Fashion", "Home", "Appliances", "Toys", "Beauty", "Sports", "Automotive", "Other"
-//        ));
-//        categories.forEach(category -> {
-//            categoryRepository.save(Category.builder()
-//                    .name(category)
-//                    .build());
-//        });
-
-//        List<String> colors = new ArrayList<>(List.of(
-//                "Red", "Green", "Blue", "Yellow", "Black", "White", "Orange", "Purple", "Brown", "Pink"
-//        ));
-//        colors.forEach(color -> {
-//            colorRepo.save(Color.builder()
-//                    .name(color)
-//                    .build());
-//        });
-//
-//        List<String> sizes = new ArrayList<>(List.of(
-//                "XS", "S", "M", "L", "XL", "XXL", "5", "5.5",
-//                "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12"
-//        ));
-//        sizes.forEach(size -> {
-//            sizeRepo.save(Size.builder()
-//                    .name(size)
-//                    .build());
-//        });
-
     }
 }
