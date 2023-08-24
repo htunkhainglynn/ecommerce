@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Slf4j
 public class ProductDto {
 
     private Long id;
@@ -50,7 +49,6 @@ public class ProductDto {
         this.reviews = entity.getReviews();
         this.averageRating = entity.getAverageRating();
         entity.getProductVariants().forEach(productVariant -> {
-            log.info("productVariant: {}", productVariant.getId());
             this.productVariants.add(new ProductVariantVo(productVariant));
         });
     }

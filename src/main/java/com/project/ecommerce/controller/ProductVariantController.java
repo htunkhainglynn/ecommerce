@@ -13,7 +13,6 @@ import java.util.List;
 
 
 @RestController
-@Slf4j
 @RequestMapping("/api/v1/product-variants")
 public class ProductVariantController {
     private final ProductVariantService  productVariantService;
@@ -28,15 +27,19 @@ public class ProductVariantController {
         return ResponseEntity.ok(productVariantService.getAllProductVariants());
     }
 
-    @PostMapping  // I use for update too sorry
+
+    @PostMapping
     public ProductVariantVo createProductVariant(@RequestBody ProductVariantDto productVariantDto){
-        log.info("ProductVariantDto: {}", productVariantDto);
+        return productVariantService.saveProductVariant(productVariantDto);
+    }
+
+    @PutMapping
+    public ProductVariantVo updateProductVariant(@RequestBody ProductVariantDto productVariantDto){
         return productVariantService.saveProductVariant(productVariantDto);
     }
 
     @PostMapping("/cache")
     public void addProductVariantToCache(@RequestBody ProductVariantCache productVariantCache) {
-        log.info("ProductVariantDto: {}", productVariantCache);
         productVariantService.cacheProductVariant(productVariantCache);
     }
 

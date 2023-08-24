@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
@@ -40,10 +39,6 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         Optional<ProductDto> result = productService.getProductById(id);
-        result.get().getProductVariants().forEach(productVariantVo -> {
-            log.info("productVariantVo: {}", productVariantVo.getProduct_id());
-            log.info("productVariantVo: {}", productVariantVo.getName());
-        });
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

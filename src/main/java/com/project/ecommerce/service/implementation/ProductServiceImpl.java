@@ -7,7 +7,6 @@ import com.project.ecommerce.repo.OrganizationRepository;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.service.ProductService;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,6 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 @Transactional
 @PreAuthorize("hasAuthority('ADMIN')")
@@ -98,7 +96,6 @@ public class ProductServiceImpl implements ProductService {
         Product product = mapper.map(productDto, Product.class);
         product = repo.save(product);
         saveProductVariants(repo.getReferenceById(product.getId()), product.getProductVariants());
-        product.getProductVariants().forEach(productVariant -> log.info("productVariant: {}", productVariant.getId()));
         return new ProductDto(product);
     }
 

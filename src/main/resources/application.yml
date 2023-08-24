@@ -33,5 +33,9 @@ security:
     token:
       secret-key: 67898682BE68ED0DC883CB5B5C96D2BCDF8B4670435AA20FABFEB9846E077760
 
+cloudinary:
+  cloud-name: dx97yn40v
+  api-key: 885826543631441
+  api-secret: nYUc9V4akJUAzK2b7Gf7lcE-ENY
 
 

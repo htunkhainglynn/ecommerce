@@ -9,7 +9,6 @@ import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.service.NotificationService;
 import com.project.ecommerce.service.OrderService;
 import com.project.ecommerce.service.QueueInfoService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -20,13 +19,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/orders")
 public class OrderController {
