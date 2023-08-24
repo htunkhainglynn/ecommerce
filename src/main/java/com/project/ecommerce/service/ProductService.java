@@ -13,5 +13,4 @@ public interface ProductService {
     public Optional<ProductDto> getProductById(Long id);
     public ProductDto saveProduct(ProductDto product);
     public void deleteProduct(Long id);
-
 }

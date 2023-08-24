@@ -2,6 +2,8 @@ package com.project.ecommerce.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecommerce.entitiy.*;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +22,10 @@ import java.util.List;
 public class ProductDto {
 
     private Long id;
+
+    private Integer sku;
+
+    private Double weight;
 
     private String name;
 
@@ -41,6 +47,8 @@ public class ProductDto {
 
     public ProductDto(Product entity) {
         this.id = entity.getId();
+        this.sku = entity.getSku();
+        this.weight = entity.getWeight();
         this.name = entity.getName();
         this.description = entity.getDescription();
         this.inStock = entity.isInStock();

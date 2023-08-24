@@ -78,4 +78,14 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         return repo.findById(id)
                 .map(ProductVariantVo::new);
     }
+
+    @Override
+    public void deleteProductVariant(Integer id) {
+        repo.deleteById(id);
+    }
+
+    @Override
+    public Optional<String> getProductVariantImageUrl(Integer id) {
+        return repo.findImageUrlById(id);
+    }
 }

@@ -1,18 +1,17 @@
 package com.project.ecommerce.controller;
 
 import com.project.ecommerce.dto.ProductDto;
+import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.service.CloudinaryService;
 import com.project.ecommerce.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,19 +49,17 @@ public class ProductController {
 
     // Endpoint to create a new product
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@ModelAttribute ProductDto product, HttpServletRequest request) {
+    public ResponseEntity<ProductDto> createProduct(@ModelAttribute ProductDto product, HttpServletRequest request) throws Exception {
         // upload image & set url to product
-        product.getProductVariants().forEach(productVariant -> {
-            MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
-
-            // get image file from request
-            MultipartFile file = multipartHttpServletRequest
-                    .getFile("productVariants[" + productVariant.getId() + "].imageFile");
-
-            if (file != null && !file.isEmpty()) {
-                productVariant.setImageUrl(cloudinaryService.uploadFile(file));
-            }
-        });
+        product.getProductVariants().forEach(
+                productVariant -> {
+                    try {
+                        cloudinaryService.uploadAndSaveUrl(product.getSku(), productVariant, request);
+                    } catch (Exception e) {
+                        throw new ProductException("Error uploading image");
+                    }
+                }
+        );
 
         ProductDto result = productService.saveProduct(product);
         return ResponseEntity.ok(result);
@@ -72,7 +69,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto product) {
         Optional<ProductDto> productDto = productService.getProductById(id);
-        if(productDto.isPresent()) {
+        if (productDto.isPresent()) {
             product.setId(id);
             ProductDto result = productService.saveProduct(product);
             return ResponseEntity.ok(result);
@@ -82,9 +79,10 @@ public class ProductController {
 
     // Endpoint to delete a product
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws Exception {
         Optional<ProductDto> productDto = productService.getProductById(id);
-        if(productDto.isPresent()) {
+        if (productDto.isPresent()) {
+            cloudinaryService.deleteFolder("product_" + productDto.get().getSku());
             productService.deleteProduct(id);
             return ResponseEntity.ok().build();
         }

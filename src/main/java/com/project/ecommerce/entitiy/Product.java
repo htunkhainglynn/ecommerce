@@ -22,6 +22,13 @@ public class Product {
     private Long id;
 
     @NotNull
+    @Column(unique=true)
+    private Integer sku;
+
+    @NotNull
+    private Double weight;
+
+    @NotNull
     private String name;
 
     @NotNull

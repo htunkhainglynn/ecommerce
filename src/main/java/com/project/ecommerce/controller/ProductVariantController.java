@@ -1,15 +1,20 @@
 package com.project.ecommerce.controller;
 
+import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.dto.ProductVariantCache;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.dto.ProductVariantVo;
+import com.project.ecommerce.exception.ProductException;
+import com.project.ecommerce.service.CloudinaryService;
+import com.project.ecommerce.service.ProductService;
 import com.project.ecommerce.service.ProductVariantService;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -17,9 +22,17 @@ import java.util.List;
 public class ProductVariantController {
     private final ProductVariantService  productVariantService;
 
+    private final CloudinaryService cloudinaryService;
+
+    private final ProductService productService;
+
     @Autowired
-    public ProductVariantController(ProductVariantService productVariantService) {
+    public ProductVariantController(ProductVariantService productVariantService,
+                                    ProductService productService,
+                                    CloudinaryService cloudinaryService) {
         this.productVariantService = productVariantService;
+        this.productService = productService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @GetMapping
@@ -29,7 +42,18 @@ public class ProductVariantController {
 
 
     @PostMapping
-    public ProductVariantVo createProductVariant(@RequestBody ProductVariantDto productVariantDto){
+    public ProductVariantVo createProductVariant(@ModelAttribute ProductVariantDto productVariantDto, HttpServletRequest request){
+        Optional<ProductDto> product = productService.getProductById(productVariantDto.getProduct_id());
+        if (product.isEmpty()) {
+            throw new ProductException("Product not found");
+        }
+
+        try {
+            cloudinaryService.uploadAndSaveUrl(product.get().getSku(), productVariantDto, request);
+        } catch (Exception e) {
+            throw new ProductException("Error uploading image");
+        }
+
         return productVariantService.saveProductVariant(productVariantDto);
     }
 
@@ -38,13 +62,10 @@ public class ProductVariantController {
         return productVariantService.saveProductVariant(productVariantDto);
     }
 
-    @PostMapping("/cache")
-    public void addProductVariantToCache(@RequestBody ProductVariantCache productVariantCache) {
-        productVariantService.cacheProductVariant(productVariantCache);
-    }
-
-    @GetMapping("/cache/{id}")
-    public ResponseEntity<List<ProductVariantCache>> getAllProductVariantCache(@PathVariable Integer id) {
-        return ResponseEntity.ok(productVariantService.getAllProductVariantCache(id));
+    @DeleteMapping("/{id}")
+    public void deleteProductVariant(@PathVariable Integer id){
+        productVariantService.getProductVariantImageUrl(id)
+                .ifPresent(cloudinaryService::deleteImage);
+        productVariantService.deleteProductVariant(id);
     }
 }

@@ -17,4 +17,8 @@ public interface ProductVariantService {
     List<ProductVariantCache> getAllProductVariantCache(Integer id);
 
     Optional<ProductVariantVo> getProductVariantById(Integer id);
+
+    void deleteProductVariant(Integer id);
+
+    Optional<String> getProductVariantImageUrl(Integer id);
 }
