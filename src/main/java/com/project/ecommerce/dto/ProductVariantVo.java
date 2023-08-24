@@ -1,20 +1,15 @@
 package com.project.ecommerce.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.project.ecommerce.entitiy.ProductVariant;
-import jakarta.validation.constraints.Null;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductVariantDto {
+public class ProductVariantVo {
 
     private int id;
 
@@ -26,16 +21,13 @@ public class ProductVariantDto {
 
     private int quantity;
 
-    @JsonIgnore
-    private MultipartFile imageFile;
-
     private String image;
 
     private String name;
 
     private Long product_id;
 
-    public ProductVariantDto(ProductVariant entity) {
+    public ProductVariantVo(ProductVariant entity) {
         this.id = entity.getId();
         this.size = entity.getSize();
         this.color = entity.getColor();

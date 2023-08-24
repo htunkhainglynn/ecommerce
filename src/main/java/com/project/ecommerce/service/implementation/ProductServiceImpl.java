@@ -102,8 +102,7 @@ public class ProductServiceImpl implements ProductService {
         return new ProductDto(product);
     }
 
-    @Transactional
-    public void saveProductVariants(Product product, List<ProductVariant> productVariants) {
+    private void saveProductVariants(Product product, List<ProductVariant> productVariants) {
     	productVariants.forEach(productVariant -> productVariant.setProduct(product));
         List<ProductVariant> pvs = productVariantRepository.saveAll(productVariants);
         product.setProductVariants(pvs);

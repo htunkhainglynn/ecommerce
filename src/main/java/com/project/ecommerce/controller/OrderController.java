@@ -113,8 +113,6 @@ public class OrderController {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonNotification = objectMapper.writeValueAsString(notification);
 
-        Notification.builder().order(order).message(message).build();
-
         // save notification to database
         notificationService.saveNotification(Notification.builder().order(order).message(message).build());
 

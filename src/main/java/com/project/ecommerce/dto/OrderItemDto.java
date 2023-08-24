@@ -18,12 +18,12 @@ public class OrderItemDto {
     private Integer product_id;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private ProductVariantDto product;
+    private ProductVariantVo product;
 
     private int quantity;
 
     public OrderItemDto(OrderItem orderItem) {
-        this.product = new ProductVariantDto(orderItem.getProductVariant());
+        this.product = new ProductVariantVo(orderItem.getProductVariant());
         this.quantity = orderItem.getQuantity();
     }
 }
