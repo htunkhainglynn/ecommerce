@@ -30,7 +30,7 @@ public class ProductDto {
 
     private boolean available;
 
-    private List<ProductVariantDto> productVariants = new ArrayList<>();
+    private List<ProductVariantVo> productVariants = new ArrayList<>();
 
     private Organization organization;
 
@@ -51,7 +51,7 @@ public class ProductDto {
         this.averageRating = entity.getAverageRating();
         entity.getProductVariants().forEach(productVariant -> {
             log.info("productVariant: {}", productVariant.getId());
-            this.productVariants.add(new ProductVariantDto(productVariant));
+            this.productVariants.add(new ProductVariantVo(productVariant));
         });
     }
 

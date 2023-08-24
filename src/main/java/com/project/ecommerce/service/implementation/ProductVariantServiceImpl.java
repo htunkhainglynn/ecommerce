@@ -2,18 +2,17 @@ package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.ProductVariantCache;
 import com.project.ecommerce.dto.ProductVariantDto;
+import com.project.ecommerce.dto.ProductVariantVo;
 import com.project.ecommerce.entitiy.Product;
 import com.project.ecommerce.entitiy.ProductVariant;
 import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.service.ProductVariantService;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,20 +42,20 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
-    public List<ProductVariantDto> getAllProductVariants() {
+    public List<ProductVariantVo> getAllProductVariants() {
         return repo.findAll()
                 .stream()
-                .map(ProductVariantDto::new)
+                .map(ProductVariantVo::new)
                 .toList();
     }
 
     @Override
-    public ProductVariantDto saveProductVariant(ProductVariantDto productVariantDto) {
+    public ProductVariantVo saveProductVariant(ProductVariantDto productVariantDto) {
         Optional<Product> product = productRepo.findById(productVariantDto.getProduct_id());
         if (product.isPresent()) {
             ProductVariant productVariant = modelMapper.map(productVariantDto, ProductVariant.class);
             productVariant.setProduct(product.get());
-            return new ProductVariantDto(repo.save(productVariant));
+            return new ProductVariantVo(repo.save(productVariant));
         }
         throw new ProductException("Product not found");
     }
@@ -70,12 +69,13 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     @Override
     public List<ProductVariantCache> getAllProductVariantCache(Integer id) {
         Set<String> keys = redisTemplate.keys("ProductVariant:" + id);
+        assert keys != null;  // key might be null
         return redisTemplate.opsForValue().multiGet(keys);
     }
 
     @Override
-    public Optional<ProductVariantDto> getProductVariantById(Integer id) {
+    public Optional<ProductVariantVo> getProductVariantById(Integer id) {
         return repo.findById(id)
-                .map(ProductVariantDto::new);
+                .map(ProductVariantVo::new);
     }
 }

@@ -2,6 +2,7 @@ package com.project.ecommerce.controller;
 
 import com.project.ecommerce.dto.ProductVariantCache;
 import com.project.ecommerce.dto.ProductVariantDto;
+import com.project.ecommerce.dto.ProductVariantVo;
 import com.project.ecommerce.service.ProductVariantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,12 @@ public class ProductVariantController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductVariantDto>> getAllProductVariants() {
+    public ResponseEntity<List<ProductVariantVo>> getAllProductVariants() {
         return ResponseEntity.ok(productVariantService.getAllProductVariants());
     }
 
     @PostMapping  // I use for update too sorry
-    public ProductVariantDto createProductVariant(@RequestBody ProductVariantDto productVariantDto){
+    public ProductVariantVo createProductVariant(@RequestBody ProductVariantDto productVariantDto){
         log.info("ProductVariantDto: {}", productVariantDto);
         return productVariantService.saveProductVariant(productVariantDto);
     }

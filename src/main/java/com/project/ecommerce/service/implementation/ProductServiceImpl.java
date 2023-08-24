@@ -82,14 +82,14 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return repo.findAll(specification, pageRequest)
-                .map(product -> mapper.map(product, ProductDto.class));
+                .map(ProductDto::new);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<ProductDto> getProductById(Long id) {
         Optional<Product> optionalProduct = repo.findById(id);
-        return optionalProduct.map(product -> mapper.map(product, ProductDto.class));
+        return optionalProduct.map(ProductDto::new);
     }
 
     @Override

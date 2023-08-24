@@ -40,6 +40,10 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         Optional<ProductDto> result = productService.getProductById(id);
+        result.get().getProductVariants().forEach(productVariantVo -> {
+            log.info("productVariantVo: {}", productVariantVo.getProduct_id());
+            log.info("productVariantVo: {}", productVariantVo.getName());
+        });
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
