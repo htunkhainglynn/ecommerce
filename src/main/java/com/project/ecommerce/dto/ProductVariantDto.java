@@ -11,6 +11,8 @@ import jakarta.validation.constraints.Null;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +31,7 @@ public class ProductVariantDto {
     @JsonIgnore
     private MultipartFile imageFile;
 
-    private String image;
+    private String imageUrl;
 
     private String name;
 
@@ -40,7 +42,7 @@ public class ProductVariantDto {
         this.size = entity.getSize();
         this.color = entity.getColor();
         this.price = entity.getPrice();
-        this.image = entity.getImage();
+        this.imageUrl = entity.getImageUrl();
         this.quantity = entity.getQuantity();
         this.name = entity.getProduct().getName();
         this.product_id = entity.getProduct().getId();

@@ -1,13 +1,16 @@
 package com.project.ecommerce.controller;
 
 import com.project.ecommerce.dto.ProductDto;
+import com.project.ecommerce.service.CloudinaryService;
 import com.project.ecommerce.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +21,12 @@ public class ProductController {
 
     private final ProductService productService;
 
+    private final CloudinaryService cloudinaryService;
+
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CloudinaryService cloudinaryService) {
         this.productService = productService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @GetMapping
@@ -44,7 +50,20 @@ public class ProductController {
 
     // Endpoint to create a new product
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto product) {
+    public ResponseEntity<ProductDto> createProduct(@ModelAttribute ProductDto product, HttpServletRequest request) {
+        // upload image & set url to product
+        product.getProductVariants().forEach(productVariant -> {
+            MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
+
+            // get image file from request
+            MultipartFile file = multipartHttpServletRequest
+                    .getFile("productVariants[" + productVariant.getId() + "].imageFile");
+
+            if (file != null && !file.isEmpty()) {
+                productVariant.setImageUrl(cloudinaryService.uploadFile(file));
+            }
+        });
+
         ProductDto result = productService.saveProduct(product);
         return ResponseEntity.ok(result);
     }

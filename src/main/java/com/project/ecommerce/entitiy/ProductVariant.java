@@ -2,6 +2,7 @@ package com.project.ecommerce.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -30,7 +31,7 @@ public class ProductVariant{
     @Column(columnDefinition = "double default 0.0")
     private double price;
 
-    private String image;
+    private String imageUrl;
 
     @JsonIgnore
     @ManyToOne
