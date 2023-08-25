@@ -1,6 +1,6 @@
 package com.project.ecommerce.utils;
 
-public class Result<T> {
+public class Result<T> {  // helper class for railway oriented programming
     private T value;
     private Exception error;
 

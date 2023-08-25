@@ -48,7 +48,7 @@ public class CloudinaryService {
     }
 
     /*
-    * There are methods to retrieve image from request because I use uploadAndSaveUrl() for productDto and productVariantDto.
+    * There are two methods to retrieve image from request because I use uploadAndSaveUrl() for productDto and productVariantDto.
     * First method is for productDto.productVariantDtoList, so image file name looks like this -> productVariants[0].imageFile.
     * Second method is for productVariantDto, image file name looks like this -> imageFile.
     * So, I solve this problem by using railway oriented programming
