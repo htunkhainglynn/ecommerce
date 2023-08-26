@@ -1,4 +1,4 @@
-package com.project.ecommerce.dto;
+package com.project.ecommerce.vo;
 
 import com.project.ecommerce.entitiy.ProductVariant;
 import lombok.AllArgsConstructor;

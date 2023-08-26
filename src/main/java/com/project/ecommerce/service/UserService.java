@@ -15,4 +15,6 @@ public interface UserService {
     void saveUser(SignUpDto signUpDto);
 
     UserDetailDto updateUser(UserDetailDto userDetailDto);
+
+    Optional<UserDetailDto> getUserByUsername(String username);
 }

@@ -18,10 +18,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@Slf4j
 public class CloudinaryService {
 
     private final Cloudinary cloudinary;
@@ -50,7 +52,7 @@ public class CloudinaryService {
     /*
     * There are two methods to retrieve image from request because I use uploadAndSaveUrl() for productDto and productVariantDto.
     * First method is for productDto.productVariantDtoList, so image file name looks like this -> productVariants[0].imageFile.
-    * Second method is for productVariantDto, image file name looks like this -> imageFile.
+    * Second method is for productVariantDto & uploadProfilePic, image file name looks like this -> imageFile.
     * So, I solve this problem by using railway oriented programming
     * https://naveenkumarmuguda.medium.com/railway-oriented-programming-a-powerful-functional-programming-pattern-ab454e467f31
     * */
@@ -69,7 +71,7 @@ public class CloudinaryService {
         }
     }
 
-    private String uploadFile(String folderName, MultipartFile multipartFile) {
+    public String uploadFile(String folderName, MultipartFile multipartFile) {
         try {
             File file = convertMultiPartToFile(multipartFile);
 
@@ -80,9 +82,9 @@ public class CloudinaryService {
             boolean isDeleted = file.delete();  // delete image after upload
 
             if (isDeleted) {
-                System.out.println("File successfully deleted");
+                log.info("File successfully deleted");
             } else {
-                System.out.println("File doesn't exist");
+                log.warn("File doesn't exist");
             }
 
             return url;

@@ -21,6 +21,8 @@ public class UserDetailDto {
 
     private String email;
 
+    private String profilePictureURL;
+
     private String phone;
 
     private String address;
@@ -36,6 +38,7 @@ public class UserDetailDto {
     public UserDetailDto(User user) {
         this.id = user.getId();
         this.name = user.getUsername();
+        this.profilePictureURL = user.getProfilePictureURL();
         this.email = user.getEmail();
         this.phone = user.getPhoneNumber();
         this.address = user.getAddress();

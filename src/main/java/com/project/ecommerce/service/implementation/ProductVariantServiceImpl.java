@@ -2,7 +2,7 @@ package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.ProductVariantCache;
 import com.project.ecommerce.dto.ProductVariantDto;
-import com.project.ecommerce.dto.ProductVariantVo;
+import com.project.ecommerce.vo.ProductVariantVo;
 import com.project.ecommerce.entitiy.Product;
 import com.project.ecommerce.entitiy.ProductVariant;
 import com.project.ecommerce.exception.ProductException;

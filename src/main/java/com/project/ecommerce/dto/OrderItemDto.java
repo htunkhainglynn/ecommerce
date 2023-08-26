@@ -1,10 +1,8 @@
 package com.project.ecommerce.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecommerce.entitiy.OrderItem;
-import com.project.ecommerce.entitiy.ProductVariant;
+import com.project.ecommerce.vo.ProductVariantVo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

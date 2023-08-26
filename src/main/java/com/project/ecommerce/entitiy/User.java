@@ -28,6 +28,8 @@ public class User implements UserDetails {
 
     private String name;
 
+    private String profilePictureURL;
+
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8_bin")
     private String username;
 

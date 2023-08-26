@@ -10,7 +10,6 @@ import com.project.ecommerce.service.NotificationService;
 import com.project.ecommerce.service.OrderService;
 import com.project.ecommerce.service.QueueInfoService;
 import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,7 +39,11 @@ public class OrderController {
 
 
     @Autowired
-    public OrderController(OrderService orderService, NotificationService notificationService, QueueInfoService queueInfoService, RabbitTemplate rabbitTemplate, DirectExchange directExchange, TopicExchange topicExchange) {
+    public OrderController(OrderService orderService,
+                           NotificationService notificationService,
+                           QueueInfoService queueInfoService,
+                           RabbitTemplate rabbitTemplate,
+                           DirectExchange directExchange) {
         this.orderService = orderService;
         this.notificationService = notificationService;
         this.queueInfoService = queueInfoService;

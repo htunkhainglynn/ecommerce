@@ -1,9 +1,8 @@
 package com.project.ecommerce.controller;
 
 import com.project.ecommerce.dto.ProductDto;
-import com.project.ecommerce.dto.ProductVariantCache;
 import com.project.ecommerce.dto.ProductVariantDto;
-import com.project.ecommerce.dto.ProductVariantVo;
+import com.project.ecommerce.vo.ProductVariantVo;
 import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.service.CloudinaryService;
 import com.project.ecommerce.service.ProductService;

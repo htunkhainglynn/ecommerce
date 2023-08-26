@@ -29,7 +29,6 @@ import java.util.function.Predicate;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -124,6 +123,12 @@ public class UserServiceImpl implements UserService {
                     return mapper.map(userRepository.save(user), UserDetailDto.class);
                 })
                 .orElseThrow(() -> new UserException("User not found"));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<UserDetailDto> getUserByUsername(String username) {
+        return userRepository.findByUsername(username).map(UserDetailDto::new);
     }
 
 }
