@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -43,4 +44,16 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order order)) return false;
+        return Double.compare(getSubTotal(), order.getSubTotal()) == 0 && Double.compare(getTotalPrice(), order.getTotalPrice()) == 0 && Objects.equals(getId(), order.getId()) && Objects.equals(getOrderDate(), order.getOrderDate()) && Objects.equals(getUser(), order.getUser()) && Objects.equals(getOrderItems(), order.getOrderItems()) && Objects.equals(getShipping(), order.getShipping()) && getStatus() == order.getStatus();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getOrderDate(), getSubTotal(), getTotalPrice(), getUser(), getOrderItems(), getShipping(), getStatus());
+    }
 }

@@ -18,6 +18,8 @@ public class UserDto {
 
     private String username;
 
+    private String profilePictureURL;
+
     private String email;
 
     private String phone;
@@ -32,6 +34,7 @@ public class UserDto {
         this.id = entity.getId();
         this.username = entity.getUsername();
         this.name = entity.getName();
+        this.profilePictureURL = entity.getProfilePictureURL();
         this.email = entity.getEmail();
         this.phone = entity.getPhoneNumber();
         this.active = entity.isActive();

@@ -131,4 +131,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username).map(UserDetailDto::new);
     }
 
+    @Override
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
+
 }

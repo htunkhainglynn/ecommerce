@@ -10,8 +10,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -48,10 +50,9 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
+            cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST},
             fetch = FetchType.LAZY)
-    private List<Order> orders;
+    private List<Order> orders = new ArrayList<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "role", joinColumns = @JoinColumn(name = "user_id"))
@@ -66,7 +67,6 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
-            orphanRemoval = true,
             fetch = FetchType.LAZY)
     private List<Shipping> shipping;
 
@@ -109,5 +109,17 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return isActive() == user.isActive() && Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getProfilePictureURL(), user.getProfilePictureURL()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getAddress(), user.getAddress()) && Objects.equals(getPhoneNumber(), user.getPhoneNumber()) && Objects.equals(getOrders(), user.getOrders()) && Objects.equals(getRoles(), user.getRoles()) && Objects.equals(getWishList(), user.getWishList()) && Objects.equals(getShipping(), user.getShipping()) && Objects.equals(getQueueInfo(), user.getQueueInfo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getProfilePictureURL(), getUsername(), getEmail(), getPassword(), getAddress(), getPhoneNumber(), isActive(), getOrders(), getRoles(), getWishList(), getShipping(), getQueueInfo());
     }
 }

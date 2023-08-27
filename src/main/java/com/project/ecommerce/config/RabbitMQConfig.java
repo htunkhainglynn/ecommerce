@@ -10,10 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    private final String directExchangeName = "ecommerce-direct-exchange";
-    private final String fanoutExchangeName = "ecommerce-fanout-exchange";
-    private final String topicExchangeName = "ecommerce-topic-exchange";
-
     @Bean
     public Queue topicQueue() {
         return new Queue("ecommerce.topic.queue", true, false, false);
@@ -25,7 +21,7 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory, TopicExchange topicExchange, FanoutExchange fanoutExchange, DirectExchange directExchange) {
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory, TopicExchange topicExchange, FanoutExchange fanoutExchange) {
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
         rabbitAdmin.declareBinding(BindingBuilder.bind(topicQueue()).to(topicExchange).with("ecommerce.topic.key.*"));
         rabbitAdmin.declareBinding(BindingBuilder.bind(fanoutQueue()).to(fanoutExchange));
@@ -34,22 +30,24 @@ public class RabbitMQConfig {
 
     @Bean
     public DirectExchange directExchange() {
+        String directExchangeName = "ecommerce-direct-exchange";
         return new DirectExchange(directExchangeName);
     }
 
     @Bean
     public FanoutExchange fanoutExchange() {
+        String fanoutExchangeName = "ecommerce-fanout-exchange";
         return new FanoutExchange(fanoutExchangeName);
     }
 
     @Bean
     public TopicExchange topicExchange() {
+        String topicExchangeName = "ecommerce-topic-exchange";
         return new TopicExchange(topicExchangeName);
     }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        return rabbitTemplate;
+        return new RabbitTemplate(connectionFactory);
     }
 }

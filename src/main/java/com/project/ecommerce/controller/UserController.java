@@ -49,4 +49,15 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    // delete user by id
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+        Optional<UserDetailDto> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            userService.deleteUserById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }
