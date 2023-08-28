@@ -22,13 +22,13 @@ public class ProductVariantVo {
 
     private double price;
 
-    private int quantity;
-
     private String imageUrl;
 
     private String name;
 
     private Long product_id;
+
+    private boolean inStock;
 
     public ProductVariantVo(ProductVariant entity) {
         this.id = entity.getId();
@@ -36,8 +36,8 @@ public class ProductVariantVo {
         this.color = entity.getColor();
         this.price = entity.getPrice();
         this.imageUrl = entity.getImageUrl();
-        this.quantity = entity.getQuantity();
         this.name = entity.getProduct().getName();
         this.product_id = entity.getProduct().getId();
+        this.inStock = entity.isInStock();
     }
 }

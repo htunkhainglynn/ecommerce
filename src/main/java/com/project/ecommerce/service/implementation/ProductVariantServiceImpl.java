@@ -54,6 +54,11 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         Optional<Product> product = productRepo.findById(productVariantDto.getProduct_id());
         if (product.isPresent()) {
             ProductVariant productVariant = modelMapper.map(productVariantDto, ProductVariant.class);
+
+            if (productVariant.getQuantity() > 0) {
+                productVariant.setInStock(true);
+            }
+
             productVariant.setProduct(product.get());
             return new ProductVariantVo(repo.save(productVariant));
         }

@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductVariant{
+public class ProductVariant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +32,9 @@ public class ProductVariant{
     private double price;
 
     private String imageUrl;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean inStock;
 
     @JsonIgnore
     @ManyToOne

@@ -4,6 +4,7 @@ import com.project.ecommerce.dto.ProductDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ProductService {
@@ -13,4 +14,6 @@ public interface ProductService {
     public Optional<ProductDto> getProductById(Long id);
     public ProductDto saveProduct(ProductDto product);
     public void deleteProduct(Long id);
+
+    void updateProductQuantity(Map<Integer, Integer> productQuantityMap);
 }

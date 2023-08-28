@@ -20,7 +20,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
-
     @Column(name = "order_date")
     private LocalDate orderDate;
 
@@ -42,4 +41,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "shipping_id")
     private Shipping shipping;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }

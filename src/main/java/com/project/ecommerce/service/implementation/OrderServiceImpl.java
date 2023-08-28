@@ -1,6 +1,7 @@
 package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.OrderDetailDto;
+import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
 import com.project.ecommerce.dto.OrderItemDto;
@@ -100,6 +101,17 @@ public class OrderServiceImpl implements OrderService {
     public Optional<OrderDetailVo> getOrderById(Long id) {
         return orderRepository.findById(id)
                 .map(OrderDetailVo::new);
+    }
+
+    @Override
+    public OrderDetailVo updateStatue(Long id, Status status) {
+        Optional<Order> order = orderRepository.findById(id);
+        if (order.isEmpty()) {
+            throw new ProductException("Order not found");
+        }
+
+        order.get().setStatus(status);
+        return new OrderDetailVo(order.get());
     }
 
     @Override

@@ -56,8 +56,25 @@ public class ProductVariantController {
         return productVariantService.saveProductVariant(productVariantDto);
     }
 
-    @PutMapping
-    public ProductVariantVo updateProductVariant(@RequestBody ProductVariantDto productVariantDto){
+    @PutMapping("/{id}")
+    public ProductVariantVo updateProductVariant(@PathVariable Integer id, @ModelAttribute ProductVariantDto productVariantDto, HttpServletRequest request){
+        productVariantDto.setId(id);
+        Optional<ProductDto> product = productService.getProductById(productVariantDto.getProduct_id());
+        if (product.isEmpty()) {
+            throw new ProductException("Product not found");
+        }
+
+        // if image is updated, delete old image
+        if (productVariantDto.getImageFile() != null) {
+            productVariantService.getProductVariantImageUrl(id)
+                    .ifPresent(cloudinaryService::deleteImage);
+            try {
+                cloudinaryService.uploadAndSaveUrl(product.get().getSku(), productVariantDto, request);
+            } catch (Exception e) {
+                throw new ProductException("Error uploading image");
+            }
+        }
+
         return productVariantService.saveProductVariant(productVariantDto);
     }
 

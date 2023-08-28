@@ -37,9 +37,6 @@ public class Product {
     @Column(columnDefinition = "boolean default false")
     private boolean available;
 
-    @Column(columnDefinition = "boolean default true")
-    private boolean inStock;
-
     @OneToMany(mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<ProductVariant> productVariants;
 

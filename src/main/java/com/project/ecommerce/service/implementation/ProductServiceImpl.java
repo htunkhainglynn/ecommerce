@@ -3,6 +3,7 @@ package com.project.ecommerce.service.implementation;
 import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.entitiy.Product;
 import com.project.ecommerce.entitiy.ProductVariant;
+import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.repo.OrganizationRepository;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
@@ -18,12 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 @Transactional
 @PreAuthorize("hasAuthority('ADMIN')")
-public class ProductServiceImpl implements ProductService {
+public class  ProductServiceImpl implements ProductService {
 
     private final ModelMapper mapper;
 
@@ -100,7 +102,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void saveProductVariants(Product product, List<ProductVariant> productVariants) {
-    	productVariants.forEach(productVariant -> productVariant.setProduct(product));
+    	productVariants.forEach(productVariant -> {
+            productVariant.setProduct(product);
+            if (productVariant.getQuantity() > 0) {
+                productVariant.setInStock(true);
+            }
+        });
         List<ProductVariant> pvs = productVariantRepository.saveAll(productVariants);
         product.setProductVariants(pvs);
     }
@@ -108,6 +115,24 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         repo.deleteById(id);
+    }
+
+    // to update quantity after an order is placed
+    @Override
+    public void updateProductQuantity(Map<Integer, Integer> productQuantityMap) {
+        productQuantityMap.forEach((key, value) -> {
+            Optional<Integer> productVariant = productVariantRepository.findQuantityById(key);
+            if (productVariant.isPresent()) {
+                Integer quantity = productVariant.get();
+                if (quantity < value) {
+                    throw new ProductException("Product quantity is not enough!");
+                } else if (quantity.equals(value)) {
+                    productVariantRepository.updateInStockById(key, false);
+                }
+                quantity -= value;
+                productVariantRepository.updateQuantityById(key, quantity);
+            }
+        });
     }
 
 }

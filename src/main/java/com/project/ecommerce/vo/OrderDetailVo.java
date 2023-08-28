@@ -34,11 +34,14 @@ public class OrderDetailVo {
 
     private UserDto user;
 
+    private Status status;
+
     public OrderDetailVo(Order order) {
         this.orderId = order.getId();
         this.orderDate = order.getOrderDate();
         this.subTotal = order.getSubTotal();
         this.totalPrice = order.getTotalPrice();
+        this.status = order.getStatus();
         this.orderItems = new ArrayList<>();
         this.user = new UserDto(order.getUser());
         order.getOrderItems().forEach(orderItem -> this.orderItems.add(new OrderItemDto(orderItem)));

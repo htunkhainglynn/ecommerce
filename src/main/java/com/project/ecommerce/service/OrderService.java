@@ -1,6 +1,7 @@
 package com.project.ecommerce.service;
 
 import com.project.ecommerce.dto.OrderDetailDto;
+import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
 import org.springframework.data.domain.Page;
@@ -13,4 +14,6 @@ public interface OrderService {
     Page<OrderVo> getAllOrders(String keyword, Optional<Integer> page, Optional<Integer> size);
 
     Optional<OrderDetailVo> getOrderById(Long id);
+
+    OrderDetailVo updateStatue(Long id, Status status);
 }

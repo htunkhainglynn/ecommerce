@@ -27,6 +27,8 @@ public class ProductVariantDto {
 
     private double price;
 
+    private boolean inStock;
+
     private int quantity;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -48,5 +50,6 @@ public class ProductVariantDto {
         this.quantity = entity.getQuantity();
         this.name = entity.getProduct().getName();
         this.product_id = entity.getProduct().getId();
+        this.inStock = entity.isInStock();
     }
 }

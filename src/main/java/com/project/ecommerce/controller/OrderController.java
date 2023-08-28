@@ -3,30 +3,39 @@ package com.project.ecommerce.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.ecommerce.dto.OrderDetailDto;
+import com.project.ecommerce.entitiy.Status;
+import com.project.ecommerce.service.ProductService;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
 import com.project.ecommerce.entitiy.Notification;
 import com.project.ecommerce.service.NotificationService;
 import com.project.ecommerce.service.OrderService;
 import com.project.ecommerce.service.QueueInfoService;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/orders")
 public class OrderController {
 
     private final OrderService orderService;
+
+    private final ProductService productService;
 
     private final NotificationService notificationService;
 
@@ -36,18 +45,24 @@ public class OrderController {
 
     private final DirectExchange directExchange;
 
+    private final ModelMapper mapper;
+
 
     @Autowired
     public OrderController(OrderService orderService,
+                           ProductService productService,
                            NotificationService notificationService,
                            QueueInfoService queueInfoService,
                            RabbitTemplate rabbitTemplate,
-                           DirectExchange directExchange) {
+                           DirectExchange directExchange,
+                           ModelMapper mapper) {
         this.orderService = orderService;
+        this.productService = productService;
         this.notificationService = notificationService;
         this.queueInfoService = queueInfoService;
         this.rabbitTemplate = rabbitTemplate;
         this.directExchange = directExchange;
+        this.mapper = mapper;
     }
 
     @GetMapping
@@ -59,7 +74,23 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderDetailVo> addOrder(@RequestBody OrderDetailDto orderDto) throws JsonProcessingException {
+
+        // update product quantity in database
+        Map<Integer, Integer> productQuantityMap = new HashMap<>();
+
+        orderDto.getOrderItems().forEach(orderItemDto -> {
+            Integer productId = orderItemDto.getProduct_id();
+            Integer quantity = orderItemDto.getQuantity();
+            productQuantityMap.put(productId, quantity);
+        });
+
+        productService.updateProductQuantity(productQuantityMap);
+
+        // set order status
+        orderDto.setStatus(Status.PENDING);
+
         OrderDetailVo result = orderService.saveOrder(orderDto);
+
         String routingKey = getAdminRoutingKey();
         sendNotification(result, "New order arrived!", routingKey);
         return ok(result);
@@ -69,6 +100,36 @@ public class OrderController {
     public ResponseEntity<OrderDetailVo> getOrderById(@PathVariable Long id) {
         Optional<OrderDetailVo> result = orderService.getOrderById(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderDetailVo> updateOrderStatus(@PathVariable Long id) throws JsonProcessingException {
+
+        log.info("order id: {}", id);
+        Optional<OrderDetailVo> result = orderService.getOrderById(id);
+        if (result.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        OrderDetailVo updatedResult;
+
+        // if order status is pending, change it to delivered
+        if(result.get().getStatus().equals(Status.PENDING)) {
+            updatedResult = orderService.updateStatue(id, Status.SHIPPED);
+
+            // send notification to customer
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            String routingKey = queueInfoService.getRoutingKeyByUsername(username);
+            sendNotification(result.get(), "Order has been shipped!", routingKey);
+        } else {
+            updatedResult = orderService.updateStatue(id, Status.RECEIVED);
+
+            // send notification to admin
+            String routingKey = getAdminRoutingKey();
+            sendNotification(result.get(), "Order has been received!", routingKey);
+        }
+
+        return ok(updatedResult);
     }
 
     private String getAdminRoutingKey() {

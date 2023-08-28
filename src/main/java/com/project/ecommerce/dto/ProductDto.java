@@ -31,8 +31,6 @@ public class ProductDto {
 
     private String description;
 
-    private boolean inStock;
-
     private boolean available;
 
     private List<ProductVariantDto> productVariants = new ArrayList<>();
@@ -51,7 +49,6 @@ public class ProductDto {
         this.weight = entity.getWeight();
         this.name = entity.getName();
         this.description = entity.getDescription();
-        this.inStock = entity.isInStock();
         this.available = entity.isAvailable();
         this.organization = entity.getOrganization();
         this.reviews = entity.getReviews();
