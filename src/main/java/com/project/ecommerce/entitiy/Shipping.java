@@ -26,10 +26,7 @@ public class Shipping {
     private String zipCode;
     private String country;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

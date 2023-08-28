@@ -1,7 +1,7 @@
 package com.project.ecommerce.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.ecommerce.dto.OrderDetailDto;
+import com.project.ecommerce.vo.OrderDetailVo;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +21,7 @@ public class Notification {
 
     private String message;
 
-    private OrderDetailDto order;
+    private OrderDetailVo order;
 
     @JsonIgnore
     private String username;

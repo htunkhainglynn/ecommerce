@@ -3,9 +3,9 @@ package com.project.ecommerce.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.ecommerce.dto.OrderDetailDto;
-import com.project.ecommerce.dto.OrderDto;
+import com.project.ecommerce.vo.OrderDetailVo;
+import com.project.ecommerce.vo.OrderVo;
 import com.project.ecommerce.entitiy.Notification;
-import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.service.NotificationService;
 import com.project.ecommerce.service.OrderService;
 import com.project.ecommerce.service.QueueInfoService;
@@ -14,7 +14,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -52,58 +51,31 @@ public class OrderController {
     }
 
     @GetMapping
-    public Page<OrderDto> getAllOrders(@RequestParam(required = false) String keyword,
-                                       @RequestParam Optional<Integer> page,
-                                       @RequestParam Optional<Integer> size) {
+    public Page<OrderVo> getAllOrders(@RequestParam(required = false) String keyword,
+                                      @RequestParam Optional<Integer> page,
+                                      @RequestParam Optional<Integer> size) {
         return orderService.getAllOrders(keyword, page, size);
     }
 
     @PostMapping
-    public ResponseEntity<OrderDetailDto> addOrder(@RequestBody OrderDetailDto orderDto) throws JsonProcessingException {
-        OrderDetailDto result = orderService.saveOrder(orderDto);
+    public ResponseEntity<OrderDetailVo> addOrder(@RequestBody OrderDetailDto orderDto) throws JsonProcessingException {
+        OrderDetailVo result = orderService.saveOrder(orderDto);
         String routingKey = getAdminRoutingKey();
         sendNotification(result, "New order arrived!", routingKey);
         return ok(result);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDetailDto> getOrderById(@PathVariable Long id) {
-        Optional<OrderDetailDto> result = orderService.getOrderById(id);
+    public ResponseEntity<OrderDetailVo> getOrderById(@PathVariable Long id) {
+        Optional<OrderDetailVo> result = orderService.getOrderById(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<OrderDetailDto> updateOrderStatus(@PathVariable Long id) throws JsonProcessingException {
-        Optional<OrderDetailDto> result = orderService.getOrderById(id);
-        if (result.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        // if order status is pending, change it to delivered
-        if(result.get().getStatus().equals(Status.PENDING)) {
-            result.get().setStatus(Status.SHIPPED);
-
-            // send notification to customer
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            String routingKey = queueInfoService.getRoutingKeyByUsername(username);
-            sendNotification(result.get(), "Order has been shipped!", routingKey);
-
-        } else {
-            result.get().setStatus(Status.RECEIVED);
-
-            // send notification to admin
-            String routingKey = getAdminRoutingKey();
-            sendNotification(result.get(), "Order has been received!", routingKey);
-        }
-
-        return ok(orderService.saveOrder(result.get()));
     }
 
     private String getAdminRoutingKey() {
         return queueInfoService.getRoutingKeyByUsername("admin");
     }
 
-    private void sendNotification(OrderDetailDto order, String message, String routingKey) throws JsonProcessingException {
+    private void sendNotification(OrderDetailVo order, String message, String routingKey) throws JsonProcessingException {
         // send notification to admin
         Map<String, Object> notification = new HashMap<>();
         notification.put("message", message);

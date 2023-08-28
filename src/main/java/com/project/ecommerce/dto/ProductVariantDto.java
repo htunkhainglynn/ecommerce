@@ -29,9 +29,10 @@ public class ProductVariantDto {
 
     private int quantity;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private MultipartFile imageFile;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imageUrl;
 
     private String name;

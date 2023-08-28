@@ -3,6 +3,7 @@ package com.project.ecommerce.dto;
 import com.project.ecommerce.entitiy.Shipping;
 import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.entitiy.WishList;
+import com.project.ecommerce.vo.OrderDetailVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,7 @@ public class UserDetailDto {
 
     private boolean active;
 
-    private List<OrderDetailDto> orders = new ArrayList<>();
+    private List<OrderDetailVo> orders = new ArrayList<>();
 
     private List<Shipping> shipping = new ArrayList<>();
 
@@ -43,7 +44,7 @@ public class UserDetailDto {
         this.phone = user.getPhoneNumber();
         this.address = user.getAddress();
         this.active = user.isActive();
-        user.getOrders().forEach(order -> this.orders.add(new OrderDetailDto(order)));
+        user.getOrders().forEach(order -> this.orders.add(new OrderDetailVo(order)));
         this.shipping.addAll(user.getShipping());
         this.wishList = user.getWishList();
     }

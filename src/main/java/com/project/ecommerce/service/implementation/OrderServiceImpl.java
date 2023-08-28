@@ -1,12 +1,12 @@
 package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.OrderDetailDto;
-import com.project.ecommerce.dto.OrderDto;
+import com.project.ecommerce.vo.OrderDetailVo;
+import com.project.ecommerce.vo.OrderVo;
 import com.project.ecommerce.dto.OrderItemDto;
 import com.project.ecommerce.entitiy.Order;
 import com.project.ecommerce.entitiy.OrderItem;
 import com.project.ecommerce.entitiy.ProductVariant;
-import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.repo.OrderItemRepository;
 import com.project.ecommerce.repo.OrderRepository;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<OrderDto> getAllOrders(
+    public Page<OrderVo> getAllOrders(
                             String keyword,
                             Optional<Integer> page,
                             Optional<Integer> size) {
@@ -91,23 +92,26 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return orderRepository.findAll(specification, pageRequest)
-                .map(OrderDto::new);
+                .map(OrderVo::new);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<OrderDetailDto> getOrderById(Long id) {
+    public Optional<OrderDetailVo> getOrderById(Long id) {
         return orderRepository.findById(id)
-                .map(OrderDetailDto::new);
+                .map(OrderDetailVo::new);
     }
 
     @Override
-    public OrderDetailDto saveOrder(OrderDetailDto orderDetailDto) {
+    public OrderDetailVo saveOrder(OrderDetailDto orderDetailDto) {
 
         // get user from security context holder
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Order order = modelMapper.map(orderDetailDto, Order.class);
+
+        // set order date
+        order.setOrderDate(LocalDate.now());
 
         // set user to order
         userRepository.getReferenceByUsername(username)
@@ -126,16 +130,11 @@ public class OrderServiceImpl implements OrderService {
             throw new ProductException("Order items cannot be empty");
         }
 
-        // set status if order is new
-        if (orderDetailDto.getStatus() == null) {
-            order.setStatus(Status.PENDING);
-        }
-
         // save order
         orderRepository.save(order);
         saveOrderItems(order, orderDetailDto.getOrderItems());
 
-        return new OrderDetailDto(order);
+        return new OrderDetailVo(order);
     }
 
     private void saveOrderItems(Order order, List<OrderItemDto> orderItems) {

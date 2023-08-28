@@ -38,4 +38,9 @@ cloudinary:
   api-key: 885826543631441
   api-secret: nYUc9V4akJUAzK2b7Gf7lcE-ENY
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
 
