@@ -37,6 +37,14 @@ public class ReviewController {
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    public ResponseEntity<List<ReviewDto>> getReviewsByProductId(@PathVariable Long productId) {
+        Optional<ProductDto> product = productService.getProductById(productId);
+        if (product.isPresent()) {
+            return ResponseEntity.ok(reviewService.getReviewsByProductId(productId));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping("/product/{productId}")
     public ResponseEntity<ReviewDto> createReviewByProductId(@PathVariable Long productId, @RequestBody ReviewDto review) {
         Optional<ProductDto> product = productService.getProductById(productId);

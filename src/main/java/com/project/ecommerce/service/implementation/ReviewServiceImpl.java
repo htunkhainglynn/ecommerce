@@ -64,4 +64,12 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteReview(Long id) {
         reviewRepo.deleteById(id);
     }
+
+    @Override
+    public List<ReviewDto> getReviewsByProductId(Long productId) {
+        return reviewRepo.findByProductId(productId)
+                .stream()
+                .map(ReviewDto::new)
+                .toList();
+    }
 }

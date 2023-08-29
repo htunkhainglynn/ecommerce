@@ -10,4 +10,6 @@ public interface ReviewService {
     Optional<ReviewDto> getReviewById(Long id);
     ReviewDto saveReview(ReviewDto review);
     void deleteReview(Long id);
+
+    List<ReviewDto> getReviewsByProductId(Long productId);
 }
