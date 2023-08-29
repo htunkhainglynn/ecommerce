@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 
 @RestController
 @RequestMapping("/api/v1/product-variants")
@@ -36,28 +38,29 @@ public class ProductVariantController {
 
     @GetMapping
     public ResponseEntity<List<ProductVariantVo>> getAllProductVariants() {
-        return ResponseEntity.ok(productVariantService.getAllProductVariants());
+        return ok(productVariantService.getAllProductVariants());
     }
 
 
     @PostMapping
-    public ProductVariantVo createProductVariant(@ModelAttribute ProductVariantDto productVariantDto, HttpServletRequest request){
+    public ResponseEntity<ProductVariantVo> createProductVariant(ProductVariantDto productVariantDto,
+                                                 HttpServletRequest request){
         Optional<ProductDto> product = productService.getProductById(productVariantDto.getProduct_id());
         if (product.isEmpty()) {
             throw new ProductException("Product not found");
         }
 
         try {
-            cloudinaryService.uploadAndSaveUrl(product.get().getSku(), productVariantDto, request);
+            cloudinaryService.uploadAndSetUrl(product.get().getSku(), productVariantDto, request);
         } catch (Exception e) {
             throw new ProductException("Error uploading image");
         }
 
-        return productVariantService.saveProductVariant(productVariantDto);
+        return ok(productVariantService.saveProductVariant(productVariantDto));
     }
 
     @PutMapping("/{id}")
-    public ProductVariantVo updateProductVariant(@PathVariable Integer id, @ModelAttribute ProductVariantDto productVariantDto, HttpServletRequest request){
+    public ProductVariantVo updateProductVariant(@PathVariable Integer id, ProductVariantDto productVariantDto, HttpServletRequest request){
         productVariantDto.setId(id);
         Optional<ProductDto> product = productService.getProductById(productVariantDto.getProduct_id());
         if (product.isEmpty()) {
@@ -69,7 +72,7 @@ public class ProductVariantController {
             productVariantService.getProductVariantImageUrl(id)
                     .ifPresent(cloudinaryService::deleteImage);
             try {
-                cloudinaryService.uploadAndSaveUrl(product.get().getSku(), productVariantDto, request);
+                cloudinaryService.uploadAndSetUrl(product.get().getSku(), productVariantDto, request);
             } catch (Exception e) {
                 throw new ProductException("Error uploading image");
             }

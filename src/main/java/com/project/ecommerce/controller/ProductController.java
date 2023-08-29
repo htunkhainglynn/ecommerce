@@ -5,11 +5,9 @@ import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.service.CloudinaryService;
 import com.project.ecommerce.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -49,12 +47,13 @@ public class ProductController {
 
     // Endpoint to create a new product
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@ModelAttribute ProductDto product, HttpServletRequest request) throws Exception {
-        // upload image & set url to product
+    public ResponseEntity<ProductDto> createProduct(ProductDto product,
+                                                    HttpServletRequest request) {
+        // upload image & set url to each product variant
         product.getProductVariants().forEach(
                 productVariant -> {
                     try {
-                        cloudinaryService.uploadAndSaveUrl(product.getSku(), productVariant, request);
+                        cloudinaryService.uploadAndSetUrl(product.getSku(), productVariant, request);
                     } catch (Exception e) {
                         throw new ProductException("Error uploading image");
                     }

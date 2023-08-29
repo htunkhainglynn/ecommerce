@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +32,7 @@ public class CloudinaryService {
         this.cloudinary = cloudinary;
     }
 
-    public void uploadAndSaveUrl(Integer productSku, ProductVariantDto productVariant, HttpServletRequest request) throws Exception {
+    public void uploadAndSetUrl(Integer productSku, ProductVariantDto productVariant, HttpServletRequest request) throws Exception {
         String folderName = createFolder(productSku);  // same folder doesn't create twice
 
         Result<MultipartFile> imageResult = retrieveImage(request, productVariant);
