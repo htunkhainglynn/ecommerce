@@ -65,6 +65,7 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepo.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ReviewDto> getReviewsByProductId(Long productId) {
         return reviewRepo.findByProductId(productId)
