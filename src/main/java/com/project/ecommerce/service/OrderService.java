@@ -16,4 +16,6 @@ public interface OrderService {
     Optional<OrderDetailVo> getOrderById(Long id);
 
     OrderDetailVo updateStatue(Long id, Status status);
+
+    Optional<OrderDetailVo> getOrderByIdWithUsername(Long id, String username);
 }

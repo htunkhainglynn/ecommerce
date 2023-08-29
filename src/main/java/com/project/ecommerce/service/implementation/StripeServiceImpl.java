@@ -57,6 +57,6 @@ public class StripeServiceImpl implements StripeService {
                         SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                 .setName(stripeItemDto.getProductName())
                                 .build())
-                .setUnitAmount((long)(stripeItemDto.getPrice() * 100L)).build();
+                .setUnitAmount(stripeItemDto.getPrice() * 100L).build();
     }
 }

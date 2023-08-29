@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +49,7 @@ public class UserServiceImpl implements UserService {
         this.dynamicQueueManager = dynamicQueueManager;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional(readOnly = true)
     @Override
     public Page<UserDto> getAllUsers(String keyword, Optional<Integer> page, Optional<Integer> size) {

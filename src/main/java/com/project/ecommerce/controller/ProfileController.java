@@ -1,9 +1,12 @@
 package com.project.ecommerce.controller;
 
+import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.dto.UserDetailDto;
 import com.project.ecommerce.service.CloudinaryService;
+import com.project.ecommerce.service.OrderService;
 import com.project.ecommerce.service.ProfileService;
 import com.project.ecommerce.service.UserService;
+import com.project.ecommerce.vo.OrderDetailVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,26 +24,32 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/api/v1/profile")
 public class ProfileController {
 
-    private final ProfileService profileService;
-
     private final CloudinaryService cloudinaryService;
 
     private final UserService userService;
 
+    private final OrderService orderService;
+
     @Autowired
-    public ProfileController(ProfileService profileService,
-                             CloudinaryService cloudinaryService,
-                             UserService userService) {
-        this.profileService = profileService;
+    public ProfileController(CloudinaryService cloudinaryService,
+                             UserService userService,
+                             OrderService orderService) {
         this.cloudinaryService = cloudinaryService;
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     @GetMapping
-    public void getProfile() {
-        // get user id from security context
-        // get user by id
-        // return user
+    public ResponseEntity<UserDetailDto> getProfile() {
+        Optional<UserDetailDto> userDetail = getUserDetailDto();
+        return userDetail.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/orders/{id}")
+    public ResponseEntity<OrderDetailVo> getOrderByIdAndUsername(@PathVariable("id") Long id) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OrderDetailVo> orderDetail = orderService.getOrderByIdWithUsername(id, username);
+        return orderDetail.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/upload")

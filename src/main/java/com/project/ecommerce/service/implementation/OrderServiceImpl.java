@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
         this.modelMapper = modelMapper;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional(readOnly = true)
     @Override
     public Page<OrderVo> getAllOrders(
@@ -96,6 +98,7 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderVo::new);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional(readOnly = true)
     @Override
     public Optional<OrderDetailVo> getOrderById(Long id) {
@@ -112,6 +115,13 @@ public class OrderServiceImpl implements OrderService {
 
         order.get().setStatus(status);
         return new OrderDetailVo(order.get());
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @Override
+    public Optional<OrderDetailVo> getOrderByIdWithUsername(Long id, String username) {
+        return orderRepository.findByIdAndUserUsername(id, username)
+                .map(OrderDetailVo::new);
     }
 
     @Override
