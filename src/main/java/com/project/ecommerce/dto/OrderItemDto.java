@@ -18,6 +18,10 @@ public class OrderItemDto {
 
     private int quantity;
 
+    private int price;
+
+    private String productName;
+
     public OrderItemDto(OrderItem orderItem) {
         this.productVariant = new ProductVariantVo(orderItem.getProductVariant());
         this.quantity = orderItem.getQuantity();

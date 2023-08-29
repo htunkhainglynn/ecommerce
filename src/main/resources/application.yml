@@ -44,3 +44,10 @@ springdoc:
   api-docs:
     path: /v3/api-docs
 
+base:
+  url: http://localhost:8080
+
+stripe:
+  secret:
+    key: sk_test_51NjhWBBw2ItUGB0m5op5hLYTpvOGvmNNDOOS2e1XLCNmWFe2udfuuT2GyiIDwbwxAoDk7Ako36cgtmQVnWJYhJTw00lEtvKTt4
+
