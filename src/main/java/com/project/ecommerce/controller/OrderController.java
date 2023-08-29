@@ -3,15 +3,15 @@ package com.project.ecommerce.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.ecommerce.dto.OrderDetailDto;
+import com.project.ecommerce.entitiy.Notification;
 import com.project.ecommerce.entitiy.Status;
-import com.project.ecommerce.service.*;
+import com.project.ecommerce.service.NotificationService;
+import com.project.ecommerce.service.OrderService;
+import com.project.ecommerce.service.ProductService;
+import com.project.ecommerce.service.QueueInfoService;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
-import com.project.ecommerce.entitiy.Notification;
-import com.stripe.exception.StripeException;
-import com.stripe.model.checkout.Session;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,23 +43,19 @@ public class OrderController {
 
     private final DirectExchange directExchange;
 
-    private final StripeService stripeService;
-
     @Autowired
     public OrderController(OrderService orderService,
                            ProductService productService,
                            NotificationService notificationService,
                            QueueInfoService queueInfoService,
                            RabbitTemplate rabbitTemplate,
-                           DirectExchange directExchange,
-                           StripeService stripeService) {
+                           DirectExchange directExchange) {
         this.orderService = orderService;
         this.productService = productService;
         this.notificationService = notificationService;
         this.queueInfoService = queueInfoService;
         this.rabbitTemplate = rabbitTemplate;
         this.directExchange = directExchange;
-        this.stripeService = stripeService;
     }
 
     @GetMapping
@@ -68,12 +63,6 @@ public class OrderController {
                                       @RequestParam Optional<Integer> page,
                                       @RequestParam Optional<Integer> size) {
         return orderService.getAllOrders(keyword, page, size);
-    }
-
-    @PostMapping("/create-checkout-session")
-    public ResponseEntity<String> createCheckoutSession(@RequestBody OrderDetailDto orderDto) throws JsonProcessingException, StripeException {
-        Session session = stripeService.createSession(orderDto);
-        return ok(session.getUrl());
     }
 
     @PostMapping

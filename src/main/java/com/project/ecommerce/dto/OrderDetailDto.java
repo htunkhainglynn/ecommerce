@@ -1,5 +1,6 @@
 package com.project.ecommerce.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -17,9 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderDetailDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Status status;
-
-    private double subTotal;
 
     private double totalPrice;
 

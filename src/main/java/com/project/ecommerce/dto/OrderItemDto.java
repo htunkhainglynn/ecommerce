@@ -16,11 +16,12 @@ public class OrderItemDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private ProductVariantVo productVariant;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String productName;
+
     private int quantity;
 
     private int price;
-
-    private String productName;
 
     public OrderItemDto(OrderItem orderItem) {
         this.productVariant = new ProductVariantVo(orderItem.getProductVariant());
