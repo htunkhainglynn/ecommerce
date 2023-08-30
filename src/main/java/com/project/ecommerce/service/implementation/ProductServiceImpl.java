@@ -118,6 +118,7 @@ public class  ProductServiceImpl implements ProductService {
     }
 
     // to update quantity after an order is placed
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @Override
     public void updateProductQuantity(Map<Integer, Integer> productQuantityMap) {
         productQuantityMap.forEach((key, value) -> {

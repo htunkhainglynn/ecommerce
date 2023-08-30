@@ -4,6 +4,8 @@ import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.service.CloudinaryService;
 import com.project.ecommerce.service.ProductService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@Api(value = "Product Management")
 public class ProductController {
 
     private final ProductService productService;
@@ -27,6 +30,7 @@ public class ProductController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all products", description = "Requires ADMIN authority")
     public ResponseEntity<Page<ProductDto>> getAllProducts
             (@RequestParam(required = false) String keyword,
              @RequestParam(required = false) boolean isAvailable,
@@ -40,6 +44,7 @@ public class ProductController {
 
     // Endpoint to get a product by ID
     @GetMapping("/{id}")
+    @Operation(summary = "Get product by id", description = "Requires ADMIN authority")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         Optional<ProductDto> result = productService.getProductById(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -47,6 +52,7 @@ public class ProductController {
 
     // Endpoint to create a new product
     @PostMapping
+    @Operation(summary = "Create product", description = "Requires ADMIN authority")
     public ResponseEntity<ProductDto> createProduct(ProductDto product,
                                                     HttpServletRequest request) {
         // upload image & set url to each product variant
@@ -66,6 +72,7 @@ public class ProductController {
 
     // Endpoint to update an existing product
     @PutMapping("/{id}")
+    @Operation(summary = "Update product", description = "Requires ADMIN authority")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto product) {
         Optional<ProductDto> productDto = productService.getProductById(id);
         if (productDto.isPresent()) {
@@ -78,6 +85,7 @@ public class ProductController {
 
     // Endpoint to delete a product
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete product", description = "Requires ADMIN authority")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws Exception {
         Optional<ProductDto> productDto = productService.getProductById(id);
         if (productDto.isPresent()) {

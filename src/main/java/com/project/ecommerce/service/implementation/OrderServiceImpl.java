@@ -58,8 +58,8 @@ public class OrderServiceImpl implements OrderService {
         this.modelMapper = modelMapper;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public Page<OrderVo> getAllOrders(
                             String keyword,
@@ -106,6 +106,7 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderDetailVo::new);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAnyAuthority('USER')")
     @Override
     public OrderDetailVo updateStatue(Long id, Status status) {
         Optional<Order> order = orderRepository.findById(id);
@@ -117,13 +118,14 @@ public class OrderServiceImpl implements OrderService {
         return new OrderDetailVo(order.get());
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER')")
     @Override
     public Optional<OrderDetailVo> getOrderByIdWithUsername(Long id, String username) {
         return orderRepository.findByIdAndUserUsername(id, username)
                 .map(OrderDetailVo::new);
     }
 
+    @PreAuthorize("hasAnyAuthority('USER')")
     @Override
     public OrderDetailVo saveOrder(OrderDetailDto orderDetailDto) {
 

@@ -4,6 +4,8 @@ import com.project.ecommerce.dto.AuthenticationRequest;
 import com.project.ecommerce.entitiy.Role;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.security.JwtTokenProvider;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +21,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/auth")
+@Api(value = "Authentication Management")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -35,6 +38,7 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
+    @Operation(summary = "Sign in", description = "Sign in with username and password")
     public ResponseEntity<Map<Object, Object>> signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();

@@ -3,6 +3,8 @@ package com.project.ecommerce.controller;
 import com.project.ecommerce.dto.UserDetailDto;
 import com.project.ecommerce.dto.UserDto;
 import com.project.ecommerce.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Api(value = "User Management")
 public class UserController {
 
     private final UserService userService;
@@ -23,6 +26,7 @@ public class UserController {
 
     // get all users
     @GetMapping
+    @Operation(summary = "Get all users", description = "Requires ADMIN authority")
     public Page<UserDto> getAllUsers(@RequestParam(required = false) String keyword,
                                      @RequestParam Optional<Integer> page,
                                      @RequestParam Optional<Integer> size) {
@@ -31,6 +35,7 @@ public class UserController {
 
     // get user by id
     @GetMapping("/{id}")
+    @Operation(summary = "Get user by id", description = "Requires ADMIN authority")
     public ResponseEntity<UserDetailDto> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
@@ -39,6 +44,7 @@ public class UserController {
 
     // update user by id
     @PutMapping("/{id}")
+    @Operation(summary = "Update user by id", description = "Requires ADMIN or USER authority")
     public ResponseEntity<UserDetailDto> updateUserById(@PathVariable Long id,
                                                         @RequestBody UserDetailDto userDetailDto) {
         Optional<UserDetailDto> user = userService.getUserById(id);
@@ -51,6 +57,7 @@ public class UserController {
 
     // delete user by id
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete user by id", description = "Requires ADMIN or USER authority")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         Optional<UserDetailDto> user = userService.getUserById(id);
         if (user.isPresent()) {

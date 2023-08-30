@@ -11,6 +11,8 @@ import com.project.ecommerce.service.ProductService;
 import com.project.ecommerce.service.QueueInfoService;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -29,6 +31,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/orders")
+@Api(value = "Order Management")
 public class OrderController {
 
     private final OrderService orderService;
@@ -59,6 +62,7 @@ public class OrderController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all orders", description = "Requires ADMIN authority")
     public Page<OrderVo> getAllOrders(@RequestParam(required = false) String keyword,
                                       @RequestParam Optional<Integer> page,
                                       @RequestParam Optional<Integer> size) {
@@ -66,6 +70,7 @@ public class OrderController {
     }
 
     @PostMapping
+    @Operation(summary = "Create order", description = "Requires USER authority")
     public ResponseEntity<OrderDetailVo> addOrder(@RequestBody OrderDetailDto orderDto) throws JsonProcessingException {
 
         // update product quantity in database
@@ -90,12 +95,14 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get order by id", description = "Requires ADMIN or USER authority")
     public ResponseEntity<OrderDetailVo> getOrderById(@PathVariable Long id) {
         Optional<OrderDetailVo> result = orderService.getOrderById(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update order by id", description = "Requires ADMIN or USER authority")
     public ResponseEntity<OrderDetailVo> updateOrderStatus(@PathVariable Long id) throws JsonProcessingException {
 
         Optional<OrderDetailVo> result = orderService.getOrderById(id);
@@ -110,7 +117,8 @@ public class OrderController {
             updatedResult = orderService.updateStatue(id, Status.SHIPPED);
 
             // send notification to customer
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            String username = result.get().getUser().getUsername();
+            log.info("username: {}", username);
             String routingKey = queueInfoService.getRoutingKeyByUsername(username);
             sendNotification(result.get(), "Order has been shipped!", routingKey);
         } else {
