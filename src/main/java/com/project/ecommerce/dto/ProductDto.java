@@ -43,6 +43,12 @@ public class ProductDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private double averageRating;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String image;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private double price;
+
     public ProductDto(Product entity) {
         this.id = entity.getId();
         this.sku = entity.getSku();
@@ -56,6 +62,8 @@ public class ProductDto {
         entity.getProductVariants().forEach(productVariant -> {
             this.productVariants.add(new ProductVariantDto(productVariant));
         });
+        this.image = entity.getProductVariants().get(0).getImageUrl();
+        this.price = entity.getProductVariants().get(0).getPrice();
     }
 
 }

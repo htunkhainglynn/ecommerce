@@ -45,6 +45,7 @@ public class Product {
     @ManyToOne
     private Organization organization; // Many products can belong to one category
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Review> reviews;// One product can have multiple reviews
 
