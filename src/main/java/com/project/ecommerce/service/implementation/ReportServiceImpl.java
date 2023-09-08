@@ -9,7 +9,6 @@ import com.project.ecommerce.repo.report.DailyReportRepo;
 import com.project.ecommerce.repo.report.MonthlyReportRepo;
 import com.project.ecommerce.repo.report.YearlyReportRepo;
 import com.project.ecommerce.service.ReportService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-@Slf4j
 public class ReportServiceImpl implements ReportService {
     private final OrderRepository orderRepository;
 
@@ -44,10 +42,6 @@ public class ReportServiceImpl implements ReportService {
         // calculate daily sales
         double sales = calculateSales(orders);
 
-        log.info("Daily revenue: {}", revenue);
-        log.info("Daily sales: {}", sales);
-        log.info("Day: {}", today.getDayOfWeek().toString());
-
         dailyReportRepo.save(DailyReport.builder()
                 .date(today)
                 .revenue(revenue)
@@ -62,9 +56,9 @@ public class ReportServiceImpl implements ReportService {
         // 1 month ago + 1 day
         LocalDate startDate = endDate.minusMonths(1).plusDays(1);
 
-        double revenue = orderRepository.findMonthlyRevenue(startDate, endDate);
+        double revenue = orderRepository.findRevenueBetweenDates(startDate, endDate);
 
-        List<List<OrderItem>> orders = orderRepository.findOrderItemsBetweenDate(startDate, endDate);
+        List<List<OrderItem>> orders = orderRepository.findOrderItemsBetweenDates(startDate, endDate);
 
         // calculate monthly sales
         double sales = calculateSales(orders);
@@ -84,9 +78,9 @@ public class ReportServiceImpl implements ReportService {
         // january 1st of the current year
         LocalDate startDate = LocalDate.of(endDate.getYear(), 1, 1);
 
-        double revenue = orderRepository.findYearlyRevenue(startDate, endDate);
+        double revenue = orderRepository.findRevenueBetweenDates(startDate, endDate);
 
-        List<List<OrderItem>> orders = orderRepository.findOrderItemsBetweenDate(startDate, endDate);
+        List<List<OrderItem>> orders = orderRepository.findOrderItemsBetweenDates(startDate, endDate);
 
         // calculate yearly sales
         double sales = calculateSales(orders);
