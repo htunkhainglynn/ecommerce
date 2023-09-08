@@ -25,4 +25,7 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
     @Transactional
     @Query("UPDATE ProductVariant pv SET pv.inStock = ?2 WHERE pv.id = ?1")
     void updateInStockById(Integer key, boolean b);
+
+    @Query("SELECT COUNT(pv) FROM ProductVariant pv where pv.quantity > 0")
+    int findTotalProducts();
 }

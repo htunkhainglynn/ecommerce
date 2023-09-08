@@ -1,12 +1,11 @@
 package com.project.ecommerce.entitiy;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -30,6 +29,9 @@ public class ProductVariant {
 
     @Column(columnDefinition = "double default 0.0")
     private double price;
+
+    @Column(columnDefinition = "double default 0.0")
+    private double purchasePrice;
 
     private String imageUrl;
 

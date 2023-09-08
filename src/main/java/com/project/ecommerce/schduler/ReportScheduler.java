@@ -1,0 +1,55 @@
+package com.project.ecommerce.schduler;
+
+import com.project.ecommerce.service.NotificationService;
+import com.project.ecommerce.service.ReportService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+
+@Component
+public class ReportScheduler {
+
+    private final ReportService reportService;
+
+    private final NotificationService notificationService;
+
+    @Autowired
+    public ReportScheduler(ReportService reportService, NotificationService notificationService) {
+        this.reportService = reportService;
+        this.notificationService = notificationService;
+    }
+
+    // Schedule daily sales calculation at 11:59:59 PM
+    @Scheduled(cron = "59 59 23 * * ?")
+    public void generateDailyReport() {
+
+        LocalDate today = LocalDate.now();
+
+        // Calculate and store daily sales
+        reportService.calculateDailyReport(today);
+    }
+
+    // Schedule monthly sales calculation at 11:59:59 PM on the last day of the month
+    @Scheduled(cron = "59 59 23 L * ?")
+    public void generateMonthlyReport() {
+
+        int year = LocalDate.now().getYear();
+
+        String month = LocalDate.now().getMonth().toString();
+
+        // Calculate and store monthly sales
+        reportService.calculateMonthlyReport(year, month);
+    }
+
+    // Schedule yearly sales calculation at 11:59:59 PM on December 31
+    @Scheduled(cron = "59 59 23 31 12 ?")
+    public void generateYearlyReport() {
+
+        int year = LocalDate.now().getYear();
+
+        // Calculate and store yearly sales
+        reportService.calculateYearlyReport(year);
+    }
+}

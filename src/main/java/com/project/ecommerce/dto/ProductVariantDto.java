@@ -27,6 +27,8 @@ public class ProductVariantDto {
 
     private double price;
 
+    private double purchasePrice;
+
     private boolean inStock;
 
     private int quantity;

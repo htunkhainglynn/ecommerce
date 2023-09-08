@@ -24,10 +24,6 @@ public class Order {
     private LocalDate orderDate;
 
     @NotNull
-    @Column(name = "sub_total")
-    private double subTotal;
-
-    @NotNull
     @Column(name = "total_price")
     private double totalPrice;
 

@@ -26,8 +26,6 @@ public class OrderDetailVo {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate orderDate;
 
-    private double subTotal;
-
     private double totalPrice;
 
     private List<OrderItemDto> orderItems;
@@ -39,7 +37,6 @@ public class OrderDetailVo {
     public OrderDetailVo(Order order) {
         this.orderId = order.getId();
         this.orderDate = order.getOrderDate();
-        this.subTotal = order.getSubTotal();
         this.totalPrice = order.getTotalPrice();
         this.status = order.getStatus();
         this.orderItems = new ArrayList<>();
