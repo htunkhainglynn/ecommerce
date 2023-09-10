@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.project.ecommerce.entitiy.Address;
 import com.project.ecommerce.entitiy.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,10 @@ public class OrderDetailDto {
     private Status status;
 
     private double totalPrice;
+
+    private Long addressId;
+
+    private Address address;
 
     private List<OrderItemDto> orderItems;
 }

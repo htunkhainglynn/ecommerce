@@ -1,6 +1,6 @@
 package com.project.ecommerce.dto;
 
-import com.project.ecommerce.entitiy.Shipping;
+import com.project.ecommerce.entitiy.Address;
 import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.entitiy.WishList;
 import com.project.ecommerce.vo.OrderDetailVo;
@@ -33,9 +33,9 @@ public class UserDetailDto {
 
     private List<OrderVo> orders = new ArrayList<>();
 
-    private List<Shipping> shipping = new ArrayList<>();
-
     private WishList wishList;
+
+    List<Address> addresses;
 
     public UserDetailDto(User user) {
         this.id = user.getId();
@@ -43,10 +43,9 @@ public class UserDetailDto {
         this.profilePictureURL = user.getProfilePictureURL();
         this.email = user.getEmail();
         this.phone = user.getPhoneNumber();
-        this.address = user.getAddress();
+        this.addresses = user.getAddresses();
         this.active = user.isActive();
         user.getOrders().forEach(order -> this.orders.add(new OrderVo(order)));
-        this.shipping.addAll(user.getShipping());
         this.wishList = user.getWishList();
     }
 }

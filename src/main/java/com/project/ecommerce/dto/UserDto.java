@@ -1,5 +1,6 @@
 package com.project.ecommerce.dto;
 
+import com.project.ecommerce.entitiy.Address;
 import com.project.ecommerce.entitiy.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,8 @@ public class UserDto {
 
     private int orders;
 
+    private List<Address> addresses;
+
     private long totalSpent;
 
     public UserDto(User entity) {
@@ -39,6 +42,7 @@ public class UserDto {
         this.phone = entity.getPhoneNumber();
         this.active = entity.isActive();
         this.orders = entity.getOrders().size();
+        this.addresses = entity.getAddresses();
         this.totalSpent = entity.getOrders().stream().mapToLong(order -> (long) order.getTotalPrice()).sum();
     }
 }

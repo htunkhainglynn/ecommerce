@@ -2,6 +2,7 @@ package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.entitiy.Status;
+import com.project.ecommerce.repo.*;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
 import com.project.ecommerce.dto.OrderItemDto;
@@ -9,10 +10,6 @@ import com.project.ecommerce.entitiy.Order;
 import com.project.ecommerce.entitiy.OrderItem;
 import com.project.ecommerce.entitiy.ProductVariant;
 import com.project.ecommerce.exception.ProductException;
-import com.project.ecommerce.repo.OrderItemRepository;
-import com.project.ecommerce.repo.OrderRepository;
-import com.project.ecommerce.repo.ProductVariantRepository;
-import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +40,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderItemRepository orderItemRepository;
 
+    private final AddressRepo addressRepo;
+
     private final ModelMapper modelMapper;
 
     @Autowired
@@ -50,11 +49,13 @@ public class OrderServiceImpl implements OrderService {
                             ProductVariantRepository productVariantRepository,
                             UserRepository userRepository,
                             OrderItemRepository orderItemRepository,
+                            AddressRepo addressRepo,
                             ModelMapper modelMapper) {
         this.orderRepository = orderRepository;
         this.productVariantRepository = productVariantRepository;
         this.userRepository = userRepository;
         this.orderItemRepository = orderItemRepository;
+        this.addressRepo = addressRepo;
         this.modelMapper = modelMapper;
     }
 
@@ -131,6 +132,12 @@ public class OrderServiceImpl implements OrderService {
 
         // get user from security context holder
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // get address by id and username
+        if (orderDetailDto.getAddressId() != null) {
+            addressRepo.findById(orderDetailDto.getAddressId())
+                    .ifPresent(orderDetailDto::setAddress);
+        }
 
         Order order = modelMapper.map(orderDetailDto, Order.class);
 

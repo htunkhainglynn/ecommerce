@@ -27,16 +27,15 @@ public class Order {
     @Column(name = "total_price")
     private double totalPrice;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
-
-    @ManyToOne
-    @JoinColumn(name = "shipping_id")
-    private Shipping shipping;
 
     @Enumerated(EnumType.STRING)
     private Status status;

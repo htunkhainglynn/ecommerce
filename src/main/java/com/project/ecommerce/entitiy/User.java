@@ -41,8 +41,6 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private String address;
-
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -66,9 +64,9 @@ public class User implements UserDetails {
     private WishList wishList;
 
     @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    private List<Shipping> shipping;
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true)
+    private List<Address> addresses;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user",
@@ -109,17 +107,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        return isActive() == user.isActive() && Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getProfilePictureURL(), user.getProfilePictureURL()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getAddress(), user.getAddress()) && Objects.equals(getPhoneNumber(), user.getPhoneNumber()) && Objects.equals(getOrders(), user.getOrders()) && Objects.equals(getRoles(), user.getRoles()) && Objects.equals(getWishList(), user.getWishList()) && Objects.equals(getShipping(), user.getShipping()) && Objects.equals(getQueueInfo(), user.getQueueInfo());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getProfilePictureURL(), getUsername(), getEmail(), getPassword(), getAddress(), getPhoneNumber(), isActive(), getOrders(), getRoles(), getWishList(), getShipping(), getQueueInfo());
     }
 }
