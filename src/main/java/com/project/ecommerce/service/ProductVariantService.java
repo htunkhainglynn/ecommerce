@@ -1,5 +1,6 @@
 package com.project.ecommerce.service;
 
+import com.project.ecommerce.dto.ExpenseDto;
 import com.project.ecommerce.dto.ProductVariantCache;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.vo.ProductVariantVo;
@@ -21,4 +22,6 @@ public interface ProductVariantService {
     void deleteProductVariant(Integer id);
 
     Optional<String> getProductVariantImageUrl(Integer id);
+
+    void updateExpenseHistory(Integer id, ExpenseDto expenseDto);
 }

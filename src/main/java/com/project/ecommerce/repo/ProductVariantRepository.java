@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, Integer> {
@@ -28,4 +30,10 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
 
     @Query("SELECT COUNT(pv) FROM ProductVariant pv where pv.quantity > 0")
     int findTotalProducts();
+
+    @Query("SELECT pv FROM ProductVariant pv WHERE pv.createdAt = ?1")
+    List<ProductVariant> findByDate(LocalDate today);
+
+    @Query("SELECT pv FROM ProductVariant pv WHERE pv.createdAt BETWEEN ?1 AND ?2")
+    List<ProductVariant> findBetweenDates(LocalDate startDate, LocalDate endDate);
 }

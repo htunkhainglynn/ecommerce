@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -38,6 +39,10 @@ public class ProductVariant {
     @Column(columnDefinition = "boolean default false")
     private boolean inStock;
 
+    private LocalDate createdAt;
+
+    private LocalDate updatedAt;
+
     @JsonIgnore
     @ManyToOne
     private Product product;
@@ -45,4 +50,8 @@ public class ProductVariant {
     @JsonIgnore
     @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL)
     private List<OrderItem> orderItem;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL)
+    private List<Expense> expenses;
 }

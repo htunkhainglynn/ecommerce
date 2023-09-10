@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -35,9 +39,33 @@ public class DashboardController {
         return ok(dashboardService.getSummary());
     }
 
-    @GetMapping("/graph")
-    public ResponseEntity<List<GraphDataVo>> getGraphData() {
-        return ok(dashboardService.getGraphData());
+    @GetMapping("/graph/daily")
+    public ResponseEntity<Map<String, Object>> getDailyGraphData() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("title", "hello, world!");
+        result.put("revenue", List.of(1, 2, 3, 4, 5));
+        result.put("sales", List.of(5, 4, 3, 2, 1));
+        return ok(result);
+    }
+
+    @GetMapping("/graph/monthly")
+    public ResponseEntity<Map<String, Object>> getMonthlyGraphData(@RequestParam(value = "year", required = false) Integer year) {
+        Optional<GraphDataVo> graphData = dashboardService.getMonthlyGraphData(year);
+
+        if (graphData.isPresent()) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("title", "%d Monthly Report".formatted(year));
+            result.put("revenue", graphData.get().getRevenue());
+            result.put("sales", graphData.get().getSales());
+            return ok(result);
+        }
+
+        return ok(null);
+    }
+
+    @GetMapping("/graph/yearly")
+    public ResponseEntity<List<GraphDataVo>> getYearlyGraphData() {
+        return ok(dashboardService.getYearlyGraphData());
     }
 
     @GetMapping("/test")

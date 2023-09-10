@@ -1,10 +1,12 @@
 package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.entitiy.OrderItem;
+import com.project.ecommerce.entitiy.ProductVariant;
 import com.project.ecommerce.entitiy.report.DailyReport;
 import com.project.ecommerce.entitiy.report.MonthlyReport;
 import com.project.ecommerce.entitiy.report.YearlyReport;
 import com.project.ecommerce.repo.OrderRepository;
+import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.repo.report.DailyReportRepo;
 import com.project.ecommerce.repo.report.MonthlyReportRepo;
 import com.project.ecommerce.repo.report.YearlyReportRepo;
@@ -19,6 +21,8 @@ import java.util.List;
 public class ReportServiceImpl implements ReportService {
     private final OrderRepository orderRepository;
 
+    private final ProductVariantRepository productVariantRepository;
+
     private final DailyReportRepo dailyReportRepo;
 
     private final MonthlyReportRepo monthlyReportRepo;
@@ -26,8 +30,13 @@ public class ReportServiceImpl implements ReportService {
     private final YearlyReportRepo yearlyReportRepo;
 
     @Autowired
-    public ReportServiceImpl(OrderRepository orderRepository, DailyReportRepo dailyReportRepo, MonthlyReportRepo monthlyReportRepo, YearlyReportRepo yearlyReportRepo) {
+    public ReportServiceImpl(OrderRepository orderRepository,
+                             ProductVariantRepository productVariantRepository,
+                             DailyReportRepo dailyReportRepo,
+                             MonthlyReportRepo monthlyReportRepo,
+                             YearlyReportRepo yearlyReportRepo) {
         this.orderRepository = orderRepository;
+        this.productVariantRepository = productVariantRepository;
         this.dailyReportRepo = dailyReportRepo;
         this.monthlyReportRepo = monthlyReportRepo;
         this.yearlyReportRepo = yearlyReportRepo;
@@ -65,7 +74,7 @@ public class ReportServiceImpl implements ReportService {
 
         monthlyReportRepo.save(MonthlyReport.builder()
                 .revenue(revenue)
-                .sale(sales)
+                .sales(sales)
                 .year(year)
                 .month(month)
                 .build());

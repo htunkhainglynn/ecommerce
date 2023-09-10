@@ -9,4 +9,5 @@ public interface ReportService {
     void calculateMonthlyReport(int year, String month);
 
     void calculateYearlyReport(int year);
+
 }

@@ -22,7 +22,7 @@ public class MonthlyReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate date;
-    private double sale;
+    private double sales;
     private double revenue;
     private String month;
     private int year;

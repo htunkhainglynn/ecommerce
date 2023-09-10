@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,10 @@ public class ProductVariantVo {
 
     private Long product_id;
 
+    private LocalDate createdAt;
+
+    private LocalDate updatedAt;
+
     private boolean inStock;
 
     public ProductVariantVo(ProductVariant entity) {
@@ -36,6 +41,8 @@ public class ProductVariantVo {
         this.color = entity.getColor();
         this.price = entity.getPrice();
         this.imageUrl = entity.getImageUrl();
+        this.createdAt = entity.getCreatedAt();
+        this.updatedAt = entity.getUpdatedAt();
         this.name = entity.getProduct().getName();
         this.product_id = entity.getProduct().getId();
         this.inStock = entity.isInStock();

@@ -5,12 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class GraphDataVo {
 
-    private String name;
-    private double value;
+    private List<Double> revenue;
+    private List<Double> sales;
 }

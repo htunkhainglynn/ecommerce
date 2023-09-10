@@ -1,9 +1,11 @@
 package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.ProductDto;
+import com.project.ecommerce.entitiy.Expense;
 import com.project.ecommerce.entitiy.Product;
 import com.project.ecommerce.entitiy.ProductVariant;
 import com.project.ecommerce.exception.ProductException;
+import com.project.ecommerce.repo.ExpenseRepo;
 import com.project.ecommerce.repo.OrganizationRepository;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,16 +34,20 @@ public class  ProductServiceImpl implements ProductService {
 
     private final ProductRepository repo;
 
+    private final ExpenseRepo expenseRepo;
+
     private final OrganizationRepository organizationRepository;
 
     private final ProductVariantRepository productVariantRepository;
 
     @Autowired
     public ProductServiceImpl(ModelMapper mapper,
+                              ExpenseRepo expenseRepo,
                               ProductRepository repo,
                               OrganizationRepository organizationRepository,
                               ProductVariantRepository productVariantRepository) {
         this.mapper = mapper;
+        this.expenseRepo = expenseRepo;
         this.repo = repo;
         this.organizationRepository = organizationRepository;
         this.productVariantRepository = productVariantRepository;
@@ -107,8 +114,21 @@ public class  ProductServiceImpl implements ProductService {
             if (productVariant.getQuantity() > 0) {
                 productVariant.setInStock(true);
             }
+            productVariant.setCreatedAt(LocalDate.now());
         });
         List<ProductVariant> pvs = productVariantRepository.saveAll(productVariants);
+
+        // add data to expense table
+        pvs.forEach(pv -> {
+            expenseRepo.save( Expense.builder()
+                    .purchasePrice(pv.getPurchasePrice())
+                    .quantity(pv.getQuantity())
+                    .total(pv.getPurchasePrice() * pv.getQuantity())
+                    .createdAt(LocalDate.now())
+                    .productVariant(pv)
+                    .build()
+            );
+        });
         product.setProductVariants(pvs);
     }
 

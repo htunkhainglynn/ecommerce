@@ -1,5 +1,6 @@
 package com.project.ecommerce.controller;
 
+import com.project.ecommerce.dto.ExpenseDto;
 import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.vo.ProductVariantVo;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,7 +86,16 @@ public class ProductVariantController {
             }
         }
 
+        // set updated date
+        productVariantDto.setUpdatedAt(LocalDate.now());
+
         return productVariantService.saveProductVariant(productVariantDto);
+    }
+
+    @PutMapping("/expense-history/{id}")
+    @Operation(summary = "Update product variant", description = "Requires ADMIN authority")
+    public void updateExpenseHistory(@PathVariable(value = "id", required = true) Integer id, @RequestBody ExpenseDto expenseDto){
+        productVariantService.updateExpenseHistory(id, expenseDto);
     }
 
     @DeleteMapping("/{id}")

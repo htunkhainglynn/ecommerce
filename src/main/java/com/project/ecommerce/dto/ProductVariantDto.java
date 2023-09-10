@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.project.ecommerce.entitiy.Expense;
 import com.project.ecommerce.entitiy.ProductVariant;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -27,6 +29,7 @@ public class ProductVariantDto {
 
     private double price;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private double purchasePrice;
 
     private boolean inStock;
@@ -41,7 +44,16 @@ public class ProductVariantDto {
 
     private String name;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDate createdAt;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDate updatedAt;
+
     private Long product_id;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<Expense> expenses;
 
     public ProductVariantDto(ProductVariant entity) {
         this.id = entity.getId();
@@ -53,5 +65,8 @@ public class ProductVariantDto {
         this.name = entity.getProduct().getName();
         this.product_id = entity.getProduct().getId();
         this.inStock = entity.isInStock();
+        this.createdAt = entity.getCreatedAt();
+        this.updatedAt = entity.getUpdatedAt();
+        this.expenses = entity.getExpenses();
     }
 }
