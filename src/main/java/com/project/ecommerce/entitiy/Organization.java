@@ -22,12 +22,14 @@ public class Organization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
+    @Column(nullable = false)
     private String vendor;
 
+    @Column(nullable = false)
     private String category;
 
     @JsonIgnore
     @OneToMany(mappedBy = "organization")
+    @Column(nullable = false)
     private List<Product> products;
 }

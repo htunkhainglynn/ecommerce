@@ -13,11 +13,17 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COLLATE utf8_bin")
     private String street;
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COLLATE utf8_bin")
     private String city;
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COLLATE utf8_bin")
     private String postalCode;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private User user;
 
     @OneToOne(mappedBy = "address")

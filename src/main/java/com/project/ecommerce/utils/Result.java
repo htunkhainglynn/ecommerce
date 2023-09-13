@@ -1,8 +1,11 @@
 package com.project.ecommerce.utils;
 
+import lombok.Getter;
+
+@Getter
 public class Result<T> {  // helper class for railway oriented programming
-    private T value;
-    private Exception error;
+    private final T value;
+    private final Exception error;
 
     private Result(T value, Exception error) {
         this.value = value;
@@ -11,14 +14,6 @@ public class Result<T> {  // helper class for railway oriented programming
 
     public boolean isSuccess() {
         return error == null;
-    }
-
-    public T getValue() {
-        return value;
-    }
-
-    public Exception getError() {
-        return error;
     }
 
     public static <T> Result<T> success(T value) {

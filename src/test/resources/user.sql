@@ -1,11 +1,6 @@
--- Insert sample users
-INSERT INTO user (name, profilePictureURL, username, email, password, address, phone_number, active)
+INSERT INTO users (active, email, name, password, phone_number, profile_pictureurl, username)
 VALUES
-    ('John Doe', 'profile.jpg', 'admin', 'admin@gmail.com', '$2a$10$J7jecF/KkINXo/UNRtuI4urTc8r66hlheI465PycaTez/WAuOhNYu', '123 Main St', '123-456-7890', true),
-    ('Jane Smith', 'profile.jpg', 'janesmith', 'jane@example.com', '$2a$10$zKT1KlCvXDKkXgAoqfgYm.CjsG0aA4bEDqf/8ZuhH5YZ9vFg0HUsa', '456 Elm St', '987-654-3210', true);
+    (1, 'user1@example.com', 'User One', 'password1', '123-456-7890', 'profile1.jpg', 'user1'),
+    (1, 'user2@example.com', 'User Two', 'password2', '987-654-3210', 'profile2.jpg', 'user2'),
+    (1, 'user3@example.com', 'User Three', 'password3', NULL, NULL, 'user3');
 
--- Assign roles to users
-INSERT INTO user_roles (user_id, role)
-VALUES
-    (1, 'ADMIN'),
-    (2, 'USER');

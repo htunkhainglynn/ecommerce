@@ -133,7 +133,7 @@ public class OrderServiceImpl implements OrderService {
         // get user from security context holder
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // get address by id and username
+        // get address by id
         if (orderDetailDto.getAddressId() != null) {
             addressRepo.findById(orderDetailDto.getAddressId())
                     .ifPresent(orderDetailDto::setAddress);

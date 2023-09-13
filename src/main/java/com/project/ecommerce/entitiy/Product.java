@@ -25,13 +25,13 @@ public class Product {
     @Column(unique=true)
     private Integer sku;
 
-    @NotNull
+    @Column(nullable = false)
     private Double weight;
 
-    @NotNull
+    @Column(nullable = false)
     private String name;
 
-    @NotNull
+    @Column(nullable = false)
     private String description;
 
     @Column(columnDefinition = "boolean default false")

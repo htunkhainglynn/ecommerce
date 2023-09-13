@@ -14,15 +14,17 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private int quantity;
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(nullable = false)
     private ProductVariant productVariant;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(nullable = false)
     private Order order;
 
     public OrderItem(ProductVariant productVariant, int quantity, Order order) {

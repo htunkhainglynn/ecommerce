@@ -19,9 +19,17 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private double purchasePrice;
+
+    @Column(nullable = false)
     private int quantity;
+
+    @Column(nullable = false)
     private double total;
+
+    @Column(nullable = false)
     private LocalDate createdAt;
 
     @JsonIgnore

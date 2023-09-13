@@ -25,13 +25,13 @@ public class ProductVariant {
 
     private String color;
 
-    @Column(columnDefinition = "int default 1")
+    @Column(columnDefinition = "int default 1", nullable = false)
     private int quantity;
 
-    @Column(columnDefinition = "double default 0.0")
+    @Column(columnDefinition = "double default 0.0", nullable = false)
     private double price;
 
-    @Column(columnDefinition = "double default 0.0")
+    @Column(columnDefinition = "double default 0.0", nullable = false)
     private double purchasePrice;
 
     private String imageUrl;
@@ -39,12 +39,15 @@ public class ProductVariant {
     @Column(columnDefinition = "boolean default false")
     private boolean inStock;
 
+    @Column(nullable = false)
     private LocalDate createdAt;
 
+    @Column(nullable = false)
     private LocalDate updatedAt;
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Product product;
 
     @JsonIgnore
