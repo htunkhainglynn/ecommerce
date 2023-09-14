@@ -18,12 +18,15 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String content;
+
+    @Column(nullable = false)
     private int rating;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "product_id") // Foreign key column in the Review table
+    @JoinColumn(name = "product_id", nullable = false) // Foreign key column in the Review table
     private Product product; // Many reviews can belong to one product
 
 }

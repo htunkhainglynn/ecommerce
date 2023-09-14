@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.usertype.LoggableUserType;
 
 import java.util.List;
 
@@ -49,10 +50,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Review> reviews;// One product can have multiple reviews
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "wishlist_id")
-    private WishList wishList;
+    @ManyToMany(mappedBy = "products", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<WishList> wishLists;
 
     @Transient
     private double averageRating;  // for json return
