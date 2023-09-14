@@ -2,6 +2,7 @@ package com.project.ecommerce.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.entitiy.Notification;
 import com.project.ecommerce.entitiy.Status;
@@ -90,6 +91,7 @@ public class OrderController {
         OrderDetailVo result = orderService.saveOrder(orderDto);
 
         String routingKey = getAdminRoutingKey();
+        log.info("routingKey: {}", routingKey);
         sendNotification(result, "New order arrived!", routingKey);
         return ok(result);
     }
@@ -144,6 +146,7 @@ public class OrderController {
 
         // change map to json
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         String jsonNotification = objectMapper.writeValueAsString(notification);
 
         // save notification to database

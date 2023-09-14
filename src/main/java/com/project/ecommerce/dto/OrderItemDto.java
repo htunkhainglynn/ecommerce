@@ -6,9 +6,11 @@ import com.project.ecommerce.vo.ProductVariantVo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
-public class OrderItemDto {
+public class OrderItemDto implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer product_id;

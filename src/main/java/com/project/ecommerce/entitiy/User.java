@@ -36,7 +36,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
     private boolean active;
@@ -59,8 +59,7 @@ public class User implements UserDetails {
     private WishList wishList;
 
     @OneToMany(mappedBy = "user",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true)
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.DETACH, CascadeType.MERGE})
     private List<Address> addresses;
 
     @JsonIgnore

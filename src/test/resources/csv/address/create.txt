@@ -1,0 +1,2 @@
+'Thaton',12345,10 Main Street,user1
+'Yangon',98767,20 Main Street,user2

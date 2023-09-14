@@ -29,7 +29,7 @@ public class Order {
     private double totalPrice;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
+    @JoinColumn()
     private Address address;
 
     @ManyToOne

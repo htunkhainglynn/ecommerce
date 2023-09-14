@@ -4,6 +4,7 @@ import com.project.ecommerce.dto.SignUpDto;
 import com.project.ecommerce.dto.UserDetailDto;
 import com.project.ecommerce.dto.UserDto;
 import com.project.ecommerce.entitiy.Order;
+import com.project.ecommerce.entitiy.Role;
 import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.exception.UserException;
 import com.project.ecommerce.repo.UserRepository;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -104,17 +106,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(SignUpDto signUpDto) {
+    public User saveUser(SignUpDto signUpDto) {
         Optional<User> optionalUser = userRepository.getReferenceByUsername(signUpDto.getUsername());
         if (optionalUser.isPresent()) {
             throw new UserException("User already exists");
         }
         signUpDto.setActive(true);
         signUpDto.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
-        userRepository.save(mapper.map(signUpDto, User.class));
+
+        // default
+        signUpDto.setRoles(List.of(Role.USER));
+        User user = userRepository.save(mapper.map(signUpDto, User.class));
 
         // create queue for user
         dynamicQueueManager.createQueueForUser(signUpDto.getUsername());
+        return user;
     }
 
     @Override
@@ -122,6 +128,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userDetailDto.getId())
                 .map(user -> {
                     mapper.map(userDetailDto, user);
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
                     return mapper.map(userRepository.save(user), UserDetailDto.class);
                 })
                 .orElseThrow(() -> new UserException("User not found"));
@@ -136,6 +143,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public Long getRoleCount() {
+       return userRepository.getRoleCount();
     }
 
 }

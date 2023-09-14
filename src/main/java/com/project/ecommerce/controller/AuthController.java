@@ -2,6 +2,7 @@ package com.project.ecommerce.controller;
 
 import com.project.ecommerce.dto.AuthenticationRequest;
 import com.project.ecommerce.entitiy.Role;
+import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.security.JwtTokenProvider;
 import io.swagger.annotations.Api;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -38,27 +40,37 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    @Operation(summary = "Sign in", description = "Sign in with username and password")
+    @Operation(summary = "Sign in", description = "Sign in with username or email and password")
     public ResponseEntity<Map<Object, Object>> signin(@RequestBody AuthenticationRequest data) {
         try {
-            String username = data.getUsername();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            String token = jwtTokenProvider
-                    .createToken(username,
-                            this.users.getReferenceByUsername(username)
-                                    .isEmpty() ? null : this.users.getReferenceByUsername(username)
-                                    .get()
-                                    .getRoles()
-                                    .stream()
-                                    .map(Role::name)
-                                    .toList());
+            String usernameOrEmail = data.getUsername(); // Assuming the usernameOrEmail field contains either username or email
+            String password = data.getPassword();
+
+            // Check if the input is an email or username
+            Optional<User> userReference = this.users.getReferenceByUsernameOrEmail(usernameOrEmail);
+            if (userReference.isEmpty()) {
+                throw new BadCredentialsException("Invalid username/email or password supplied");
+            }
+
+            String username = userReference.get().getUsername();
+
+            // Authenticate with either username or email
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+            String token = jwtTokenProvider.createToken(username, userReference
+                    .get()
+                    .getRoles()
+                    .stream()
+                    .map(Role::name)
+                    .toList());
 
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);
             model.put("token", token);
             return ok(model);
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
+            throw new BadCredentialsException("Invalid username/email or password supplied");
         }
     }
+
 }

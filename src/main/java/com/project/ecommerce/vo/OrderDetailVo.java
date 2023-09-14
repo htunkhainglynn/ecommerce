@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Slf4j
-public class OrderDetailVo {
+public class OrderDetailVo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long orderId;
 

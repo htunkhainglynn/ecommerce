@@ -1,0 +1,2 @@
+true,koko@example.com,User One,password1,123-456-7890,profile1.jpg,user3
+true,koko@example.com,User One,password1,123-456-7890,profile1.jpg,user3

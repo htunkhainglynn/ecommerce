@@ -42,7 +42,7 @@ public class ProductVariant {
     @Column(nullable = false)
     private LocalDate createdAt;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate updatedAt;
 
     @JsonIgnore
