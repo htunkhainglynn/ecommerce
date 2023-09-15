@@ -19,7 +19,7 @@ public class Address {
     @Column(nullable = false, columnDefinition = "VARCHAR(255) COLLATE utf8_bin")
     private String city;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COLLATE utf8_bin")
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COLLATE utf8_bin", unique = true)
     private String postalCode;
 
     @ManyToOne
