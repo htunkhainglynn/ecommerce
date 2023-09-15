@@ -10,6 +10,7 @@ import com.project.ecommerce.repo.OrganizationRepository;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.service.ProductService;
+import com.project.ecommerce.vo.ProductVariantVo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -96,9 +97,25 @@ public class  ProductServiceImpl implements ProductService {
     @Override
     public ProductDto saveProduct(ProductDto productDto) {
         organizationRepository.save(productDto.getOrganization());
-        Product product = mapper.map(productDto, Product.class);
+        Product product;
+
+        // update case
+        if (productDto.getId() != null) {
+            product = new Product(productDto);  // map productDto to product
+            Product originalProduct = repo.getReferenceById(productDto.getId());
+
+            // set original product's product variants and organization to the updated product
+            product.setProductVariants(originalProduct.getProductVariants());
+            product.setOrganization(originalProduct.getOrganization());
+        } else {  // add case
+            product = mapper.map(productDto, Product.class);
+        }
+
+        product.setAvailable(false);
         product = repo.save(product);
-        saveProductVariants(repo.getReferenceById(product.getId()), product.getProductVariants());
+        if (!productDto.getProductVariants().isEmpty()) {
+            saveProductVariants(repo.getReferenceById(product.getId()), product.getProductVariants());
+        }
         return new ProductDto(product);
     }
 
@@ -113,17 +130,17 @@ public class  ProductServiceImpl implements ProductService {
         List<ProductVariant> pvs = productVariantRepository.saveAll(productVariants);
 
         // add data to expense table
-        pvs.forEach(pv -> {
-            expenseRepo.save( Expense.builder()
-                    .purchasePrice(pv.getPurchasePrice())
-                    .quantity(pv.getQuantity())
-                    .total(pv.getPurchasePrice() * pv.getQuantity())
-                    .createdAt(LocalDate.now())
-                    .productVariant(pv)
-                    .build()
-            );
-        });
+        pvs.forEach(pv -> expenseRepo.save( Expense.builder()
+                .purchasePrice(pv.getPurchasePrice())
+                .quantity(pv.getQuantity())
+                .total(pv.getPurchasePrice() * pv.getQuantity())
+                .createdAt(LocalDate.now())
+                .productVariant(pv)
+                .build()
+        ));
         product.setProductVariants(pvs);
+        product.setAvailable(true);
+        repo.save(product);
     }
 
     @Override
@@ -154,6 +171,12 @@ public class  ProductServiceImpl implements ProductService {
     public void updateProductAvailability(Long id) {
         Product product = repo.getReferenceById(id);
         product.setAvailable(!product.isAvailable());
+    }
+
+    @Override
+    public Optional<List<ProductVariantVo>> getProductVariantById(Integer id) {
+        List<ProductVariant> productVariants = repo.getProductVariantById(id);
+        return Optional.of(productVariants.stream().map(ProductVariantVo::new).toList());
     }
 
 }

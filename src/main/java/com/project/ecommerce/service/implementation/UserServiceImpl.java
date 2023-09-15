@@ -125,13 +125,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailDto updateUser(UserDetailDto userDetailDto) {
-        return userRepository.findById(userDetailDto.getId())
-                .map(user -> {
-                    mapper.map(userDetailDto, user);
-                    user.setPassword(passwordEncoder.encode(user.getPassword()));
-                    return mapper.map(userRepository.save(user), UserDetailDto.class);
-                })
-                .orElseThrow(() -> new UserException("User not found"));
+        User originalUser = userRepository.getReferenceById(userDetailDto.getId());
+        User user = mapper.map(userDetailDto, User.class);
+        user.setPassword(originalUser.getPassword());
+        user.setAddresses(originalUser.getAddresses());
+        return mapper.map(userRepository.save(user), UserDetailDto.class);
     }
 
     @Transactional(readOnly = true)

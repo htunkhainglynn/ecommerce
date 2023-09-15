@@ -1,6 +1,7 @@
 package com.project.ecommerce.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.ecommerce.dto.ProductDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -55,6 +56,15 @@ public class Product {
 
     @Transient
     private double averageRating;  // for json return
+
+    public Product(ProductDto dto) {
+        this.id = dto.getId();
+        this.sku = dto.getSku();
+        this.weight = dto.getWeight();
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.available = dto.isAvailable();
+    }
 
     @PostLoad
     private void calculateAverageRating() {

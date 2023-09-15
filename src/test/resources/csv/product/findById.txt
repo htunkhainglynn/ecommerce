@@ -1,0 +1,2 @@
+1,1001,2.5,Product 1 Name,Product 1 Description,true,0.0,red.jpg,29.99
+3,1003,3.2,Product 3 Name,Product 3 Description,false,0.0,green.jpg,39.99

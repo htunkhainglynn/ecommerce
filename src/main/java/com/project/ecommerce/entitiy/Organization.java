@@ -29,7 +29,7 @@ public class Organization {
     private String category;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Column(nullable = false)
     private List<Product> products;
 }

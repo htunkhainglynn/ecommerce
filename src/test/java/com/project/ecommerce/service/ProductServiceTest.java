@@ -3,6 +3,8 @@ package com.project.ecommerce.service;
 import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.entitiy.Organization;
+import com.project.ecommerce.vo.ProductVariantVo;
+import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -11,14 +13,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.jdbc.Sql;
 
-import javax.swing.text.html.Option;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,8 @@ public class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired ProductVariantService productVariantService;
 
     @Order(1)
     @ParameterizedTest
@@ -102,4 +105,80 @@ public class ProductServiceTest {
 
     }
 
+    @Order(2)
+    @ParameterizedTest
+    @CsvFileSource(resources = "/csv/product/create-duplication.txt")
+    void testCreateDuplication(Integer sku, double weight, String name, String description, boolean available) {
+        ProductDto productDto = ProductDto.builder()
+                .description(description).available(available)
+                .sku(sku).weight(weight).name(name).build();
+
+        Organization organization = Organization.builder().vendor("vendor").category("category").build();
+        productDto.setOrganization(organization);
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            productService.saveProduct(productDto);
+        });
+    }
+
+    @Order(3)
+    @ParameterizedTest
+    @CsvFileSource(resources = "/csv/product/findById.txt")
+    void testFindById(long id, Integer sku, double weight, String name, String description, boolean available,
+                      double averageRating, String image, String price) {
+        Optional<ProductDto> productDtoOptional = productService.getProductById(id);
+        assertThat(productDtoOptional.isPresent(), equalTo(true));
+        ProductDto productDto = productDtoOptional.get();
+        assertThat(productDto.getSku(), equalTo(sku));
+        assertThat(productDto.getWeight(), equalTo(weight));
+        assertThat(productDto.getName(), equalTo(name));
+        assertThat(productDto.getDescription(), equalTo(description));
+        assertThat(productDto.isAvailable(), equalTo(available));
+        assertThat(productDto.getAverageRating(), equalTo(averageRating));
+        assertThat(productDto.getImage(), equalTo(image));
+        assertThat(productDto.getPrice(), equalTo(Double.parseDouble(price)));
+    }
+
+    @Order(5)
+    @Test
+    void testDeleteProduct() {
+        Optional<ProductDto> productDtoOptional = productService.getProductById(1L);
+        assertThat(productDtoOptional.isPresent(), equalTo(true));
+        List<ProductVariantDto> productVariantDtoList = productDtoOptional.get().getProductVariants();
+        assertThat(productVariantDtoList, hasSize(2));
+        productService.deleteProduct(1L);
+        productDtoOptional = productService.getProductById(1L);
+        assertThat(productDtoOptional.isPresent(), equalTo(false));
+        productVariantDtoList.forEach(productVariantDto -> {
+            Optional<ProductVariantVo> productVariantDtoOptional = productVariantService.getProductVariantById(productVariantDto.getId());
+            assertThat(productVariantDtoOptional.isPresent(), equalTo(false));
+        });
+    }
+
+    @Order(6)
+    @ParameterizedTest
+    @CsvFileSource(resources = "/csv/product/update.txt")
+    void testUpdate(long id, Integer sku,double weight, String name,
+                    String description, boolean available) {
+        Optional<ProductDto> productDtoOptional = productService.getProductById(id);
+        assertThat(productDtoOptional.isPresent(), equalTo(true));
+        ProductDto productDto = productDtoOptional.get();
+        productDto.setId(id);
+        productDto.setSku(sku);
+        productDto.setWeight(weight);
+        productDto.setName(name);
+        productDto.setDescription(description);
+        productDto.setAvailable(available);
+
+        productService.saveProduct(productDto);
+
+        productDtoOptional = productService.getProductById(id);
+        assertThat(productDtoOptional.isPresent(), equalTo(true));
+        productDto = productDtoOptional.get();
+        assertThat(productDto.getSku(), equalTo(sku));
+        assertThat(productDto.getWeight(), equalTo(weight));
+        assertThat(productDto.getName(), equalTo(name));
+        assertThat(productDto.getDescription(), equalTo(description));
+        assertThat(productDto.isAvailable(), equalTo(available));
+    }
 }

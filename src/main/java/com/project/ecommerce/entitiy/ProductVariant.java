@@ -1,6 +1,7 @@
 package com.project.ecommerce.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.ecommerce.dto.ProductVariantDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,4 +58,17 @@ public class ProductVariant {
     @JsonIgnore
     @OneToMany(mappedBy = "productVariant", cascade = CascadeType.ALL)
     private List<Expense> expenses;
+
+    public ProductVariant(ProductVariantDto productVariantDto) {
+        this.id = productVariantDto.getId();
+        this.size = productVariantDto.getSize();
+        this.color = productVariantDto.getColor();
+        this.price = productVariantDto.getPrice();
+        this.inStock = productVariantDto.isInStock();
+        this.quantity = productVariantDto.getQuantity();
+        this.imageUrl = productVariantDto.getImageUrl();
+        this.purchasePrice = productVariantDto.getPurchasePrice();
+        this.createdAt = productVariantDto.getCreatedAt();
+        this.updatedAt = productVariantDto.getUpdatedAt();
+    }
 }

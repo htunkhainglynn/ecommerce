@@ -57,11 +57,12 @@ public class ProductDto {
         this.available = entity.isAvailable();
         this.organization = entity.getOrganization();
         this.averageRating = entity.getAverageRating();
-        if (entity.getProductVariants() != null) {
-            for (ProductVariant pv : entity.getProductVariants()) {
-                this.image = pv.getImageUrl();
-                this.price = pv.getPrice();
-            }
+        if (!entity.getProductVariants().isEmpty()) {
+            this.image = entity.getProductVariants().get(0).getImageUrl();
+            this.price = entity.getProductVariants().get(0).getPrice();
+            entity.getProductVariants().forEach(productVariant -> {
+                this.productVariants.add(new ProductVariantDto(productVariant));
+            });
         }
     }
 

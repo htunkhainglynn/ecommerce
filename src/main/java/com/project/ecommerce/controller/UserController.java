@@ -44,13 +44,13 @@ public class UserController {
 
     // update user by id
     @PutMapping("/{id}")
-    @Operation(summary = "Update user by id", description = "Requires ADMIN or USER authority")
+    @Operation(summary = "Update user activation by id", description = "Requires ADMIN or USER authority")
     public ResponseEntity<UserDetailDto> updateUserById(@PathVariable Long id,
                                                         @RequestBody UserDetailDto userDetailDto) {
         Optional<UserDetailDto> user = userService.getUserById(id);
         if (user.isPresent()) {
-            userDetailDto.setId(id);
-            return ResponseEntity.ok(userService.updateUser(userDetailDto));
+            user.get().setActive(!user.get().isActive());
+            return ResponseEntity.ok(userService.updateUser(user.get()));
         }
         return ResponseEntity.notFound().build();
     }

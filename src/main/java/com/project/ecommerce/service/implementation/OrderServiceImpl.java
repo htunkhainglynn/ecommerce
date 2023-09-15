@@ -116,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.get().setStatus(status);
+        orderRepository.save(order.get());
         return new OrderDetailVo(order.get());
     }
 

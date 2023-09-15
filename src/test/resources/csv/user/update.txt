@@ -1,1 +1,1 @@
-admin@example.com,Htun Khaing Lynn,password123,098-098-9872,profile1.jpg,admin,true,1
+admin@example.com,Htun Khaing Lynn,password,098-098-9872,profile1.jpg,admin,false,1

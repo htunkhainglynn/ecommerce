@@ -4,6 +4,7 @@ import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.service.CloudinaryService;
 import com.project.ecommerce.service.ProductService;
+import com.project.ecommerce.vo.ProductVariantVo;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -47,6 +49,14 @@ public class ProductController {
     @Operation(summary = "Get product by id", description = "Requires ADMIN authority")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         Optional<ProductDto> result = productService.getProductById(id);
+        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Endpoint to get product variants by product ID
+    @GetMapping("/{id}/product-variants")
+    @Operation(summary = "Get product variants by product id", description = "Requires ADMIN authority")
+    public ResponseEntity<List<ProductVariantVo>> getProductVariantById(@PathVariable Integer id) {
+        Optional<List<ProductVariantVo>> result = productService.getProductVariantById(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

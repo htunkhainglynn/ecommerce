@@ -14,6 +14,7 @@ import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.service.ProductVariantService;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,47 +55,48 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     public ProductVariantVo saveProductVariant(ProductVariantDto productVariantDto) {
-        Optional<Product> product = productRepo.findById(productVariantDto.getProduct_id());
+        Product product = productRepo.getReferenceById(productVariantDto.getProduct_id());
         int oldQuantity = 0;
 
         // update case
         if (productVariantDto.getId() != 0) {
-            ProductVariant originalProductVariant = productVariantRepository.getReferenceById(productVariantDto.getId());
+            ProductVariant originalProductVariant = productVariantRepository
+                                                        .getReferenceById(productVariantDto.getId());
+
+            // set expenses to updated expenses
+            productVariantDto.setExpenses(originalProductVariant.getExpenses());
             oldQuantity = originalProductVariant.getQuantity();
         }
 
 
-        if (product.isPresent()) {
-            // set product to available if it was previously unavailable
-            if (!product.get().isAvailable()) {
-                product.get().setAvailable(true);
-                productRepo.save(product.get());
-            }
-
-            ProductVariant productVariant = modelMapper.map(productVariantDto, ProductVariant.class);
-
-            if (productVariant.getQuantity() > 0) {
-                productVariant.setInStock(true);
-            }
-            if (productVariant.getCreatedAt() == null) {
-                productVariant.setCreatedAt(LocalDate.now());
-            } else {
-                productVariant.setUpdatedAt(LocalDate.now());
-            }
-
-            productVariant.setProduct(product.get());
-            productVariant.setQuantity(productVariant.getQuantity() + oldQuantity);
-            ProductVariant savedProductVariant = productVariantRepository.save(productVariant);
-
-            // save expense to expense table
-            saveExpense(savedProductVariant, productVariantDto.getQuantity());
-            return new ProductVariantVo(savedProductVariant);
+        // set product to available if it was previously unavailable
+        if (!product.isAvailable()) {
+            product.setAvailable(true);
+            productRepo.save(product);
         }
-        throw new ProductException("Product not found");
+
+        ProductVariant productVariant = modelMapper.map(productVariantDto, ProductVariant.class);
+
+        if (productVariant.getQuantity() > 0) {
+            productVariant.setInStock(true);
+        }
+        if (productVariant.getCreatedAt() == null) {
+            productVariant.setCreatedAt(LocalDate.now());
+        } else {
+            productVariant.setUpdatedAt(LocalDate.now());
+        }
+
+        productVariant.setProduct(product);
+        productVariant.setQuantity(productVariant.getQuantity() + oldQuantity);
+        ProductVariant savedProductVariant = productVariantRepository.save(productVariant);
+
+        // save expense to expense table
+        saveExpense(savedProductVariant, productVariantDto.getQuantity());
+        return new ProductVariantVo(savedProductVariant);
     }
 
     private void saveExpense(ProductVariant savedProductVariant, Integer quantity) {
-        expenseRepo.save( Expense.builder()
+        expenseRepo.save(Expense.builder()
                 .purchasePrice(savedProductVariant.getPurchasePrice())
                 .quantity(quantity)
                 .total(savedProductVariant.getPurchasePrice() * quantity)
@@ -151,14 +153,5 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     @Override
     public Long getProductIdByPvId(Integer id) {
         return productVariantRepository.findProductIdById(id);
-    }
-
-    @Override
-    public List<ProductVariantVo> getProductVariantByProductId(Integer id) {
-        Optional<List<ProductVariant>> productVariants =  productVariantRepository.findByProductId(id);
-        if (productVariants.isEmpty()) {
-            throw new ProductException("Product Not Found");
-        }
-        return productVariants.get().stream().map(ProductVariantVo::new).toList();
     }
 }

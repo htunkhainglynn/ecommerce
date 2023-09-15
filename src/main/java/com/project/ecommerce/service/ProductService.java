@@ -1,6 +1,7 @@
 package com.project.ecommerce.service;
 
 import com.project.ecommerce.dto.ProductDto;
+import com.project.ecommerce.vo.ProductVariantVo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface ProductService {
     void updateProductQuantity(Map<Integer, Integer> productQuantityMap);
 
     void updateProductAvailability(Long id);
+
+    Optional<List<ProductVariantVo>> getProductVariantById(Integer id);
 }

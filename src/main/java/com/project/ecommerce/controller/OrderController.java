@@ -120,7 +120,6 @@ public class OrderController {
 
             // send notification to customer
             String username = result.get().getUser().getUsername();
-            log.info("username: {}", username);
             String routingKey = queueInfoService.getRoutingKeyByUsername(username);
             sendNotification(result.get(), "Order has been shipped!", routingKey);
         } else {

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Sql(scripts = {"/sql/init-database.sql", "/sql/user.sql"})
+@Sql(scripts = {"/sql/init-database.sql", "/sql/user.sql", "/sql/address.sql"})
 @Slf4j
 public class UserServiceTest {
 
@@ -137,7 +137,6 @@ public class UserServiceTest {
                 .email(email)
                 .name(name)
                 .username(username)
-                .password(password)
                 .phoneNumber(phoneNumber)
                 .profilePictureURL(profilePictureURL)
                 .id(id)
@@ -155,6 +154,7 @@ public class UserServiceTest {
         assertEquals(phoneNumber, user.getPhoneNumber());
         assertTrue(passwordEncoder.matches(password, user.getPassword()));
         assertEquals(profilePictureURL, user.getProfilePictureURL());
+        assertEquals(1, user.getAddresses().size());
     }
 
     @Test

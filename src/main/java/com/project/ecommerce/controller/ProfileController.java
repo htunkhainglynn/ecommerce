@@ -78,7 +78,7 @@ public class ProfileController {
 
     @PutMapping("/delete-picture")
     @Operation(summary = "Delete profile picture", description = "Requires USER authority")
-    public void deleteProfile() {
+    public void deleteProfilePic() {
         Optional<UserDetailDto> user = getUserDetailDto();
 
         if (user.isPresent()) {

@@ -11,8 +11,6 @@ import java.util.Optional;
 public interface ProductVariantService {
     ProductVariantVo saveProductVariant(ProductVariantDto productVariantDto);
 
-    List<ProductVariantVo> getProductVariantByProductId(Integer id);
-
     Optional<ProductVariantVo> getProductVariantById(Integer id);
 
     void deleteProductVariant(Integer id);

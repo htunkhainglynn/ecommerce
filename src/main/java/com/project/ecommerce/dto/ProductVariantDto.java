@@ -36,14 +36,13 @@ public class ProductVariantDto {
 
     private Long product_id;
 
+    private String imageUrl;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private double purchasePrice;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private MultipartFile imageFile;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String imageUrl;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String name;
