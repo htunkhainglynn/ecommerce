@@ -14,4 +14,7 @@ INSERT INTO product_variant (created_at, in_stock, price, purchase_price, quanti
 VALUES
     ('2023-09-13', 1, 29.99, 19.99, 100, '2023-09-13', 1, 'Red', 'red.jpg', 'Medium'),
     ('2023-09-14', 1, 39.99, 29.99, 50, '2023-09-14', 1, 'Blue', 'blue.jpg', 'Large'),
-    ('2023-09-15', 0, 19.99, 14.99, 75, '2023-09-15', 2, 'Black', 'black.jpg', 'Small');
+    ('2023-09-15', 0, 19.99, 14.99, 75, '2023-09-15', 2, 'Black', 'black.jpg', 'Small'),
+    ('2023-09-16', 1, 29.99, 19.99, 100, '2023-09-16', 2, 'White', 'white.jpg', 'Medium'),
+    ('2023-09-17', 1, 39.99, 29.99, 50, '2023-09-17', 3, 'Green', 'green.jpg', 'Large'),
+    ('2023-09-18', 0, 19.99, 14.99, 75, '2023-09-18', 3, 'Yellow', 'yellow.jpg', 'Small');

@@ -11,11 +11,7 @@ import java.util.Optional;
 public interface ProductVariantService {
     ProductVariantVo saveProductVariant(ProductVariantDto productVariantDto);
 
-    void cacheProductVariant(ProductVariantCache productVariantCache);
-
-    List<ProductVariantVo> getAllProductVariants();
-
-    List<ProductVariantCache> getAllProductVariantCache(Integer id);
+    List<ProductVariantVo> getProductVariantByProductId(Integer id);
 
     Optional<ProductVariantVo> getProductVariantById(Integer id);
 
@@ -24,4 +20,6 @@ public interface ProductVariantService {
     Optional<String> getProductVariantImageUrl(Integer id);
 
     void updateExpenseHistory(Integer id, ExpenseDto expenseDto);
+
+    Long getProductIdByPvId(Integer id);
 }

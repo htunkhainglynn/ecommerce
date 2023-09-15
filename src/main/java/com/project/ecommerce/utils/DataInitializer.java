@@ -8,7 +8,6 @@
 //import jakarta.transaction.Transactional;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.amqp.core.DirectExchange;
-//import org.springframework.amqp.core.Exchange;
 //import org.springframework.amqp.core.FanoutExchange;
 //import org.springframework.amqp.core.TopicExchange;
 //import org.springframework.beans.factory.annotation.Autowired;

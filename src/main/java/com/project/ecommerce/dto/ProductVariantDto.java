@@ -19,6 +19,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProductVariantDto {
 
     private int id;
@@ -29,12 +30,14 @@ public class ProductVariantDto {
 
     private double price;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private double purchasePrice;
-
     private boolean inStock;
 
     private int quantity;
+
+    private Long product_id;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private double purchasePrice;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private MultipartFile imageFile;
@@ -42,6 +45,7 @@ public class ProductVariantDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imageUrl;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String name;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -49,8 +53,6 @@ public class ProductVariantDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate updatedAt;
-
-    private Long product_id;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Expense> expenses;

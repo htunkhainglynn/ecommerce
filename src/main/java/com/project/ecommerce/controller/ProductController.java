@@ -33,11 +33,11 @@ public class ProductController {
     @Operation(summary = "Get all products", description = "Requires ADMIN authority")
     public ResponseEntity<Page<ProductDto>> getAllProducts
             (@RequestParam(required = false) String keyword,
-             @RequestParam(required = false) boolean isAvailable,
+             @RequestParam(required = false) Boolean isAvailable,
              @RequestParam Optional<Integer> page,
              @RequestParam Optional<Integer> size) {
 
-        Page<ProductDto> result = productService.getAllProducts(keyword, isAvailable, page, size);
+        Page<ProductDto> result = productService.getAllProducts(keyword, isAvailable == null || isAvailable, page, size);
         return ResponseEntity.ok(result);
     }
 
@@ -81,6 +81,14 @@ public class ProductController {
             return ResponseEntity.ok(result);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    // Endpoint to update product availability
+    @PutMapping("/{id}/availability")
+    @Operation(summary = "Update product availability", description = "Requires ADMIN authority")
+    public ResponseEntity<Void> updateProductAvailability(@PathVariable Long id) {
+        productService.updateProductAvailability(id);
+        return ResponseEntity.ok().build();
     }
 
     // Endpoint to delete a product

@@ -42,9 +42,16 @@ public class ProductVariantController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all product variants", description = "Requires ADMIN authority")
-    public ResponseEntity<List<ProductVariantVo>> getAllProductVariants() {
-        return ok(productVariantService.getAllProductVariants());
+    @Operation(summary = "Get product variant by id", description = "Requires ADMIN authority")
+    public ResponseEntity<ProductVariantVo> getProductVariantById(Integer id) {
+        Optional<ProductVariantVo> result = productVariantService.getProductVariantById(id);
+        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get product variant by product id", description = "Requires ADMIN authority")
+    public ResponseEntity<List<ProductVariantVo>> getProductVariantByProductId(@PathVariable("id") Integer id) {
+        return ok(productVariantService.getProductVariantByProductId(id));
     }
 
 
@@ -103,6 +110,12 @@ public class ProductVariantController {
     public void deleteProductVariant(@PathVariable Integer id){
         productVariantService.getProductVariantImageUrl(id)
                 .ifPresent(cloudinaryService::deleteImage);
+
+        // if all product variants of a product are deleted, set product to unavailable
+        Long productId = productVariantService.getProductIdByPvId(id);
+        if (productVariantService.getProductVariantByProductId(productId.intValue()).size() == 1) {
+            productService.updateProductAvailability(productId);
+        }
         productVariantService.deleteProductVariant(id);
     }
 }

@@ -1,0 +1,3 @@
+123,1.5,Product One,Description for Product One,true,Large,Red,10.0,true,100,4,5.0,product1.jpg,Small,Blue,8.0,true,50,4,4.5,product2.jpg,Vendor A,Category X
+456,2.0,Product Two,Description for Product Two,true,Medium,Green,12.0,false,0,4,6.0,product3.jpg,Large,Yellow,9.0,true,60,4,5.5,product4.jpg,Vendor B,Category Y
+789,1.2,Product Three,Description for Product Three,false,Small,Orange,15.0,true,120,4,7.0,product5.jpg,Medium,Black,11.0,false,0,4,6.5,product6.jpg,Vendor C,Category Z

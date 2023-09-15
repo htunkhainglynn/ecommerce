@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-public class OrderItemDto implements Serializable {
+public class OrderItemDto {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer product_id;
@@ -25,8 +25,11 @@ public class OrderItemDto implements Serializable {
 
     private int price;
 
+    private long orderId;
+
     public OrderItemDto(OrderItem orderItem) {
         this.productVariant = new ProductVariantVo(orderItem.getProductVariant());
         this.quantity = orderItem.getQuantity();
+        this.orderId = orderItem.getOrder().getId();
     }
 }

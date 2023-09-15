@@ -1,6 +1,7 @@
 package com.project.ecommerce.repo;
 
 import com.project.ecommerce.entitiy.ProductVariant;
+import com.project.ecommerce.vo.ProductVariantVo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -36,4 +37,10 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
 
     @Query("SELECT pv FROM ProductVariant pv WHERE pv.createdAt BETWEEN ?1 AND ?2")
     List<ProductVariant> findBetweenDates(LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT pv FROM ProductVariant pv WHERE pv.product.id = ?1")
+    Optional<List<ProductVariant>> findByProductId(Integer id);
+
+    @Query("SELECT p.id FROM ProductVariant pv JOIN pv.product p WHERE pv.id = ?1")
+    Long findProductIdById(Integer id);
 }

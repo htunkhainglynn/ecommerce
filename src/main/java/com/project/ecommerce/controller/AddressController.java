@@ -18,12 +18,9 @@ public class AddressController {
 
     private final AddressService addressService;
 
-    private final UserService userService;
-
     @Autowired
-    public AddressController(AddressService addressService, UserService userService) {
+    public AddressController(AddressService addressService) {
         this.addressService = addressService;
-        this.userService = userService;
     }
 
     // get addresses by username
@@ -35,26 +32,28 @@ public class AddressController {
 
     // create address by username
     @PostMapping
-    public ResponseEntity<Address> createAddressByUsername(AddressDto addressDto) {
+    public ResponseEntity<Long> createAddressByUsername(AddressDto addressDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return ResponseEntity.ok(addressService.saveAddressByUsername(addressDto, username));
+        Address address = addressService.saveAddressByUsername(addressDto, username);
+        return ResponseEntity.ok(address.getId());
     }
 
     // update address by id
     @PutMapping("/{id}")
-    public ResponseEntity<Address> updateAddressById(@PathVariable Long id, AddressDto addressDto) {
+    public ResponseEntity<Long> updateAddressById(@PathVariable Long id, AddressDto addressDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Address> address = addressService.getAddressById(id);
         if (address.isPresent()) {
             addressDto.setId(id);
-            return ResponseEntity.ok(addressService.saveAddressByUsername(addressDto, username));
+            Address result = addressService.saveAddressByUsername(addressDto, username);
+            return ResponseEntity.ok(result.getId());
         }
         return ResponseEntity.notFound().build();
     }
 
     // delete address by id
     @DeleteMapping("/{id}")
-    public ResponseEntity<Address> deleteAddressById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAddressById(@PathVariable Long id) {
         Optional<Address> address = addressService.getAddressById(id);
         if (address.isPresent()) {
             addressService.deleteAddressById(id);

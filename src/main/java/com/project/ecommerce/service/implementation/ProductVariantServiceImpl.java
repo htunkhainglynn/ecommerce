@@ -37,8 +37,6 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     private final ExpenseRepo expenseRepo;
 
-    private final RedisTemplate<String, ProductVariantCache> redisTemplate;
-
     private final BalanceRepo balanceRepo;
 
     @Autowired
@@ -46,43 +44,49 @@ public class ProductVariantServiceImpl implements ProductVariantService {
                                      ProductVariantRepository productVariantRepository,
                                      ProductRepository productRepo,
                                      ExpenseRepo expenseRepo,
-                                     RedisTemplate<String, ProductVariantCache> redisTemplate,
                                      BalanceRepo balanceRepo) {
         this.modelMapper = modelMapper;
         this.productVariantRepository = productVariantRepository;
         this.productRepo = productRepo;
         this.expenseRepo = expenseRepo;
-        this.redisTemplate = redisTemplate;
         this.balanceRepo = balanceRepo;
-    }
-
-    @Override
-    public List<ProductVariantVo> getAllProductVariants() {
-        return productVariantRepository.findAll()
-                .stream()
-                .map(ProductVariantVo::new)
-                .toList();
     }
 
     @Override
     public ProductVariantVo saveProductVariant(ProductVariantDto productVariantDto) {
         Optional<Product> product = productRepo.findById(productVariantDto.getProduct_id());
-        ProductVariant originalProductVariant = productVariantRepository.getReferenceById(productVariantDto.getId());
+        int oldQuantity = 0;
+
+        // update case
+        if (productVariantDto.getId() != 0) {
+            ProductVariant originalProductVariant = productVariantRepository.getReferenceById(productVariantDto.getId());
+            oldQuantity = originalProductVariant.getQuantity();
+        }
+
+
         if (product.isPresent()) {
+            // set product to available if it was previously unavailable
+            if (!product.get().isAvailable()) {
+                product.get().setAvailable(true);
+                productRepo.save(product.get());
+            }
+
             ProductVariant productVariant = modelMapper.map(productVariantDto, ProductVariant.class);
 
             if (productVariant.getQuantity() > 0) {
                 productVariant.setInStock(true);
             }
-            if (productVariant.getCreatedAt() != null) {
+            if (productVariant.getCreatedAt() == null) {
                 productVariant.setCreatedAt(LocalDate.now());
             } else {
                 productVariant.setUpdatedAt(LocalDate.now());
             }
 
             productVariant.setProduct(product.get());
-            productVariant.setQuantity(productVariant.getQuantity() + originalProductVariant.getQuantity());
+            productVariant.setQuantity(productVariant.getQuantity() + oldQuantity);
             ProductVariant savedProductVariant = productVariantRepository.save(productVariant);
+
+            // save expense to expense table
             saveExpense(savedProductVariant, productVariantDto.getQuantity());
             return new ProductVariantVo(savedProductVariant);
         }
@@ -98,19 +102,6 @@ public class ProductVariantServiceImpl implements ProductVariantService {
                 .productVariant(savedProductVariant)
                 .build()
         );
-    }
-
-    @Override
-    public void cacheProductVariant(ProductVariantCache productVariantCache) {
-        String key = "ProductVariant:" + productVariantCache.getProduct_id();
-        redisTemplate.opsForValue().set(key, productVariantCache);
-    }
-
-    @Override
-    public List<ProductVariantCache> getAllProductVariantCache(Integer id) {
-        Set<String> keys = redisTemplate.keys("ProductVariant:" + id);
-        assert keys != null;  // key might be null
-        return redisTemplate.opsForValue().multiGet(keys);
     }
 
     @Override
@@ -155,5 +146,19 @@ public class ProductVariantServiceImpl implements ProductVariantService {
             LocalDate endOfYear = expenseDto.getCreatedAt().withDayOfYear(expenseDto.getCreatedAt().lengthOfYear());
             balanceRepo.updateExpenses(endOfYear, difference);
         }
+    }
+
+    @Override
+    public Long getProductIdByPvId(Integer id) {
+        return productVariantRepository.findProductIdById(id);
+    }
+
+    @Override
+    public List<ProductVariantVo> getProductVariantByProductId(Integer id) {
+        Optional<List<ProductVariant>> productVariants =  productVariantRepository.findByProductId(id);
+        if (productVariants.isEmpty()) {
+            throw new ProductException("Product Not Found");
+        }
+        return productVariants.get().stream().map(ProductVariantVo::new).toList();
     }
 }

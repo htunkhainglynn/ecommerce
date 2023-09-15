@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@PreAuthorize("hasAuthority('ADMIN')")
+//@PreAuthorize("hasAuthority('ADMIN')")
 public class  ProductServiceImpl implements ProductService {
 
     private final ModelMapper mapper;
@@ -56,7 +56,7 @@ public class  ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     @Override
     public Page<ProductDto> getAllProducts(String keyword,
-                                           boolean isAvailable,
+                                           Boolean isAvailable,
                                            Optional<Integer> page,
                                            Optional<Integer> size) {
 
@@ -76,15 +76,9 @@ public class  ProductServiceImpl implements ProductService {
             );
         }
 
-        if (isAvailable) {
+        if (isAvailable != null) {
             specification = specification.and((root, query, cb) ->
-                    cb.equal(root.get("available"), true)
-            );
-        }
-
-        if(!isAvailable) {
-            specification = specification.and((root, query, cb) ->
-                    cb.equal(root.get("available"), false)
+                    cb.equal(root.get("available"), isAvailable)
             );
         }
 
@@ -154,6 +148,12 @@ public class  ProductServiceImpl implements ProductService {
                 productVariantRepository.updateQuantityById(key, quantity);
             }
         });
+    }
+
+    @Override
+    public void updateProductAvailability(Long id) {
+        Product product = repo.getReferenceById(id);
+        product.setAvailable(!product.isAvailable());
     }
 
 }

@@ -33,12 +33,11 @@ public class ProductDto {
 
     private boolean available;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<ProductVariantDto> productVariants = new ArrayList<>();
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Organization organization;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<Review> reviews;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private double averageRating;
@@ -57,13 +56,13 @@ public class ProductDto {
         this.description = entity.getDescription();
         this.available = entity.isAvailable();
         this.organization = entity.getOrganization();
-        this.reviews = entity.getReviews();
         this.averageRating = entity.getAverageRating();
-        entity.getProductVariants().forEach(productVariant -> {
-            this.productVariants.add(new ProductVariantDto(productVariant));
-        });
-        this.image = entity.getProductVariants().get(0).getImageUrl();
-        this.price = entity.getProductVariants().get(0).getPrice();
+        if (entity.getProductVariants() != null) {
+            for (ProductVariant pv : entity.getProductVariants()) {
+                this.image = pv.getImageUrl();
+                this.price = pv.getPrice();
+            }
+        }
     }
 
 }
