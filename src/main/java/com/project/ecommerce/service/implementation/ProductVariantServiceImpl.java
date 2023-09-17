@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@Transactional
 public class ProductVariantServiceImpl implements ProductVariantService {
 
     private final ModelMapper modelMapper;
@@ -107,6 +109,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<ProductVariantVo> getProductVariantById(Integer id) {
         return productVariantRepository.findById(id)
                 .map(ProductVariantVo::new);
@@ -118,6 +121,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<String> getProductVariantImageUrl(Integer id) {
         return productVariantRepository.findImageUrlById(id);
     }
@@ -151,6 +155,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long getProductIdByPvId(Integer id) {
         return productVariantRepository.findProductIdById(id);
     }

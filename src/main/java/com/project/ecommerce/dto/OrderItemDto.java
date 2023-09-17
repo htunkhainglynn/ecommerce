@@ -2,34 +2,40 @@ package com.project.ecommerce.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecommerce.entitiy.OrderItem;
-import com.project.ecommerce.vo.ProductVariantVo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 public class OrderItemDto {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Integer product_id;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private ProductVariantVo productVariant;
+    private Integer productVariantId;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String productName;
 
     private int quantity;
 
-    private int price;
+    private double price;
 
     private long orderId;
 
+    private String imageUrl;
+
+    private String size;
+
+    private String color;
+
+
     public OrderItemDto(OrderItem orderItem) {
-        this.productVariant = new ProductVariantVo(orderItem.getProductVariant());
+        this.price = orderItem.getProductVariant().getPrice();
+        this.productName = orderItem.getProductVariant().getProduct().getName();
+        this.imageUrl = orderItem.getProductVariant().getImageUrl();
+        this.size = orderItem.getProductVariant().getSize();
+        this.color = orderItem.getProductVariant().getColor();
         this.quantity = orderItem.getQuantity();
         this.orderId = orderItem.getOrder().getId();
     }
+
 }

@@ -36,6 +36,7 @@ public class UserServiceTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/user/creation.txt", delimiter = ',')
     void testCreate(boolean active, String email, String name, String password, String phoneNumber, String profilePictureURL, String username, int id) {
+
         SignUpDto signUpDto = SignUpDto.builder()
                 .active(active)
                 .email(email)

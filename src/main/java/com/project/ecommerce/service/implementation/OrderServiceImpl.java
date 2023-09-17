@@ -1,17 +1,14 @@
 package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.dto.OrderDetailDto;
-import com.project.ecommerce.entitiy.Status;
+import com.project.ecommerce.dto.OrderItemDto;
+import com.project.ecommerce.entitiy.*;
+import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.repo.*;
+import com.project.ecommerce.service.AddressService;
+import com.project.ecommerce.service.OrderService;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
-import com.project.ecommerce.dto.OrderItemDto;
-import com.project.ecommerce.entitiy.Order;
-import com.project.ecommerce.entitiy.OrderItem;
-import com.project.ecommerce.entitiy.ProductVariant;
-import com.project.ecommerce.exception.ProductException;
-import com.project.ecommerce.service.OrderService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final AddressRepo addressRepo;
 
-    private final ModelMapper modelMapper;
+    private final AddressService addressService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
@@ -50,13 +47,13 @@ public class OrderServiceImpl implements OrderService {
                             UserRepository userRepository,
                             OrderItemRepository orderItemRepository,
                             AddressRepo addressRepo,
-                            ModelMapper modelMapper) {
+                            AddressService addressService) {
         this.orderRepository = orderRepository;
         this.productVariantRepository = productVariantRepository;
         this.userRepository = userRepository;
         this.orderItemRepository = orderItemRepository;
         this.addressRepo = addressRepo;
-        this.modelMapper = modelMapper;
+        this.addressService = addressService;
     }
 
     @Transactional(readOnly = true)
@@ -99,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderVo::new);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAnyAuthority('USER')")
     @Transactional(readOnly = true)
     @Override
     public Optional<OrderDetailVo> getOrderById(Long id) {
@@ -127,6 +124,17 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderDetailVo::new);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN') or hasAnyAuthority('USER')")
+    @Override
+    public Optional<List<OrderItemDto>> getOrderItemsByOrderId(Long id) {
+        List<OrderItemDto> orderItemDto = orderRepository
+                                                .getOrderItemsByOrderId(id)
+                                                .stream()
+                                                .map(OrderItemDto::new)
+                                                .toList();
+        return Optional.of(orderItemDto);
+    }
+
     @PreAuthorize("hasAnyAuthority('USER')")
     @Override
     public OrderDetailVo saveOrder(OrderDetailDto orderDetailDto) {
@@ -134,13 +142,20 @@ public class OrderServiceImpl implements OrderService {
         // get user from security context holder
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        Address address;
+
         // get address by id
         if (orderDetailDto.getAddressId() != null) {
-            addressRepo.findById(orderDetailDto.getAddressId())
-                    .ifPresent(orderDetailDto::setAddress);
+            address = addressRepo.findById(orderDetailDto.getAddressId())
+                    .orElseThrow(() -> new ProductException("Address not found"));
+        } else {
+            address = addressService.saveAddressByUsername(orderDetailDto.getAddress(), username);
         }
 
-        Order order = modelMapper.map(orderDetailDto, Order.class);
+        Order order = new Order(orderDetailDto);
+
+        // set address to order
+        order.setAddress(address);
 
         // set order date
         order.setOrderDate(LocalDate.now());
@@ -151,7 +166,7 @@ public class OrderServiceImpl implements OrderService {
 
         // check if product exists in order
         for (OrderItemDto o : orderDetailDto.getOrderItems()) {
-            Optional<ProductVariant> p = productVariantRepository.findById(o.getProduct_id());
+            Optional<ProductVariant> p = productVariantRepository.findById(o.getProductVariantId());
             if (p.isEmpty()) {
                 throw new ProductException("Product not found");
             }
@@ -172,7 +187,7 @@ public class OrderServiceImpl implements OrderService {
     private void saveOrderItems(Order order, List<OrderItemDto> orderItems) {
         List<OrderItem> orderItemList = new ArrayList<>();
         orderItems.forEach(orderItemDto -> {
-            ProductVariant productVariant = productVariantRepository.findById(orderItemDto.getProduct_id())
+            ProductVariant productVariant = productVariantRepository.findById(orderItemDto.getProductVariantId())
                     .orElseThrow(() -> new ProductException("Product not found"));
             OrderItem orderItem = new OrderItem(productVariant, orderItemDto.getQuantity(), order);
             orderItemList.add(orderItem);

@@ -43,7 +43,6 @@ public class UserDto implements Serializable {
         this.phone = entity.getPhoneNumber();
         this.active = entity.isActive();
         this.orders = entity.getOrders().size();
-        this.addresses = entity.getAddresses();
         this.totalSpent = entity.getOrders().stream().mapToLong(order -> (long) order.getTotalPrice()).sum();
     }
 }

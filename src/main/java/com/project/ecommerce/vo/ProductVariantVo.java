@@ -27,6 +27,8 @@ public class ProductVariantVo {
 
     private String name;
 
+    private int quantity;
+
     private Long product_id;
 
     private LocalDate createdAt;
@@ -46,5 +48,6 @@ public class ProductVariantVo {
         this.name = entity.getProduct().getName();
         this.product_id = entity.getProduct().getId();
         this.inStock = entity.isInStock();
+        this.quantity = entity.getQuantity();
     }
 }

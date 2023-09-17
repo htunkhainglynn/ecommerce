@@ -36,6 +36,7 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
+    @Basic(fetch = FetchType.EAGER)
     @Column(columnDefinition = "boolean default false")
     private boolean available;
 

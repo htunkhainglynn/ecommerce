@@ -31,20 +31,19 @@ public class OrderDetailVo implements Serializable {
 
     private double totalPrice;
 
-    private List<OrderItemDto> orderItems;
-
     private UserDto user;
 
     private Status status;
+
+    private Address address;
 
     public OrderDetailVo(Order order) {
         this.orderId = order.getId();
         this.orderDate = order.getOrderDate();
         this.totalPrice = order.getTotalPrice();
         this.status = order.getStatus();
-        this.orderItems = new ArrayList<>();
         this.user = new UserDto(order.getUser());
-        order.getOrderItems().forEach(orderItem -> this.orderItems.add(new OrderItemDto(orderItem)));
+        this.address = order.getAddress();
     }
 
 }

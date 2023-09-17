@@ -28,7 +28,7 @@ public class Notification {
     @Column(nullable = false)
     private LocalDate date;
 
-    private OrderDetailVo order;
+    private long orderId;
 
     @JsonIgnore
     private String username;

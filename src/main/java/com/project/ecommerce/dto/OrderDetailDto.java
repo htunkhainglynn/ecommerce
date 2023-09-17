@@ -26,7 +26,7 @@ public class OrderDetailDto {
 
     private Long addressId;
 
-    private Address address;
+    private AddressDto address;
 
     private List<OrderItemDto> orderItems;
 }

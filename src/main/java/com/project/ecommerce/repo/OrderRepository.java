@@ -1,5 +1,6 @@
 package com.project.ecommerce.repo;
 
+import com.project.ecommerce.dto.OrderItemDto;
 import com.project.ecommerce.entitiy.Order;
 import com.project.ecommerce.entitiy.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,4 +33,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     @Query("SELECT o.orderItems FROM Order o WHERE o.orderDate BETWEEN ?1 AND ?2")
     List<List<OrderItem>> findOrderItemsBetweenDates(LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT o.orderItems FROM Order o WHERE o.id = ?1")
+    List<OrderItem> getOrderItemsByOrderId(Long id);
 }
