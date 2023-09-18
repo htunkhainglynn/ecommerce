@@ -8,7 +8,6 @@ import com.project.ecommerce.repo.ReviewRepository;
 import com.project.ecommerce.service.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

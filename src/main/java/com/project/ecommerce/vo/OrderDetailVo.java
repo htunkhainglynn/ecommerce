@@ -4,23 +4,24 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.project.ecommerce.dto.OrderItemDto;
 import com.project.ecommerce.dto.UserDto;
-import com.project.ecommerce.entitiy.*;
+import com.project.ecommerce.entitiy.Address;
+import com.project.ecommerce.entitiy.Order;
+import com.project.ecommerce.entitiy.Status;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @Slf4j
 public class OrderDetailVo implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private Long orderId;

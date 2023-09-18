@@ -5,5 +5,5 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 
 public interface StripeService {
-    public Session createSession(StripeDto stripeDto) throws StripeException;
+    Session createSession(StripeDto stripeDto) throws StripeException;
 }

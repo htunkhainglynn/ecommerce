@@ -8,7 +8,6 @@ import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.service.NotificationService;
 import com.project.ecommerce.service.QueueInfoService;
 import com.project.ecommerce.vo.OrderDetailVo;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.amqp.core.DirectExchange;
@@ -22,7 +21,6 @@ import java.util.Map;
 
 @Aspect
 @Component
-@Slf4j
 public class NotificationAspect {
 
     private final NotificationService notificationService;
@@ -49,7 +47,6 @@ public class NotificationAspect {
             returning = "result"
     )
     public void sendNotificationAfterOrderCreation(Object result) throws JsonProcessingException {
-        log.info("sendNotificationAfterOrderCreation");
         // Check if the result is an instance of OrderDetailVo (or your actual return type)
         if (result instanceof ResponseEntity) {
             ResponseEntity<OrderDetailVo> responseEntity = (ResponseEntity<OrderDetailVo>) result;
@@ -69,10 +66,8 @@ public class NotificationAspect {
             returning = "updatedResult"
     )
     public void sendNotificationAfterOrderStatusUpdate(Object updatedResult) throws JsonProcessingException {
-        log.info("sendNotificationAfterOrderStatusUpdate");
         // Check if the result is an instance of OrderDetailVo (or your actual return type)
         if (updatedResult instanceof ResponseEntity) {
-
             ResponseEntity<OrderDetailVo> responseEntity = (ResponseEntity<OrderDetailVo>) updatedResult;
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {

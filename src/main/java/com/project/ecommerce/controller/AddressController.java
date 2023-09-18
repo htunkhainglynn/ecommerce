@@ -3,7 +3,6 @@ package com.project.ecommerce.controller;
 import com.project.ecommerce.dto.AddressDto;
 import com.project.ecommerce.entitiy.Address;
 import com.project.ecommerce.service.AddressService;
-import com.project.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;

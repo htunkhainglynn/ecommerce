@@ -28,7 +28,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-//@PreAuthorize("hasAuthority('ADMIN')")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class  ProductServiceImpl implements ProductService {
 
     private final ModelMapper mapper;
@@ -54,6 +54,7 @@ public class  ProductServiceImpl implements ProductService {
         this.productVariantRepository = productVariantRepository;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @Transactional(readOnly = true)
     @Override
     public Page<ProductDto> getAllProducts(String keyword,
@@ -87,6 +88,7 @@ public class  ProductServiceImpl implements ProductService {
                 .map(ProductDto::new);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @Transactional(readOnly = true)
     @Override
     public Optional<ProductDto> getProductById(Long id) {
@@ -149,9 +151,9 @@ public class  ProductServiceImpl implements ProductService {
     }
 
     // to update quantity after an order is placed
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @Override
-    public void updateProductQuantity(Map<Integer, Integer> productQuantityMap) {
+    public void updateProductVariantQuantity(Map<Integer, Integer> productQuantityMap) {
         productQuantityMap.forEach((key, value) -> {
             Optional<Integer> productVariant = productVariantRepository.findQuantityById(key);
             if (productVariant.isPresent()) {
@@ -167,12 +169,14 @@ public class  ProductServiceImpl implements ProductService {
         });
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void updateProductAvailability(Long id) {
         Product product = repo.getReferenceById(id);
         product.setAvailable(!product.isAvailable());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @Override
     public Optional<List<ProductVariantVo>> getProductVariantById(Integer id) {
         List<ProductVariant> productVariants = repo.getProductVariantById(id);

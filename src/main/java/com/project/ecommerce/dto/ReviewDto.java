@@ -1,6 +1,5 @@
 package com.project.ecommerce.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecommerce.entitiy.Review;
 import lombok.Data;

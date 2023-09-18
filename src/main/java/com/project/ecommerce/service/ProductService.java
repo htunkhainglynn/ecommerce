@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public interface ProductService {
 
-    public Page<ProductDto> getAllProducts(String keyword, Boolean isAvailable, Optional<Integer> page,
+    Page<ProductDto> getAllProducts(String keyword, Boolean isAvailable, Optional<Integer> page,
                                            Optional<Integer> size);
-    public Optional<ProductDto> getProductById(Long id);
-    public ProductDto saveProduct(ProductDto product);
-    public void deleteProduct(Long id);
+    Optional<ProductDto> getProductById(Long id);
+    ProductDto saveProduct(ProductDto product);
+    void deleteProduct(Long id);
 
-    void updateProductQuantity(Map<Integer, Integer> productQuantityMap);
+    void updateProductVariantQuantity(Map<Integer, Integer> productQuantityMap);
 
     void updateProductAvailability(Long id);
 

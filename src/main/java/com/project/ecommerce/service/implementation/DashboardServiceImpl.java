@@ -2,7 +2,6 @@ package com.project.ecommerce.service.implementation;
 
 import com.project.ecommerce.entitiy.report.MonthlyReport;
 import com.project.ecommerce.repo.OrderRepository;
-import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.repo.report.MonthlyReportRepo;

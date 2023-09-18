@@ -1,11 +1,9 @@
 package com.project.ecommerce.service;
 
 import com.project.ecommerce.dto.ExpenseDto;
-import com.project.ecommerce.dto.ProductVariantCache;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.vo.ProductVariantVo;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ProductVariantService {

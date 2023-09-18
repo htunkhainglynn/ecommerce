@@ -7,7 +7,6 @@ import com.project.ecommerce.exception.UserException;
 import com.project.ecommerce.repo.AddressRepo;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.service.AddressService;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +19,10 @@ public class AddressServiceImpl implements AddressService {
 
     private final UserRepository userRepository;
 
-    private final ModelMapper modelMapper;
 
-    public AddressServiceImpl(AddressRepo addressRepo, UserRepository userRepository, ModelMapper modelMapper) {
+    public AddressServiceImpl(AddressRepo addressRepo, UserRepository userRepository) {
         this.addressRepo = addressRepo;
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override

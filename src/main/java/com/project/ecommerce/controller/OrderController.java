@@ -1,11 +1,9 @@
 package com.project.ecommerce.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.dto.OrderItemDto;
 import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.service.OrderService;
-import com.project.ecommerce.service.ProductService;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
 import io.swagger.annotations.Api;
@@ -16,9 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -31,13 +27,9 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    private final ProductService productService;
-
     @Autowired
-    public OrderController(OrderService orderService,
-                           ProductService productService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.productService = productService;
     }
 
     @GetMapping
@@ -50,19 +42,7 @@ public class OrderController {
 
     @PostMapping
     @Operation(summary = "Create order", description = "Requires USER authority")
-    public ResponseEntity<OrderDetailVo> addOrder(@RequestBody OrderDetailDto orderDto) throws JsonProcessingException {
-
-        // update product quantity in database
-        Map<Integer, Integer> productQuantityMap = new HashMap<>();
-
-        orderDto.getOrderItems().forEach(orderItemDto -> {
-            Integer productId = orderItemDto.getProductVariantId();
-            Integer quantity = orderItemDto.getQuantity();
-            productQuantityMap.put(productId, quantity);
-        });
-
-        productService.updateProductQuantity(productQuantityMap);
-
+    public ResponseEntity<OrderDetailVo> addOrder(@RequestBody OrderDetailDto orderDto) {
         // set order status
         orderDto.setStatus(Status.PENDING);
         return ok(orderService.saveOrder(orderDto));
@@ -84,7 +64,7 @@ public class OrderController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update order by id", description = "Requires ADMIN or USER authority")
-    public ResponseEntity<OrderDetailVo> updateOrderStatus(@PathVariable Long id) throws JsonProcessingException {
+    public ResponseEntity<OrderDetailVo> updateOrderStatus(@PathVariable Long id) {
 
         Optional<OrderDetailVo> result = orderService.getOrderById(id);
         if (result.isEmpty()) {

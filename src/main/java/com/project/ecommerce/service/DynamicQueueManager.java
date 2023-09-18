@@ -1,11 +1,13 @@
 package com.project.ecommerce.service;
 
-import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.entitiy.QueueInfo;
+import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.repo.QueueInfoRepository;
 import com.project.ecommerce.repo.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

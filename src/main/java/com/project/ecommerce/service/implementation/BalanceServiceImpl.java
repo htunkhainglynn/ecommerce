@@ -1,17 +1,14 @@
 package com.project.ecommerce.service.implementation;
 
-import com.project.ecommerce.entitiy.ProductVariant;
 import com.project.ecommerce.entitiy.balance.Balance;
 import com.project.ecommerce.entitiy.balance.Type;
 import com.project.ecommerce.repo.BalanceRepo;
 import com.project.ecommerce.repo.ExpenseRepo;
 import com.project.ecommerce.repo.OrderRepository;
-import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.service.BalanceService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class BalanceServiceImpl implements BalanceService {

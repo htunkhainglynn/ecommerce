@@ -1,6 +1,5 @@
 package com.project.ecommerce.dto;
 
-import com.project.ecommerce.entitiy.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

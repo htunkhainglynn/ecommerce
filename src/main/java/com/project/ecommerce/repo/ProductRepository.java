@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
-    @Query("SELECT pv FROM Product p JOIN ProductVariant pv WHERE p.id = ?1")
+    @Query("SELECT p.productVariants FROM Product p WHERE p.id = ?1")
     List<ProductVariant> getProductVariantById(Integer id);
 }
