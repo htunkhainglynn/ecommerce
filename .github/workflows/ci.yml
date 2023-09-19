@@ -41,14 +41,14 @@ jobs:
           distribution: 'temurin'
 
       - name: Set up RabbitMQ
-        uses: namoshek/rabbitmq-action@v1
+        uses: getong/rabbitmq-action@v1.2
         with:
-          rabbitmq-version: 3.8.2
-          rabbitmq-username: guest
-          rabbitmq-password: guest
-          rabbitmq-port: 5672
-          rabbitmq-management-port: 15672
-          rabbitmq-erlang-cookie: secret
+          rabbitmq version: '3.8.2-management-alpine'
+          host port: 5672
+          rabbitmq user: 'guest'
+          rabbitmq password: 'guest'
+          rabbitmq vhost: '/'
+          rabbitmq plugins: 'rabbitmq_management rabbitmq_web_mqtt rabbitmq_mqtt rabbitmq_stomp rabbitmq_web_stomp rabbitmq_delayed_message_exchange'
 
       - name: Start MySQL
         run: |
@@ -69,29 +69,7 @@ jobs:
         run: |
           docker run -d --name redis -p 6380:6379 redis:6.2
 
-      - name: Enable RabbitMQ Management Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_management
-
-      - name: Enable RabbitMQ Web MQTT Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_web_mqtt
-
-      - name: Enable RabbitMQ MQTT Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_mqtt
-
-      - name: Enable RabbitMQ STOMP Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stomp
-
-      - name: Enable RabbitMQ Web STOMP Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_web_stomp
-
-      - name: Enable RabbitMQ Message Delay Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_delayed_message_exchange
+  
 
       - name: Build with Maven
         run: mvn -B -Dspring.config.location=src/main/resources/application.yml clean package
