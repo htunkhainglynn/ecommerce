@@ -41,7 +41,7 @@ jobs:
       - name: Set up MySQL
         run: |
           sudo apt-get install -y mysql-client
-          mysql -h localhost -u root -padmin -e "CREATE DATABASE ecommerce;"
+          mysql -h 127.0.0.1 -u root -padmin -e "CREATE DATABASE ecommerce;"
 
       - name: Start MySQL
         run: |
