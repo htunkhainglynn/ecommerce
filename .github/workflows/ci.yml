@@ -29,7 +29,6 @@ jobs:
         host port: 3800
         container port: 3307
         mysql database: 'ecommerce'
-        mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
 
     - name: Create Database
       run: |
@@ -37,11 +36,7 @@ jobs:
         mysql -h localhost -u root -proot -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
-
-    # run all unit test classes
-    - name: Run unit tests
-      run: mvn -B test --file pom.xml
+      run: mvn --batch-mode --update-snapshots package
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
