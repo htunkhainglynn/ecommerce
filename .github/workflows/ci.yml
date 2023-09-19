@@ -32,8 +32,9 @@ jobs:
         mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
 
     - name: Create Database
-      run:
-        mysql -h 127.0.0.1 -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
+      run: |
+        sudo systemctl start mysql
+        mysql -h localhost -u root -p"${{ secrets.MYSQL_ROOT_PASSWORD }}" -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
