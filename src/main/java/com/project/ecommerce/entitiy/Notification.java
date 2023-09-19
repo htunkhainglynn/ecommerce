@@ -1,10 +1,8 @@
 package com.project.ecommerce.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.ecommerce.vo.OrderDetailVo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
