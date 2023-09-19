@@ -29,7 +29,7 @@ jobs:
           host port: 3800
           container port: 3307
           mysql database: 'ecommerce'
-          mysql root password: root
+          mysql root password: admin
 
       - name: Wait for MySQL to start
         run: |
@@ -39,18 +39,14 @@ jobs:
       - name: Create Database
         run: |
           sudo systemctl start mysql
-          mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
+          mysql -h 127.0.0.1 -u root -padmin -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
 
       - name: Debug MySQL Connection
         run: |
-          mysql -h 127.0.0.1 -u root -proot -e "SELECT 1;"
+          mysql -h 127.0.0.1 -u root -padmin -e "SELECT 1;"
 
       - name: Build with Maven
         run: |
-          mysql -h 127.0.0.1 -u root -proot -e "USE ecommerce;"
-          mysql -h 127.0.0.1 -u root -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';"
-          mysql -h 127.0.0.1 -u root -proot -e "FLUSH PRIVILEGES;"
-          sudo systemctl restart mysql
           mvn --batch-mode --update-snapshots package
       
 
