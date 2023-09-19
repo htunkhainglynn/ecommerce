@@ -62,7 +62,7 @@ jobs:
 
       - name: Start RabbitMQ
         run: |
-          docker run -d --name rabbitmq -p 5673:5672 -p 15672:15672 --memory=2g --cpus=2 rabbitmq:3-management
+          docker run -d --name rabbitmq -p 5673:5672 -p 15672:15672 rabbitmq:3.8.2-management-alpine
 
       - name: Start Redis
         run: |
