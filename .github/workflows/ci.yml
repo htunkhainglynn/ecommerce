@@ -13,6 +13,16 @@ jobs:
       matrix:
         mongodb-version: ['6.0']
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: admin
+          MYSQL_DATABASE: ecommerce
+        ports:
+          - 3800:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - uses: actions/checkout@v3
 
@@ -23,32 +33,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Set up MySQL 8.0
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3800
-          container port: 3307
-          mysql database: 'ecommerce'
-          mysql root password: admin
-
-      - name: Wait for MySQL to start
-        run: |
-          sleep 10
-          # Add any necessary additional checks here
-
-      - name: Create Database
-        run: |
-          sudo systemctl start mysql
-          mysql -h 127.0.0.1 -u root -padmin -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
-
-      - name: Debug MySQL Connection
-        run: |
-          mysql -h 127.0.0.1 -u root -padmin -e "SELECT 1;"
-
       - name: Build with Maven
-        run: |
-          mvn --batch-mode --update-snapshots package
-      
+        run: mvn -B package --file pom.xml
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Update dependency graph
