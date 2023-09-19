@@ -32,10 +32,10 @@ jobs:
     - name: Set up MongoDB 4.4
       uses: docker://mongo:4.4
       with:
-          args: mongod --port 27018 --bind_ip_all --auth --replSet rs0
+          args: mongod --port 27018 --bind_ip_all --replSet rs0
       env:
-          MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
-          MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
+          MONGO_INITDB_ROOT_USERNAME: ''
+          MONGO_INITDB_ROOT_PASSWORD: ''
           MONGO_INITDB_DATABASE: 'ecommerce'
 
     - name: Create Database
