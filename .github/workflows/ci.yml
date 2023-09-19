@@ -34,7 +34,7 @@ jobs:
     - name: Create Database
       run: |
         sudo systemctl start mysql
-        mysql -h localhost -u root -p"${{ secrets.MYSQL_ROOT_PASSWORD }}" -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
+        mysql -h localhost -u root -proot -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
