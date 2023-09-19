@@ -68,7 +68,7 @@ jobs:
 
       - name: Start Redis
         run: |
-          docker run -d --name redis -p 6379:6379 redis:6.2
+          docker run -d --name redis -p 6380:6379 redis:6.2
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
