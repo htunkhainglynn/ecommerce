@@ -41,7 +41,7 @@ jobs:
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
           mongodb-replica-set: test-rs
-          mongodb-port: 42069
+          mongodb-port: 27017
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
