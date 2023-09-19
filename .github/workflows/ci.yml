@@ -43,7 +43,8 @@ jobs:
 
       - name: Debug MySQL Connection
         run: |
-          mysql -h 127.0.0.1 -u root -p"${{ secrets.MYSQL_ROOT_PASSWORD }}" -e "SELECT 1;"
+          
+          mysql -h 127.0.0.1 -u root -proot -e "SELECT 1;"
 
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
