@@ -28,7 +28,6 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@PreAuthorize("hasAuthority('ADMIN')")
 public class  ProductServiceImpl implements ProductService {
 
     private final ModelMapper mapper;
@@ -54,7 +53,6 @@ public class  ProductServiceImpl implements ProductService {
         this.productVariantRepository = productVariantRepository;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @Transactional(readOnly = true)
     @Override
     public Page<ProductDto> getAllProducts(String keyword,
@@ -88,7 +86,6 @@ public class  ProductServiceImpl implements ProductService {
                 .map(ProductDto::new);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @Transactional(readOnly = true)
     @Override
     public Optional<ProductDto> getProductById(Long id) {
@@ -96,6 +93,7 @@ public class  ProductServiceImpl implements ProductService {
         return optionalProduct.map(ProductDto::new);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public ProductDto saveProduct(ProductDto productDto) {
         organizationRepository.save(productDto.getOrganization());
@@ -145,6 +143,7 @@ public class  ProductServiceImpl implements ProductService {
         repo.save(product);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void deleteProduct(Long id) {
         repo.deleteById(id);
@@ -176,7 +175,6 @@ public class  ProductServiceImpl implements ProductService {
         product.setAvailable(!product.isAvailable());
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @Override
     public Optional<List<ProductVariantVo>> getProductVariantById(Integer id) {
         List<ProductVariant> productVariants = repo.getProductVariantById(id);

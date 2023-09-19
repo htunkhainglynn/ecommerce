@@ -3,14 +3,21 @@ package com.project.ecommerce.service;
 import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.vo.ProductVariantVo;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
+import lombok.With;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -30,6 +37,7 @@ public class ProductVariantServiceTest {
     @Order(1)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/productVariant/create.txt")
+    @WithMockUser(authorities = {"ADMIN"})
     void testSaveProductVariant(String size, String color, double price, boolean inStock,
                                 int quantity, Long productId, String imageUrl, double purchasePrice) {
         ProductVariantDto productVariantDto = ProductVariantDto.builder()

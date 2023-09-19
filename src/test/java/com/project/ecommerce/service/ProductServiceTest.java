@@ -11,10 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +28,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Sql(scripts = {"/sql/init-database.sql", "/sql/product.sql"})
+@Sql(scripts = {"/sql/init-database.sql",  "/sql/product.sql"})
 public class ProductServiceTest {
 
     @Autowired
@@ -37,6 +39,7 @@ public class ProductServiceTest {
     @Order(1)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/product/create.txt")
+    @WithMockUser(authorities = {"ADMIN"})
     void testCreateProduct(
             Integer sku, Double weight, String name, String description, Boolean available,
             String size1, String color1, Double price1, Boolean inStock1, Integer quantity1,
@@ -108,6 +111,7 @@ public class ProductServiceTest {
     @Order(2)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/product/create-duplication.txt")
+    @WithMockUser(authorities = {"ADMIN"})
     void testCreateDuplication(Integer sku, double weight, String name, String description, boolean available) {
         ProductDto productDto = ProductDto.builder()
                 .description(description).available(available)
@@ -141,6 +145,7 @@ public class ProductServiceTest {
 
     @Order(5)
     @Test
+    @WithMockUser(authorities = {"ADMIN"})
     void testDeleteProduct() {
         Optional<ProductDto> productDtoOptional = productService.getProductById(1L);
         assertThat(productDtoOptional.isPresent(), equalTo(true));
@@ -158,6 +163,7 @@ public class ProductServiceTest {
     @Order(6)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/product/update.txt")
+    @WithMockUser(authorities = {"ADMIN"})
     void testUpdate(long id, Integer sku,double weight, String name,
                     String description, boolean available) {
         Optional<ProductDto> productDtoOptional = productService.getProductById(id);

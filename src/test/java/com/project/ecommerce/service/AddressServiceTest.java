@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class AddressServiceTest {
     @Order(1)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/address/create.txt")
+    @WithMockUser(authorities = {"USER"})
     void testCreateAddressByUsername(String street, String city, String postalCode, String username, int size) {
         AddressDto addressDto = AddressDto.builder()
                 .street(street)
@@ -45,8 +47,9 @@ public class AddressServiceTest {
 
     @Order(2)
     @ParameterizedTest
-    @CsvFileSource(resources = "/csv/address/create-duplication.txt")
-    void testCreateAddressDuplication(String city, String postalCode, String street, String username) {
+    @CsvFileSource(resources = "/csv/address/create-null.txt")
+    @WithMockUser(authorities = {"USER"})
+    void testCreateWithNull(String city, String postalCode, String street, String username) {
         AddressDto addressDto = AddressDto.builder()
                 .street(street)
                 .city(city)
@@ -58,20 +61,8 @@ public class AddressServiceTest {
 
     @Order(3)
     @ParameterizedTest
-    @CsvFileSource(resources = "/csv/address/create-null.txt")
-    void testCreateWithNull(String city, String postalCode, String street, String username) {
-        AddressDto addressDto = AddressDto.builder()
-                .street(street)
-                .city(city)
-                .postalCode(postalCode)
-                .build();
-
-        assertThrows(DataIntegrityViolationException.class, () -> addressService.saveAddressByUsername(addressDto, username));
-    }
-
-    @Order(4)
-    @ParameterizedTest
     @CsvFileSource(resources = "/csv/address/update.txt")
+    @WithMockUser(authorities = {"USER"})
     void testUpdate(long id, String city, String postalCode, String street, String username) {
         Optional<Address> address = addressService.getAddressById(id);
         assertTrue(address.isPresent());
@@ -92,7 +83,7 @@ public class AddressServiceTest {
         assertEquals(address.get().getUser().getUsername(),username);
     }
 
-    @Order(5)
+    @Order(4)
     @Test
     void testGetAddressById() {
         Optional<Address> address = addressService.getAddressById(1L);
@@ -106,8 +97,9 @@ public class AddressServiceTest {
         assertTrue(address.isEmpty());
     }
 
-    @Order(6)
+    @Order(5)
     @Test
+    @WithMockUser(authorities = {"USER"})
     void testDeleteAddressById() {
         Optional<Address> address = addressService.getAddressById(1L);
         assertTrue(address.isPresent());

@@ -7,6 +7,7 @@ import com.project.ecommerce.exception.UserException;
 import com.project.ecommerce.repo.AddressRepo;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.service.AddressService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,16 +27,23 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<Address> getAddressesByUsername(String username) {
         return addressRepo.findAllByUsername(username);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('USER')")
     public Address saveAddressByUsername(AddressDto addressDto, String username) {
         User user = userRepository.getReferenceByUsername(username)
                                 .orElseThrow(() -> new UserException("User not found"));
 
         Address address = new Address(addressDto);
+
+        // update case
+        if (addressDto.getId() != null) {
+            address.setId(addressDto.getId());
+        }
         address.setUser(user);
         return addressRepo.save(address);
     }
@@ -46,6 +54,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('USER')")
     public void deleteAddressById(Long id) {
         addressRepo.deleteById(id);
     }

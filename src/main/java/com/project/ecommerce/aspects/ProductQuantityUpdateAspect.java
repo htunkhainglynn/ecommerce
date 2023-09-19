@@ -28,7 +28,6 @@ public class ProductQuantityUpdateAspect {
             returning = "result",
             argNames = "result,orderDto")
     public void updateProductVariantQuantity(Object result, OrderDetailDto orderDto) {
-        // Check if the result is an instance of OrderDetailVo (or your actual return type)
         if (result instanceof ResponseEntity) {
             ResponseEntity<OrderDetailVo> responseEntity = (ResponseEntity<OrderDetailVo>) result;
 

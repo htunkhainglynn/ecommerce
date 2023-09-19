@@ -47,7 +47,6 @@ public class NotificationAspect {
             returning = "result"
     )
     public void sendNotificationAfterOrderCreation(Object result) throws JsonProcessingException {
-        // Check if the result is an instance of OrderDetailVo (or your actual return type)
         if (result instanceof ResponseEntity) {
             ResponseEntity<OrderDetailVo> responseEntity = (ResponseEntity<OrderDetailVo>) result;
 
@@ -66,7 +65,6 @@ public class NotificationAspect {
             returning = "updatedResult"
     )
     public void sendNotificationAfterOrderStatusUpdate(Object updatedResult) throws JsonProcessingException {
-        // Check if the result is an instance of OrderDetailVo (or your actual return type)
         if (updatedResult instanceof ResponseEntity) {
             ResponseEntity<OrderDetailVo> responseEntity = (ResponseEntity<OrderDetailVo>) updatedResult;
 

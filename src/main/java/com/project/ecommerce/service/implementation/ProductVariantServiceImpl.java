@@ -14,6 +14,7 @@ import com.project.ecommerce.vo.ProductVariantVo;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +50,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ProductVariantVo saveProductVariant(ProductVariantDto productVariantDto) {
         Product product = productRepo.getReferenceById(productVariantDto.getProduct_id());
         int oldQuantity = 0;
@@ -103,12 +105,14 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Optional<ProductVariantVo> getProductVariantById(Integer id) {
         return productVariantRepository.findById(id)
                 .map(ProductVariantVo::new);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteProductVariant(Integer id) {
         productVariantRepository.deleteById(id);
     }
@@ -120,6 +124,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void updateExpenseHistory(Integer id, ExpenseDto expenseDto) {
         double purchasePrice = expenseDto.getPurchasePrice();
         int quantity = expenseDto.getQuantity();
