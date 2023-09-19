@@ -29,6 +29,7 @@ jobs:
         host port: 3800
         container port: 3307
         mysql database: 'ecommerce'
+        mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
 
     - name: Create Database
       run: |
