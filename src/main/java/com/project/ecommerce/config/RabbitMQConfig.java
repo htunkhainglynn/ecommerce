@@ -1,6 +1,7 @@
 package com.project.ecommerce.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -26,6 +27,11 @@ public class RabbitMQConfig {
         rabbitAdmin.declareBinding(BindingBuilder.bind(topicQueue()).to(topicExchange).with("ecommerce.topic.key.*"));
         rabbitAdmin.declareBinding(BindingBuilder.bind(fanoutQueue()).to(fanoutExchange));
         return rabbitAdmin;
+    }
+
+    @Bean
+    public CachingConnectionFactory connectionFactory() {
+        return new CachingConnectionFactory("localhost");
     }
 
     @Bean
