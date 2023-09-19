@@ -14,22 +14,6 @@ jobs:
       matrix:
         mongodb-version: ['6.0']
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: admin
-          MYSQL_DATABASE: ecommerce
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      redis:
-        image: redis:6.2
-        ports:
-          - 6379:6379
-        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
       - uses: actions/checkout@v3
 
@@ -38,7 +22,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven
 
       - name: Set up RabbitMQ
         uses: getong/rabbitmq-action@v1.2
@@ -48,6 +31,17 @@ jobs:
           rabbitmq user: 'guest'
           rabbitmq password: 'guest'
           rabbitmq vhost: '/'
+
+      - name: Set up Redis
+        uses: redis-actions/setup-redis@v1.0.0
+        with:
+          redis-version: '6.2'
+          redis-port: 6379
+
+      - name: Set up MySQL
+        run: |
+          sudo apt-get install -y mysql-client
+          mysql -h localhost -u root -padmin -e "CREATE DATABASE ecommerce;"
 
       - name: Start MySQL
         run: |
