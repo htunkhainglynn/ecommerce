@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mongodb-version: ['4.2', '4.4', '5.0', '6.0']
+        mongodb-version: ['6.0']
 
     steps:
     - uses: actions/checkout@v3
@@ -33,7 +33,7 @@ jobs:
 
     - name: Create Database
       run:
-        mysql -h localhost -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
+        mysql -h 127.0.0.1 -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "CREATE DATABASE IF NOT EXISTS ecommerce;"
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
