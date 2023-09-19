@@ -23,15 +23,7 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-      rabbitmq:
-        image: rabbitmq:3.8.2-management-alpine
-        env:
-          RABBITMQ_DEFAULT_USER: guest
-          RABBITMQ_DEFAULT_PASS: guest
-        ports:
-          - 5672:5672
-          - 15672:15672
-        options: --health-cmd="rabbitmq-diagnostics -q ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
 
       redis:
         image: redis:6.2
@@ -48,6 +40,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Set up RabbitMQ
+        uses: supercharge/rabbitmq-github-action@1.0.0
+        with:
+          rabbitmq-version: 3.8.2
+          rabbitmq-username: guest
+          rabbitmq-password: guest
+          rabbitmq-port: 5672
+          rabbitmq-management-port: 15672
+          rabbitmq-erlang-cookie: secret
 
       - name: Start MySQL
         run: |
