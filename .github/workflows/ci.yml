@@ -41,7 +41,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Set up RabbitMQ
-        uses: namoshek/rabbitmq-github-action@v1
+        uses: namoshek/rabbitmq-action@v1
         with:
           rabbitmq-version: 3.8.2
           rabbitmq-username: guest
