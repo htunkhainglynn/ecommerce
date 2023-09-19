@@ -34,8 +34,6 @@ jobs:
       with:
           args: mongod --port 27018 --bind_ip_all --replSet rs0
       env:
-          MONGO_INITDB_ROOT_USERNAME: ''
-          MONGO_INITDB_ROOT_PASSWORD: ''
           MONGO_INITDB_DATABASE: 'ecommerce'
 
     - name: Create Database
