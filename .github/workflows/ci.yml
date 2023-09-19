@@ -20,7 +20,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: admin
           MYSQL_DATABASE: ecommerce
         ports:
-          - 3800:3306
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -34,7 +34,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B -Dspring.datasource.url="jdbc:mysql://localhost:3306/ecommerce" dependency:go-offline clean verify
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Update dependency graph
