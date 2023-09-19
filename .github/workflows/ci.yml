@@ -53,7 +53,7 @@ jobs:
 
       - name: Start MySQL
         run: |
-          docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=ecommerce mysql:8.0
+          docker run -d --name mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=ecommerce mysql:8.0
 
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.10.0
