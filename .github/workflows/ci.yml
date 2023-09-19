@@ -43,11 +43,16 @@ jobs:
 
       - name: Debug MySQL Connection
         run: |
-          
           mysql -h 127.0.0.1 -u root -proot -e "SELECT 1;"
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
+        run: |
+          mysql -h 127.0.0.1 -u root -proot -e "USE ecommerce;"
+          mysql -h 127.0.0.1 -u root -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';"
+          mysql -h 127.0.0.1 -u root -proot -e "FLUSH PRIVILEGES;"
+          sudo systemctl restart mysql
+          mvn --batch-mode --update-snapshots package
+      
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Update dependency graph
