@@ -5,6 +5,7 @@ import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.service.CloudinaryService;
+import com.project.ecommerce.service.ExpenseService;
 import com.project.ecommerce.service.ProductService;
 import com.project.ecommerce.service.ProductVariantService;
 import com.project.ecommerce.vo.ProductVariantVo;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -29,16 +31,20 @@ import static org.springframework.http.ResponseEntity.ok;
 public class ProductVariantController {
     private final ProductVariantService  productVariantService;
 
-    private final CloudinaryService cloudinaryService;
-
     private final ProductService productService;
+
+    private final ExpenseService expenseService;
+
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
     public ProductVariantController(ProductVariantService productVariantService,
                                     ProductService productService,
+                                    ExpenseService expenseService,
                                     CloudinaryService cloudinaryService) {
         this.productVariantService = productVariantService;
         this.productService = productService;
+        this.expenseService = expenseService;
         this.cloudinaryService = cloudinaryService;
     }
 
@@ -93,10 +99,16 @@ public class ProductVariantController {
         return productVariantService.saveProductVariant(productVariantDto);
     }
 
+    @GetMapping("{id}/expense-history")
+    @Operation(summary = "Get expense history of a product variant", description = "Requires ADMIN authority")
+    public ResponseEntity<List<ExpenseDto>> getExpenseHistory(@PathVariable(value = "id") Integer id){
+        return ResponseEntity.ok(expenseService.getExpenseByProductVariantId(id));
+    }
+
     @PutMapping("/expense-history/{id}")
     @Operation(summary = "To update old expense history if there was a typo.", description = "Requires ADMIN authority")
     public void updateExpenseHistory(@PathVariable(value = "id") Integer id, @RequestBody ExpenseDto expenseDto){
-        productVariantService.updateExpenseHistory(id, expenseDto);
+        expenseService.updateExpenseHistory(id, expenseDto);
     }
 
     @DeleteMapping("/{id}")

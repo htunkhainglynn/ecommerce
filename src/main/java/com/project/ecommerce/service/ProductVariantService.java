@@ -15,7 +15,5 @@ public interface ProductVariantService {
 
     Optional<String> getProductVariantImageUrl(Integer id);
 
-    void updateExpenseHistory(Integer id, ExpenseDto expenseDto);
-
     Long getProductIdByPvId(Integer id);
 }

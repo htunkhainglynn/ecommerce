@@ -3,6 +3,7 @@ package com.project.ecommerce.entitiy.balance;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Balance {
 
     @Id
@@ -19,7 +21,6 @@ public class Balance {
     private double income;
     private double expenses;
     private double profit;
-    private String day;
     private String month;
     private Integer year;
 

@@ -14,4 +14,7 @@ public interface BalanceRepo extends JpaRepository<Balance, Long> {
     @Transactional
     @Query("UPDATE Balance b SET b.expenses = b.expenses + ?2 WHERE b.date = ?1")
     void updateExpenses(LocalDate now, double difference);
+
+    @Query("SELECT b FROM Balance b WHERE b.date = ?1")
+    Balance getDailyBalance(LocalDate date);
 }

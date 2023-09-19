@@ -1,5 +1,6 @@
 package com.project.ecommerce.repo;
 
+import com.project.ecommerce.dto.ExpenseDto;
 import com.project.ecommerce.entitiy.Expense;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,4 +25,7 @@ public interface ExpenseRepo extends JpaRepository<Expense, Long> {
 
     @Query("SELECT e.total FROM Expense e WHERE e.id = ?1")
     Double getTotalById(Integer id);
+
+    @Query("SELECT e FROM Expense e WHERE e.productVariant.id = ?1")
+    List<Expense> getExpenseByProductVariantId(Integer id);
 }

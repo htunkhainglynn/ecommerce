@@ -1,1 +1,2 @@
 Large,Red,10.0,true,100,1,product1.jpg,8.0
+Large,Red,10.0,false,0,1,product1.jpg,8.0

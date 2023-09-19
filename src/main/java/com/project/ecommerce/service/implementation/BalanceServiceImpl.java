@@ -9,6 +9,7 @@ import com.project.ecommerce.service.BalanceService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Service
 public class BalanceServiceImpl implements BalanceService {
@@ -39,7 +40,6 @@ public class BalanceServiceImpl implements BalanceService {
         // save daily balance
         balanceRepo.save(
                 Balance.builder()
-                        .day(today.getDayOfWeek().toString())
                         .date(today)
                         .income(income)
                         .expenses(expenses)
@@ -104,5 +104,10 @@ public class BalanceServiceImpl implements BalanceService {
                         .type(Type.YEAR)
                         .build()
         );
+    }
+
+    @Override
+    public Balance getDailyBalance(LocalDate date) {
+        return balanceRepo.getDailyBalance(date);
     }
 }

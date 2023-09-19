@@ -63,6 +63,8 @@ public class ProductVariantServiceImpl implements ProductVariantService {
             // set expenses to updated expenses
             productVariantDto.setExpenses(originalProductVariant.getExpenses());
             oldQuantity = originalProductVariant.getQuantity();
+            productVariantDto.setUpdatedAt(LocalDate.now());
+            productVariantDto.setCreatedAt(originalProductVariant.getCreatedAt());
         }
 
 
@@ -121,35 +123,6 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     @Transactional(readOnly = true)
     public Optional<String> getProductVariantImageUrl(Integer id) {
         return productVariantRepository.findImageUrlById(id);
-    }
-
-    @Override
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public void updateExpenseHistory(Integer id, ExpenseDto expenseDto) {
-        double purchasePrice = expenseDto.getPurchasePrice();
-        int quantity = expenseDto.getQuantity();
-        double oldTotal = expenseRepo.getTotalById(id);
-        double newTotal = purchasePrice * quantity;
-        double difference = newTotal - oldTotal;
-        expenseRepo.updateExpenseHistory(id, purchasePrice, quantity, newTotal);
-
-        // update propagated changes in balance table
-        // day propagation
-        if (!expenseDto.getCreatedAt().equals(LocalDate.now())) {
-            balanceRepo.updateExpenses(expenseDto.getCreatedAt(), difference);
-        }
-
-        // month propagation
-        if (!expenseDto.getCreatedAt().getMonth().equals(LocalDate.now().getMonth())) {
-            LocalDate endOfMonth = expenseDto.getCreatedAt().withDayOfMonth(expenseDto.getCreatedAt().lengthOfMonth());
-            balanceRepo.updateExpenses(endOfMonth, difference);
-        }
-
-        // year propagation
-        if (expenseDto.getCreatedAt().getYear() != LocalDate.now().getYear()) {
-            LocalDate endOfYear = expenseDto.getCreatedAt().withDayOfYear(expenseDto.getCreatedAt().lengthOfYear());
-            balanceRepo.updateExpenses(endOfYear, difference);
-        }
     }
 
     @Override
