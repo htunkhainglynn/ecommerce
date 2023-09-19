@@ -83,10 +83,6 @@ jobs:
         run: |
           docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stomp
 
-      - name: Enable RabbitMQ Delayed Message Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_delayed_message_exchange
-
       - name: Build with Maven
         run: mvn -B -Dspring.config.location=src/main/resources/application.yml clean package
 
