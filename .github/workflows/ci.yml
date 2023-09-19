@@ -48,30 +48,6 @@ jobs:
           rabbitmq password: 'guest'
           rabbitmq vhost: '/'
 
-      - name: Enable RabbitMQ Management Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_management
-
-      - name: Enable RabbitMQ Web STOMP Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_web_stomp
-
-      - name: Enable RabbitMQ Web MQTT Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_web_mqtt
-
-      - name: Enable RabbitMQ MQTT Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_mqtt
-
-      - name: Enable RabbitMQ STOMP Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stomp
-
-      - name: Enable RabbitMQ Delayed Message Plugin
-        run: |
-          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_delayed_message_exchange
-
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -98,6 +74,30 @@ jobs:
       - name: Start Redis
         run: |
           docker run -d --name redis -p 6380:6379 redis:6.2
+
+      - name: Enable RabbitMQ Management Plugin
+        run: |
+          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_management
+
+      - name: Enable RabbitMQ Web STOMP Plugin
+        run: |
+          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_web_stomp
+
+      - name: Enable RabbitMQ Web MQTT Plugin
+        run: |
+          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_web_mqtt
+
+      - name: Enable RabbitMQ MQTT Plugin
+        run: |
+          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_mqtt
+
+      - name: Enable RabbitMQ STOMP Plugin
+        run: |
+          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stomp
+
+      - name: Enable RabbitMQ Delayed Message Plugin
+        run: |
+          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 
       - name: Build with Maven
         run: mvn -B -Dspring.config.location=src/main/resources/application.yml clean package
