@@ -9,6 +9,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    resources:
+      cpu: 2
+      memory: 8GB
+
     strategy:
       matrix:
         mongodb-version: ['6.0']
@@ -109,22 +114,7 @@ jobs:
       - name: Run tests with Maven
         run: mvn -B -Dspring.config.location=src/main/resources/application.yml test
 
-      - name: Stop MySQL
+      - name: Stop and Remove Containers
         run: |
-          docker stop mysql
-          docker rm mysql
-
-      - name: Stop MongoDB
-        run: |
-          docker stop mongodb
-          docker rm mongodb
-
-      - name: Stop RabbitMQ
-        run: |
-          docker stop rabbitmq
-          docker rm rabbitmq
-
-      - name: Stop Redis
-        run: |
-          docker stop redis
-          docker rm redis
+          docker stop mysql mongodb rabbitmq redis
+          docker rm mysql mongodb rabbitmq redis
