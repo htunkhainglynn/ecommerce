@@ -49,14 +49,6 @@ jobs:
           rabbitmq password: 'guest'
           rabbitmq vhost: '/'
 
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
       - name: Start MySQL
         run: |
           docker run -d --name mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=ecommerce mysql:8.0
@@ -79,6 +71,10 @@ jobs:
       - name: Enable RabbitMQ Management Plugin
         run: |
           docker exec rabbitmq rabbitmq-plugins enable rabbitmq_management
+
+      - name: Enable RabbitMQ Web MQTT Plugin
+        run: |
+          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_web_mqtt
 
       - name: Enable RabbitMQ MQTT Plugin
         run: |
