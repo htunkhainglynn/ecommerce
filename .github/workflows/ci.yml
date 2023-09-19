@@ -23,6 +23,15 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      rabbitmq:
+        image: rabbitmq:3.8.2-management-alpine
+        env:
+          RABBITMQ_DEFAULT_USER: guest
+          RABBITMQ_DEFAULT_PASS: guest
+        ports:
+          - 5672:5672
+          - 15672:15672
+        options: --health-cmd="rabbitmq-diagnostics -q ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
       redis:
         image: redis:6.2
@@ -39,14 +48,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set up RabbitMQ
-        uses: getong/rabbitmq-action@v1.2
-        with:
-          rabbitmq version: '3.8.2-management-alpine'
-          host port: 5672
-          rabbitmq user: 'guest'
-          rabbitmq password: 'guest'
-          rabbitmq vhost: '/'
 
       - name: Start MySQL
         run: |
@@ -82,6 +83,14 @@ jobs:
       - name: Enable RabbitMQ STOMP Plugin
         run: |
           docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stomp
+
+      - name: Enable RabbitMQ Web STOMP Plugin
+        run: |
+          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_web_stomp
+
+      - name: Enable RabbitMQ Message Delay Plugin
+        run: |
+          docker exec rabbitmq rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 
       - name: Build with Maven
         run: mvn -B -Dspring.config.location=src/main/resources/application.yml clean package
