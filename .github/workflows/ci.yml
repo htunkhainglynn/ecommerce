@@ -25,12 +25,12 @@ jobs:
       rabbitmq:
         image: rabbitmq:3.8
         ports:
-          - 5673:5672
+          - 5672:5672
         options: --health-cmd="rabbitmqctl node_health_check" --health-interval=10s --health-timeout=5s --health-retries=3
       redis:
         image: redis:6.2
         ports:
-          - 6370:6379
+          - 6379:6379
         options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -58,7 +58,7 @@ jobs:
       - name: Wait for MySQL
         run: |
           # Wait for MySQL to be available
-          while ! curl -s http://localhost:3306; do
+          while ! curl -s http://localhost:3307; do
               sleep 5
           done
 
