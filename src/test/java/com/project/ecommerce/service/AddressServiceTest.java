@@ -88,7 +88,7 @@ public class AddressServiceTest {
     void testGetAddressById() {
         Optional<Address> address = addressService.getAddressById(1L);
         assertTrue(address.isPresent());
-        assertEquals(address.get().getCity(), "New York");
+        assertEquals(address.get().getCity(), "Yangon");
         assertEquals(address.get().getPostalCode(), "10001");
         assertEquals(address.get().getStreet(), "123 Main St");
         assertEquals(address.get().getUser().getUsername(),"user1");

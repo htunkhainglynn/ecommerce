@@ -69,11 +69,8 @@ jobs:
         run: |
           docker run -d --name redis -p 6380:6379 redis:6.2
 
-      - name: Build with Maven
+      - name: Build and run test with Maven
         run: mvn -B -Dspring.config.location=src/main/resources/application.yml clean package
-
-      - name: Run tests with Maven
-        run: mvn -B -Dspring.config.location=src/main/resources/application.yml test
 
       - name: Stop and Remove Containers
         run: |
