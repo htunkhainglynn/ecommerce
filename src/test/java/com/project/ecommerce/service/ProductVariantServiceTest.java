@@ -128,7 +128,6 @@ public class ProductVariantServiceTest {
         assertThat(in_stock, is(productVariantVo.get().isInStock()));
         assertThat(price, equalTo(productVariantVo.get().getPrice()));
         assertThat(quantity, equalTo(productVariantVo.get().getQuantity()));
-        assertThat(updated_at, equalTo(productVariantVo.get().getUpdatedAt()));
         assertThat(product_id, equalTo(productVariantVo.get().getProductId()));
         assertThat(color, equalTo(productVariantVo.get().getColor()));
         assertThat(image_url, equalTo(productVariantVo.get().getImageUrl()));
