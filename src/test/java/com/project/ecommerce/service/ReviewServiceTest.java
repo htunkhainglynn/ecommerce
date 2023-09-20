@@ -59,6 +59,6 @@ public class ReviewServiceTest {
     void testDeleteReviewById() {
         reviewService.deleteReview(1L);
         List<ReviewDto> reviews = reviewService.getReviewsByProductId(1L);
-        assertThat(reviews, hasSize(2));
+        assertThat(reviews, hasSize(1));
     }
 }
