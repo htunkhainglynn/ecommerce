@@ -33,13 +33,6 @@
 //    @Autowired
 //    private DirectExchange directExchange;
 //
-//    @Autowired
-//    private FanoutExchange fanoutExchange;
-//
-//    @Autowired
-//    private TopicExchange topicExchange;
-//
-//
 //    @Transactional
 //    @PostConstruct
 //    public void initializeUser() {

@@ -2,11 +2,15 @@ package com.project.ecommerce.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecommerce.entitiy.OrderItem;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class OrderItemDto {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

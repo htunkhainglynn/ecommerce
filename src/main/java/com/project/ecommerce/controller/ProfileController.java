@@ -48,9 +48,8 @@ public class ProfileController {
 
     @GetMapping("/orders/{id}")
     @Operation(summary = "Get order purchased by user with id", description = "Requires USER authority")
-    public ResponseEntity<OrderDetailVo> getOrderByIdAndUsername(@PathVariable("id") Long id) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<OrderDetailVo> orderDetail = orderService.getOrderByIdWithUsername(id, username);
+    public ResponseEntity<OrderDetailVo> getUserOrderById(@PathVariable("id") Long id) {
+        Optional<OrderDetailVo> orderDetail = orderService.getOrderById(id);
         return orderDetail.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

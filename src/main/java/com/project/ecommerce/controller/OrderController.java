@@ -43,9 +43,15 @@ public class OrderController {
     @PostMapping
     @Operation(summary = "Create order", description = "Requires USER authority")
     public ResponseEntity<OrderDetailVo> addOrder(@RequestBody OrderDetailDto orderDto) {
-        // set order status
-        orderDto.setStatus(Status.PENDING);
         return ok(orderService.saveOrder(orderDto));
+    }
+
+    @GetMapping("/user/{username}")
+    @Operation(summary = "Get all orders by username", description = "Requires ADMIN or USER authority")
+    public Page<OrderVo> getAllOrdersByUsername(@PathVariable String username,
+                                                 @RequestParam Optional<Integer> page,
+                                                 @RequestParam Optional<Integer> size) {
+        return orderService.getAllOrdersByUsername(username, page, size);
     }
 
     @GetMapping("/{id}")
@@ -75,9 +81,9 @@ public class OrderController {
 
         // if order status is pending, change it to delivered
         if(result.get().getStatus().equals(Status.PENDING)) {
-            updatedResult = orderService.updateStatue(id, Status.SHIPPED);
+            updatedResult = orderService.updateStatus(id, Status.SHIPPED);
         } else {
-            updatedResult = orderService.updateStatue(id, Status.RECEIVED);
+            updatedResult = orderService.updateStatus(id, Status.RECEIVED);
         }
 
         return ok(updatedResult);

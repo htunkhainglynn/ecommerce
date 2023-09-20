@@ -9,6 +9,7 @@ import com.project.ecommerce.service.AddressService;
 import com.project.ecommerce.service.OrderService;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ import java.util.function.Predicate;
 
 @Service
 @Transactional
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -106,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAnyAuthority('USER')")
     @Override
-    public OrderDetailVo updateStatue(Long id, Status status) {
+    public OrderDetailVo updateStatus(Long id, Status status) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isEmpty()) {
             throw new ProductException("Order not found");
@@ -135,6 +137,16 @@ public class OrderServiceImpl implements OrderService {
         return Optional.of(orderItemDto);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN') or hasAnyAuthority('USER')")
+    @Override
+    public Page<OrderVo> getAllOrdersByUsername(String username, Optional<Integer> page, Optional<Integer> size) {
+        PageRequest pageRequest = PageRequest.of(
+                page.orElse(0),
+                size.orElse(10));
+
+        return orderRepository.findAllByUserUsername(username, pageRequest).map(OrderVo::new);
+    }
+
     @PreAuthorize("hasAnyAuthority('USER')")
     @Override
     public OrderDetailVo saveOrder(OrderDetailDto orderDetailDto) {
@@ -146,9 +158,11 @@ public class OrderServiceImpl implements OrderService {
 
         // get address by id
         if (orderDetailDto.getAddressId() != null) {
+            log.info("address id: {}", orderDetailDto.getAddressId());
             address = addressRepo.findById(orderDetailDto.getAddressId())
                     .orElseThrow(() -> new ProductException("Address not found"));
         } else {
+            log.info("address: {}", orderDetailDto.getAddress());
             address = addressService.saveAddressByUsername(orderDetailDto.getAddress(), username);
         }
 
@@ -156,6 +170,9 @@ public class OrderServiceImpl implements OrderService {
 
         // set address to order
         order.setAddress(address);
+
+        // set order status to pending
+        order.setStatus(Status.PENDING);
 
         // set order date
         order.setOrderDate(LocalDate.now());

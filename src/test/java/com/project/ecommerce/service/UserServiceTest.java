@@ -2,7 +2,10 @@ package com.project.ecommerce.service;
 
 import com.project.ecommerce.dto.SignUpDto;
 import com.project.ecommerce.dto.UserDetailDto;
+import com.project.ecommerce.dto.UserDto;
+import com.project.ecommerce.entitiy.Role;
 import com.project.ecommerce.entitiy.User;
+import com.project.ecommerce.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -13,9 +16,15 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,7 +87,7 @@ public class UserServiceTest {
                 .username(username)
                 .build();
 
-        assertThrows(DataIntegrityViolationException.class, () -> userService.saveUser(signUpDto));
+        assertThrows(UserException.class, () -> userService.saveUser(signUpDto));
     }
 
     @Order(3)
@@ -167,6 +176,35 @@ public class UserServiceTest {
         Optional<UserDetailDto> user = userService.getUserById(1L);
         assertTrue(user.isEmpty());
         assertTrue(beforeDelete > afterDelete);
+    }
+
+    @Test
+    @Order(8)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    void testGetAllUsers() {
+
+        setAuthentication("admin", Role.ADMIN);
+
+        Page<UserDto> userDtoPage =  userService.getAllUsers(null, Optional.empty(), Optional.empty());
+
+        assertEquals(3, userDtoPage.getTotalElements());
+        assertEquals(1, userDtoPage.getTotalPages());
+        assertEquals(3, userDtoPage.getContent().size());
+
+        userDtoPage =  userService.getAllUsers("987-654-321", Optional.empty(), Optional.empty());
+
+        assertEquals(2, userDtoPage.getTotalElements());
+        assertEquals(2, userDtoPage.getContent().size());
+
+        userDtoPage =  userService.getAllUsers("user1", Optional.empty(), Optional.empty());
+
+        assertEquals(1, userDtoPage.getTotalElements());
+        assertEquals(1, userDtoPage.getContent().size());
+    }
+
+    void setAuthentication(String username, Role role) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of(role::name));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 }

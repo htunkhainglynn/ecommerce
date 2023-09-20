@@ -30,8 +30,7 @@ public class Order {
     @Column(name = "total_price", nullable = false)
     private double totalPrice;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
-    @JoinColumn()
+    @ManyToOne
     private Address address;
 
     @ManyToOne

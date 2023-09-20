@@ -59,7 +59,8 @@ public class UserServiceImpl implements UserService {
                 page.orElse(0),
                 size.orElse(10));
 
-        Specification<User> specification = (root, query, cb) -> cb.conjunction();
+        // search for users with role USER
+        Specification<User> specification = (root, query, cb) -> cb.isMember(Role.USER, root.get("roles"));
 
         Predicate<String> isDouble = s -> {
             try {
@@ -70,6 +71,7 @@ public class UserServiceImpl implements UserService {
             }
         };
 
+        // if keyword is not double, search for users with username, email, or phone number containing keyword
         specification = StringUtils.hasLength(keyword) && !isDouble.test(keyword)
                 ? specification.and((root, query, cb) ->
                 cb.or(
@@ -79,6 +81,7 @@ public class UserServiceImpl implements UserService {
                 ))
                 : specification;
 
+        // if keyword is double, search for users with total spent >= keyword
         specification = StringUtils.hasLength(keyword) && isDouble.test(keyword)
                 ? specification.and((root, query, cb) -> {
             Subquery<Long> subquery = query.subquery(Long.class);

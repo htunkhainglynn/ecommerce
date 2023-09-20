@@ -32,7 +32,7 @@ public class AddressServiceTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/address/create.txt")
     @WithMockUser(authorities = {"USER"})
-    void testCreateAddressByUsername(String street, String city, String postalCode, String username, int size) {
+    void testCreateAddressByUsername(String street, int postalCode, String city, String username, int size) {
         AddressDto addressDto = AddressDto.builder()
                 .street(street)
                 .city(city)
@@ -49,7 +49,7 @@ public class AddressServiceTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/address/create-null.txt")
     @WithMockUser(authorities = {"USER"})
-    void testCreateWithNull(String city, String postalCode, String street, String username) {
+    void testCreateWithNull(String city, Integer postalCode, String street, String username) {
         AddressDto addressDto = AddressDto.builder()
                 .street(street)
                 .city(city)
@@ -63,7 +63,7 @@ public class AddressServiceTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/address/update.txt")
     @WithMockUser(authorities = {"USER"})
-    void testUpdate(long id, String city, String postalCode, String street, String username) {
+    void testUpdate(long id, String city, Integer postalCode, String street, String username) {
         Optional<Address> address = addressService.getAddressById(id);
         assertTrue(address.isPresent());
         AddressDto addressDto = AddressDto.builder()
@@ -89,7 +89,7 @@ public class AddressServiceTest {
         Optional<Address> address = addressService.getAddressById(1L);
         assertTrue(address.isPresent());
         assertEquals(address.get().getCity(), "New York");
-        assertEquals(address.get().getPostalCode(), "10001");
+        assertEquals(address.get().getPostalCode(), 10001);
         assertEquals(address.get().getStreet(), "123 Main St");
         assertEquals(address.get().getUser().getUsername(),"user1");
 

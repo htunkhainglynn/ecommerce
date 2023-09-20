@@ -3,6 +3,9 @@ package com.project.ecommerce.repo;
 import com.project.ecommerce.dto.OrderItemDto;
 import com.project.ecommerce.entitiy.Order;
 import com.project.ecommerce.entitiy.OrderItem;
+import io.lettuce.core.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -36,4 +39,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     @Query("SELECT o.orderItems FROM Order o WHERE o.id = ?1")
     List<OrderItem> getOrderItemsByOrderId(Long id);
+
+    @Query("SELECT o FROM Order o WHERE o.user.username = ?1")
+    Page<Order> findAllByUserUsername(String username, PageRequest pageRequest);
 }
