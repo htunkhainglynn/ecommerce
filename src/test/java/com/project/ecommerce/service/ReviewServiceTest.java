@@ -39,6 +39,25 @@ public class ReviewServiceTest {
 
     @Order(2)
     @ParameterizedTest
+    @CsvFileSource(resources = "/csv/review/update.txt")
+    void testUpdateReview(Integer id, Integer rating, Integer productId, String content) {
+        ReviewDto reviewDto = ReviewDto.builder()
+                .id(id)
+                .rating(rating)
+                .productId((long)productId)
+                .content(content)
+                .build();
+
+        reviewService.saveReview(reviewDto);
+
+        List<ReviewDto> reviews = reviewService.getReviewsByProductId(1L);
+        assertThat(reviews, hasSize(2));
+        assertThat(reviews.get(1).getRating(), is(rating));
+        assertThat(reviews.get(1).getContent(), is(content));
+    }
+
+    @Order(3)
+    @ParameterizedTest
     @CsvFileSource(resources = "/csv/review/create.txt")
     void testCreateReview(Integer rating, Integer productId, String content) {
         ReviewDto reviewDto = ReviewDto.builder()
@@ -54,7 +73,7 @@ public class ReviewServiceTest {
         assertThat(reviews.get(2).getContent(), is(content));
     }
 
-    @Order(3)
+    @Order(4)
     @Test
     void testDeleteReviewById() {
         reviewService.deleteReview(1L);
