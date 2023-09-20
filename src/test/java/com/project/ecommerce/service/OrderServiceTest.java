@@ -84,6 +84,7 @@ public class OrderServiceTest {
                 .totalPrice(total)
                 .build();
 
+
         OrderDetailVo orderDetailVo = orderService.saveOrder(orderDetailDto);
 
         Optional<List<OrderItemDto>> orderItems = orderService.getOrderItemsByOrderId(orderDetailVo.getOrderId());
@@ -109,6 +110,7 @@ public class OrderServiceTest {
             assertThat(orderDetailVo.getAddress().getPostalCode(), is(postalCode));
             assertThat(orderItems.get().size(), is(2));
         }
+
     }
 
     @Order(2)

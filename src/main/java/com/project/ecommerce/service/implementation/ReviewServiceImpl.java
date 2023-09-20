@@ -43,8 +43,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<ReviewDto> getReviewById(Long id) {
-        Optional<Review> optionalReview = reviewRepo.findById(id);
+    public Optional<ReviewDto> getReviewById(int id) {
+        Optional<Review> optionalReview = reviewRepo.findById((long)id);
         return optionalReview.map(ReviewDto::new);
     }
 

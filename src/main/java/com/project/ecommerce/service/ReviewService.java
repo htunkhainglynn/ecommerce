@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ReviewService {
     List<ReviewDto> getAllReviews();
-    Optional<ReviewDto> getReviewById(Long id);
+    Optional<ReviewDto> getReviewById(int id);
     ReviewDto saveReview(ReviewDto review);
     void deleteReview(Long id);
 

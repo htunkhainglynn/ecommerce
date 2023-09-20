@@ -18,6 +18,8 @@ spring:
       timeout: 60000ms
     mongodb:
       uri: mongodb://localhost:27017/ecommerce
+
+
   mvc:
     cors: allowed-origins=http://localhost:3000
 

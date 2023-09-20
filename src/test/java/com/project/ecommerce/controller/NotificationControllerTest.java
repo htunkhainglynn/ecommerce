@@ -54,7 +54,7 @@ class NotificationControllerTest {
         List<Notification> notifications = new ArrayList<>();
         // Add some mock notifications to the list
 
-        when(notificationService.getNotificationByUserName(username)).thenReturn(notifications);
+        when(notificationService.getNotificationByUsername(username)).thenReturn(notifications);
 
         // Perform the GET request
         mockMvc.perform(get("/api/v1/notifications")

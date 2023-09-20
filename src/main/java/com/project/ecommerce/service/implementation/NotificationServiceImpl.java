@@ -36,7 +36,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Notification> getNotificationByUserName(String username) {
+    public List<Notification> getNotificationByUsername(String username) {
         return notificationRepo.findByUsername(username);
     }
 }

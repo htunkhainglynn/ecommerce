@@ -29,6 +29,6 @@ public class NotificationController {
     @Operation(summary = "Get all notifications", description = "Requires ADMIN or USER authority")
     public ResponseEntity<List<Notification>> getNotificationByUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return ResponseEntity.ok(notificationService.getNotificationByUserName(username));
+        return ResponseEntity.ok(notificationService.getNotificationByUsername(username));
     }
 }

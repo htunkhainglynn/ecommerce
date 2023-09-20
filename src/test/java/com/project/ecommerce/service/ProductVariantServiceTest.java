@@ -4,7 +4,10 @@ import com.project.ecommerce.dto.ExpenseDto;
 import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.vo.ProductVariantVo;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +106,7 @@ public class ProductVariantServiceTest {
     @CsvFileSource(resources = {"/csv/productVariant/update.txt"})
     void testUpdateProductVariant(LocalDate created_at, boolean in_stock, double price,
                                   double purchasePrice, int quantity,
-                                  LocalDate updated_at, long product_id, String color,
+                                  long product_id, String color,
                                   String image_url, String size, int productVariantId) {
         ProductVariantDto productVariantDto = ProductVariantDto.builder()
                                                         .id(productVariantId)

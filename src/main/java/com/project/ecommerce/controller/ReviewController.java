@@ -37,7 +37,7 @@ public class ReviewController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get review by id", description = "Requires ADMIN or USER authority")
-    public ResponseEntity<ReviewDto> getReviewById(@PathVariable Long id) {
+    public ResponseEntity<ReviewDto> getReviewById(@PathVariable int id) {
         Optional<ReviewDto> result = reviewService.getReviewById(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -68,7 +68,7 @@ public class ReviewController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update review by id", description = "Requires USER authority")
-    public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewDto review) {
+    public ResponseEntity<ReviewDto> updateReview(@PathVariable int id, @RequestBody ReviewDto review) {
         Optional<ReviewDto> reviewDto = reviewService.getReviewById(id);
         if(reviewDto.isPresent()) {
             review.setId(id);

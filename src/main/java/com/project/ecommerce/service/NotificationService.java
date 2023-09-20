@@ -8,5 +8,5 @@ public interface NotificationService {
 
     void saveNotification(Notification notification);
 
-    List<Notification> getNotificationByUserName(String username);
+    List<Notification> getNotificationByUsername(String username);
 }
