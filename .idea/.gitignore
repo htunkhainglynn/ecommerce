@@ -1,4 +1,7 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-../src/main/resources/application.yml
+
+# Ignore application.yml
+!/application.yml
+```
