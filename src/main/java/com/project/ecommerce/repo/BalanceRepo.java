@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface BalanceRepo extends JpaRepository<Balance, Long> {
 
@@ -17,4 +18,13 @@ public interface BalanceRepo extends JpaRepository<Balance, Long> {
 
     @Query("SELECT b FROM Balance b WHERE b.date = ?1")
     Balance getDailyBalance(LocalDate date);
+
+    @Query("SELECT b FROM Balance b WHERE b.date BETWEEN ?1 AND ?2 AND b.type = 'DAY'")
+    List<Balance> findByDateBetween(LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT b FROM Balance b WHERE b.year = ?1 AND b.type = 'MONTH'")
+    List<Balance> findByYear(Integer year);
+
+    @Query("SELECT b FROM Balance b WHERE b.year BETWEEN ?1 AND ?2 AND b.type = 'YEAR'")
+    List<Balance> findByYearBetween(int startYear, int endYear);
 }

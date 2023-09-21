@@ -19,17 +19,10 @@ VALUES
     ('2023-09-17', 1, 39.99, 29.99, 50, '2023-09-17', 3, 'Green', 'green.jpg', 'Large'),
     ('2023-09-18', 1, 19.99, 14.99, 75, '2023-09-18', 3, 'Yellow', 'yellow.jpg', 'Small');
 
-INSERT INTO expense (purchase_price, quantity, total, created_at, product_variant_id    )
+INSERT INTO expense (purchase_price, quantity, total, created_at, product_variant_id)
 VALUES
     (19.99, 100, 1999.00, '2023-09-13', 1),
     (29.99, 75, 2249.25, '2023-09-15', 2),
     (19.99, 100, 1999.00, '2023-09-16', 1),
     (39.99, 50, 1999.50, '2023-09-17', 3);
 
-INSERT INTO balance (income, expenses, profit, month, year, date, type)
-VALUES
-    (5000.00, 1999.00, 3001.00, 'September', '2023', '2023-09-13', 'DAY'),
-    (5000.00, 0, 5000.00, 'September', '2023', '2023-09-14', 'DAY'),
-    (6000.00, 4000.00, 2000.00, 'September', '2023', '2023-09-15', 'DAY'),
-    (6000.00, 1999.00, 3001.00, 'September', '2023', '2023-09-16', 'DAY'),
-    (7000.00, 5000.00, 2000.00, 'September', '2023', '2023-09-17', 'DAY');

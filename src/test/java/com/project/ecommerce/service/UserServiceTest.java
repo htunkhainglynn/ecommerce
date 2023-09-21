@@ -15,7 +15,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +40,9 @@ public class UserServiceTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private QueueInfoService queueInfoService;
+
     @Order(1)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/user/creation.txt", delimiter = ',')
@@ -59,6 +61,8 @@ public class UserServiceTest {
         Long beforeSave = userService.getRoleCount();
         User user = userService.saveUser(signUpDto);
         Long afterSave = userService.getRoleCount();
+        String queue = queueInfoService.getQueueNameByUsername(username);
+        String key = queueInfoService.getRoutingKeyByUsername(username);
 
         // check result
         assertNotNull(user);
@@ -71,6 +75,8 @@ public class UserServiceTest {
         assertEquals(profilePictureURL, user.getProfilePictureURL());
         assertEquals(username, user.getUsername());
         assertTrue(beforeSave < afterSave);
+        assertEquals(queue, "ecommerce."+username+".queue");
+        assertEquals(key, "ecommerce."+username+".key");
     }
 
     @Order(2)

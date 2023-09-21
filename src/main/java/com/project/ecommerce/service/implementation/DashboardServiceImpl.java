@@ -1,6 +1,8 @@
 package com.project.ecommerce.service.implementation;
 
+import com.project.ecommerce.entitiy.balance.Balance;
 import com.project.ecommerce.entitiy.report.MonthlyReport;
+import com.project.ecommerce.repo.BalanceRepo;
 import com.project.ecommerce.repo.OrderRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
 import com.project.ecommerce.repo.UserRepository;
@@ -26,14 +28,18 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final MonthlyReportRepo monthlyReportRepo;
 
+    private final BalanceRepo balanceRepo;
+
     @Autowired
     public DashboardServiceImpl(UserRepository userRepository,
                                 ProductVariantRepository productVariantRepository,
                                 OrderRepository orderRepository,
+                                BalanceRepo balanceRepo,
                                 MonthlyReportRepo monthlyReportRepo) {
         this.userRepository = userRepository;
         this.productVariantRepository = productVariantRepository;
         this.orderRepository = orderRepository;
+        this.balanceRepo = balanceRepo;
         this.monthlyReportRepo = monthlyReportRepo;
     }
 
@@ -77,6 +83,44 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<GraphDataVo> getYearlyGraphData() {
         return null;
+    }
+
+    @Override
+    public List<Balance> getBalance(LocalDate startDate, LocalDate endDate) {
+        if (startDate == null && endDate == null) {
+            endDate = LocalDate.now();
+            startDate = endDate.minusDays(7).plusDays(1);
+        }
+
+        if (startDate == null) {
+            startDate = endDate.minusDays(7).plusDays(1);
+        }
+
+        if (endDate == null) {
+            endDate = LocalDate.now();
+        }
+
+        // calculate weekly balance
+        return balanceRepo.findByDateBetween(startDate, endDate);
+    }
+
+    @Override
+    public List<Balance> getMonthlyBalance(Integer year) {
+        if (year == null) {
+            year = LocalDate.now().getYear();
+        }
+
+        return balanceRepo.findByYear(year);
+    }
+
+    @Override
+    public List<Balance> getYearlyBalance(int startYear, int endYear) {
+        if (startYear == 0 && endYear == 0) {
+            endYear = LocalDate.now().getYear();
+            startYear = LocalDate.now().getYear();
+        }
+
+        return balanceRepo.findByYearBetween(startYear, endYear);
     }
 
 }

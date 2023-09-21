@@ -1,5 +1,6 @@
 package com.project.ecommerce.controller;
 
+import com.project.ecommerce.entitiy.balance.Balance;
 import com.project.ecommerce.service.DashboardService;
 import com.project.ecommerce.service.ReportService;
 import com.project.ecommerce.vo.DashBoardSummaryVo;
@@ -68,9 +69,43 @@ public class DashboardController {
         return ok(dashboardService.getYearlyGraphData());
     }
 
-    @GetMapping("/test")
-    public void getTest() {
-        LocalDate today = LocalDate.now();
-        reportService.calculateDailyReport(today);
+
+    @GetMapping("/balance")
+    public ResponseEntity<Map<String, Object>> getBalance(@RequestParam(value = "startDate", required = false) LocalDate startDate,
+                                                          @RequestParam(value = "endDate", required = false) LocalDate endDate) {
+        List<Balance> balance = dashboardService.getBalance(startDate, endDate);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("title", "Balance Report from %s to %s".formatted(startDate, endDate));
+        result.put("income", balance.stream().map(Balance::getIncome).toList());
+        result.put("expenses", balance.stream().map(Balance::getExpenses).toList());
+        result.put("profit", balance.stream().map(Balance::getProfit).toList());
+        result.put("date", balance.stream().map(Balance::getDate).toList());
+        return ok(result);
     }
+
+    @GetMapping("/balance/monthly")
+    public ResponseEntity<Map<String, Object>> getMonthlyBalance(@RequestParam(value = "year", required = false) Integer year) {
+        List<Balance> balance = dashboardService.getMonthlyBalance(year);
+        Map<String, Object> result = new HashMap<>();
+        result.put("title", "%d Monthly Balance Report".formatted(year));
+        result.put("income", balance.stream().map(Balance::getIncome).toList());
+        result.put("expenses", balance.stream().map(Balance::getExpenses).toList());
+        result.put("profit", balance.stream().map(Balance::getProfit).toList());
+        result.put("month", balance.stream().map(Balance::getMonth).toList());
+        return ok(result);
+    }
+
+    @GetMapping("/balance/yearly")
+    public ResponseEntity<Map<String, Object>> getYearlyBalance(@RequestParam(required = false) int startYear, @RequestParam(required = false) int endYear) {
+        List<Balance> balance = dashboardService.getYearlyBalance(startYear, endYear);
+        Map<String, Object> result = new HashMap<>();
+        result.put("title", "Yearly Balance Report");
+        result.put("income", balance.stream().map(Balance::getIncome).toList());
+        result.put("expenses", balance.stream().map(Balance::getExpenses).toList());
+        result.put("profit", balance.stream().map(Balance::getProfit).toList());
+        result.put("year", balance.stream().map(Balance::getYear).toList());
+        return ok(result);
+    }
+
 }

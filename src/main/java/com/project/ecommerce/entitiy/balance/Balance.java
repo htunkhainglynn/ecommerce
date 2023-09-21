@@ -23,8 +23,6 @@ public class Balance {
     private double profit;
     private String month;
     private Integer year;
-
-    @Column(unique = true)
     private LocalDate date;
 
     @Enumerated(EnumType.STRING)

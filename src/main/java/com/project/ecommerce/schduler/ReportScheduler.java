@@ -1,7 +1,6 @@
 package com.project.ecommerce.schduler;
 
 import com.project.ecommerce.service.BalanceService;
-import com.project.ecommerce.service.NotificationService;
 import com.project.ecommerce.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,13 +15,12 @@ public class ReportScheduler {
 
     private final BalanceService balanceService;
 
-    private final NotificationService notificationService;
 
     @Autowired
-    public ReportScheduler(ReportService reportService, BalanceService balanceService , BalanceService balanceService1, NotificationService notificationService) {
+    public ReportScheduler(ReportService reportService,
+                           BalanceService balanceService) {
         this.reportService = reportService;
-        this.balanceService = balanceService1;
-        this.notificationService = notificationService;
+        this.balanceService = balanceService;
     }
 
     // Schedule daily sales calculation at 11:59:59 PM
