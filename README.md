@@ -1,4 +1,4 @@
-## Project Documentation
+## Ecommerce
 
 This is a comprehensive documentation for the Ecommerce project, a web application that allows users to buy and manage products, place orders, and receive notifications. The project is built using Spring Boot, Spring Security, Spring Data JPA, Hibernate, RabbitMQ for notifications, Stripe for payment processing, Cloudinary for image storage, GitHub Actions for continuous integration, and Swagger for API documentation.
 
