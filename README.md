@@ -2,7 +2,7 @@
 
 This is a comprehensive documentation for the Ecommerce project, a web application that allows users to buy and manage products, place orders, and receive notifications. The project is built using Spring Boot, Spring Security, Spring Data JPA, Hibernate, RabbitMQ for notifications, Stripe for payment processing, Cloudinary for image storage, GitHub Actions for continuous integration, and Swagger for API documentation.
 
-### To-Do List
+### TODOs
 
 - [ ] Build frontend with React
 - [x] Implement user authentication and authorization
@@ -14,7 +14,6 @@ This is a comprehensive documentation for the Ecommerce project, a web applicati
 - [x] Implement cron jobs for automatic balance reports
 
 ### Table of Contents
-- [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
@@ -23,53 +22,6 @@ This is a comprehensive documentation for the Ecommerce project, a web applicati
     - [Dashboard](#dashboard)
     - [Cron Jobs](#cron-jobs)
     - [API Documentation](#api-documentation)
-
-## Features
-
-### Authentication and Authorization
-
-Users can register, log in, and perform actions based on their roles (admin or user). Spring Security ensures secure access.
-
-### Product Management
-
-Admins can create, update, delete, and read products and their variants. Products can be associated with categories.
-
-### Order Management
-
-Admins can manage orders, view order details, and receive notifications when orders are placed.
-
-### Category Management
-
-Admins can manage product categories.
-
-### Payment Gateway
-
-Payment processing is handled through Stripe, making it easy for users to pay for their orders securely.
-
-### Image Storage
-
-Cloudinary is used to store and serve product images.
-
-### Continuous Integration
-
-GitHub Actions is set up for continuous integration, ensuring that the codebase is always up to date and building successfully.
-
-### Push Notifications
-
-RabbitMQ is used to send push notifications, including order placement and product delivery notifications.
-
-### Dashboard
-
-Users and admins can access a dashboard displaying essential information about orders, users, and products.
-
-### Cron Jobs
-
-The system automatically generates balance reports, including income, expenses, and profits, using cron jobs.
-
-### API Documentation
-
-Swagger is integrated for easy access to API documentation.
-
 ## Technologies Used
 
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1.2-brightgreen) ![Spring Security](https://img.shields.io/badge/Spring%20Security-6.0.0-brightgreen) ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-4.0.0-brightgreen) ![Hibernate](https://img.shields.io/badge/Hibernate-6.2.5-brightgreen) ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-3.9.7-brightgreen) ![Stripe](https://img.shields.io/badge/Stripe-Payment%20Gateway-brightgreen) ![Cloudinary](https://img.shields.io/badge/Cloudinary-Image%20Storage-brightgreen) ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI/CD-brightgreen) ![Swagger](https://img.shields.io/badge/Swagger-API%20Documentation-brightgreen) ![MySQL](https://img.shields.io/badge/MySQL-8.0.26-brightgreen) ![Maven](https://img.shields.io/badge/Maven-4.0.0-brightgreen) ![Java](https://img.shields.io/badge/Java-17-brightgreen) ![MongoDB](https://img.shields.io/badge/MongoDB-5.0.3-brightgreen) ![JUnit](https://img.shields.io/badge/JUnit-5.8.0-brightgreen) ![Mockito](https://img.shields.io/badge/Mockito-4.0.0-brightgreen) ![Hamcrest](https://img.shields.io/badge/Hamcrest-2.2-brightgreen)
@@ -86,6 +38,7 @@ Swagger is integrated for easy access to API documentation.
 2. Configure your application properties, including database settings, Stripe API keys, Cloudinary credentials, and RabbitMQ configuration.
 3. Run the application using `mvn spring-boot:run`.
 4. Access the application at `http://localhost:8080`.
+5. Login as Admin using admin@gmail.com, password.
 
 #### Using Docker
 
@@ -99,7 +52,11 @@ Ensure you have set up the project, and the application is running. Users and ad
 
 - **Product Management:** Create, update, delete, and read products and their variants. Manage product categories.
 
-- **Order Management:** View and manage orders, receive order placement notifications.
+- **Order Management:** View and manage orders. receive order placement notifications.
+
+- **Notification Management:** Receive order placement notifications.
+
+- **User Management:** View and manage users.
 
 - **Dashboard:** Access the dashboard to view order statistics, user statistics, product information, and purchase price timeline.
 
