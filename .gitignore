@@ -1,0 +1,13 @@
+# Default ignored files
+/.idea/shelf/
+/.idea/workspace.xml
+
+# Ignore all .iml files
+*.iml
+
+# Ignore all .DS_Store files
+.DS_Store
+
+# Ignore application.yml
+/src/main/resources/application.yml
+
