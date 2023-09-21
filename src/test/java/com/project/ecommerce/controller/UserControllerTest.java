@@ -3,11 +3,8 @@ package com.project.ecommerce.controller;
 import com.project.ecommerce.dto.UserDetailDto;
 import com.project.ecommerce.dto.UserDto;
 import com.project.ecommerce.utils.PagerResult;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -23,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @WithMockUser(username = "admin", authorities = {"ADMIN"})
 @Sql(scripts = {"/sql/init-database.sql", "/sql/user.sql"})
-@Slf4j
 public class UserControllerTest {
 
     WebTestClient client;
@@ -66,7 +62,7 @@ public class UserControllerTest {
 
         assertNotNull(result);
         assertEquals("user1", result.getUsername());
-        assertEquals("user@gmail.com", result.getEmail());
+        assertEquals("user@example.com", result.getEmail());
     }
 
     @Test

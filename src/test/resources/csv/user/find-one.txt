@@ -1,2 +1,2 @@
 admin@example.com,Admin,password,123-456-7890,profile1.jpg,admin,true,1
-user@example.com,User One,password,987-654-3210,profile2.jpg,user1,true,2
+user@example.com,User One,password,987-654-3210,profile2.jpg,user1,false,2
