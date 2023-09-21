@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Sql(scripts = {"/sql/init-database.sql", "/sql/product.sql"})
+@Sql(scripts = {"/sql/init-database.sql", "/sql/product.sql", "/sql/balance.sql"})
 public class ProductVariantServiceTest {
 
     @Autowired
@@ -167,6 +167,7 @@ public class ProductVariantServiceTest {
                                     .quantity(quantity)
                                     .createdAt(createdAt)
                                     .build();
+
         expenseService.updateExpenseHistory(id, expenseDto);
 
         Optional<ExpenseDto> expenseDtoOptional = expenseService.getExpenseById(id);
