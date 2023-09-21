@@ -3,6 +3,7 @@ package com.project.ecommerce.controller;
 import com.project.ecommerce.dto.AuthenticationRequest;
 import com.project.ecommerce.entitiy.Role;
 import com.project.ecommerce.entitiy.User;
+import com.project.ecommerce.exception.UserException;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.security.JwtTokenProvider;
 import io.swagger.annotations.Api;
@@ -50,6 +51,10 @@ public class AuthController {
             Optional<User> userReference = this.users.getReferenceByUsernameOrEmail(usernameOrEmail);
             if (userReference.isEmpty()) {
                 throw new BadCredentialsException("Invalid username/email or password supplied");
+            }
+
+            if (!userReference.get().isActive()) {
+                throw new UserException("User is not active");
             }
 
             String username = userReference.get().getUsername();
