@@ -2,6 +2,17 @@
 
 This is a comprehensive documentation for the Ecommerce project, a web application that allows users to buy and manage products, place orders, and receive notifications. The project is built using Spring Boot, Spring Security, Spring Data JPA, Hibernate, RabbitMQ for notifications, Stripe for payment processing, Cloudinary for image storage, GitHub Actions for continuous integration, and Swagger for API documentation.
 
+### To-Do List
+
+- [ ] Build frontend with React
+- [x] Implement user authentication and authorization
+- [x] Add product management functionality
+- [x] Configure payment gateway with Stripe
+- [ ] Set up Docker containerization for the application
+- [x] Create API documentation using Swagger
+- [x] Implement push notifications with RabbitMQ
+- [x] Implement cron jobs for automatic balance reports
+
 ### Table of Contents
 - [Features](#features)
 - [Technologies Used](#technologies-used)
@@ -61,14 +72,24 @@ Swagger is integrated for easy access to API documentation.
 
 ## Technologies Used
 
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.5.4-brightgreen) ![Spring Security](https://img.shields.io/badge/Spring%20Security-5.5.1-brightgreen) ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-2.5.4-brightgreen) ![Hibernate](https://img.shields.io/badge/Hibernate-5.5.7-brightgreen) ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-3.9.7-brightgreen) ![Stripe](https://img.shields.io/badge/Stripe-API-brightgreen) ![Cloudinary](https://img.shields.io/badge/Cloudinary-Image%20Storage-brightgreen) ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI/CD-brightgreen) ![Swagger](https://img.shields.io/badge/Swagger-API%20Documentation-brightgreen) ![MySQL](https://img.shields.io/badge/MySQL-8.0.26-brightgreen) ![Maven](https://img.shields.io/badge/Maven-3.8.2-brightgreen) ![Java](https://img.shields.io/badge/Java-11-brightgreen) ![MongoDB](https://img.shields.io/badge/MongoDB-5.0.3-brightgreen) ![JUnit](https://img.shields.io/badge/JUnit-5.8.0-brightgreen) ![Mockito](https://img.shields.io/badge/Mockito-4.0.0-brightgreen)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1.2-brightgreen) ![Spring Security](https://img.shields.io/badge/Spring%20Security-6.0.0-brightgreen) ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-4.0.0-brightgreen) ![Hibernate](https://img.shields.io/badge/Hibernate-6.2.5-brightgreen) ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-3.9.7-brightgreen) ![Stripe](https://img.shields.io/badge/Stripe-Payment%20Gateway-brightgreen) ![Cloudinary](https://img.shields.io/badge/Cloudinary-Image%20Storage-brightgreen) ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI/CD-brightgreen) ![Swagger](https://img.shields.io/badge/Swagger-API%20Documentation-brightgreen) ![MySQL](https://img.shields.io/badge/MySQL-8.0.26-brightgreen) ![Maven](https://img.shields.io/badge/Maven-4.0.0-brightgreen) ![Java](https://img.shields.io/badge/Java-17-brightgreen) ![MongoDB](https://img.shields.io/badge/MongoDB-5.0.3-brightgreen) ![JUnit](https://img.shields.io/badge/JUnit-5.8.0-brightgreen) ![Mockito](https://img.shields.io/badge/Mockito-4.0.0-brightgreen) ![Hamcrest](https://img.shields.io/badge/Hamcrest-2.2-brightgreen)
 
 
 ## Getting Started
 
+#### Clone the Repository
+
 1. Clone the repository from GitHub.
+
+   ```shell
+   git clone https://github.com/yourusername/your-ecommerce-project.git
 2. Configure your application properties, including database settings, Stripe API keys, Cloudinary credentials, and RabbitMQ configuration.
 3. Run the application using `mvn spring-boot:run`.
+4. Access the application at `http://localhost:8080`.
+
+#### Using Docker
+
+
 
 ## Usage
 
