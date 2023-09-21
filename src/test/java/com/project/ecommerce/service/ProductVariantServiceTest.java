@@ -163,10 +163,10 @@ public class ProductVariantServiceTest {
     @CsvFileSource(resources = {"/csv/productVariant/updateExpenseHistory.txt"})
     void testUpdateExpense(int id, double purchasePrice, int quantity, LocalDate createdAt) {
         ExpenseDto expenseDto = ExpenseDto.builder()
-                                    .purchasePrice(purchasePrice)
-                                    .quantity(quantity)
-                                    .createdAt(createdAt)
-                                    .build();
+                .purchasePrice(purchasePrice)
+                .quantity(quantity)
+                .createdAt(createdAt)
+                .build();
 
         expenseService.updateExpenseHistory(id, expenseDto);
 
