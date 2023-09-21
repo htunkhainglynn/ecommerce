@@ -3,6 +3,7 @@ package com.project.ecommerce.controller;
 import com.project.ecommerce.dto.UserDetailDto;
 import com.project.ecommerce.dto.UserDto;
 import com.project.ecommerce.service.UserService;
+import com.project.ecommerce.utils.PagerResult;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,12 @@ public class UserController {
     // get all users
     @GetMapping
     @Operation(summary = "Get all users", description = "Requires ADMIN authority")
-    public Page<UserDto> getAllUsers(@RequestParam(required = false) String keyword,
+    public ResponseEntity<PagerResult<UserDto>> getAllUsers(@RequestParam(required = false) String keyword,
                                      @RequestParam Optional<Integer> page,
                                      @RequestParam Optional<Integer> size) {
-        return userService.getAllUsers(keyword, page, size);
+        Page<UserDto> result = userService.getAllUsers(keyword, page, size);
+        PagerResult<UserDto> pagerResult = PagerResult.of(result);
+        return ResponseEntity.ok(pagerResult);
     }
 
     // get user by id

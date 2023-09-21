@@ -4,6 +4,7 @@ import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.service.CloudinaryService;
 import com.project.ecommerce.service.ProductService;
+import com.project.ecommerce.utils.PagerResult;
 import com.project.ecommerce.vo.ProductVariantVo;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,14 +34,15 @@ public class ProductController {
 
     @GetMapping
     @Operation(summary = "Get all products", description = "Requires ADMIN authority")
-    public ResponseEntity<Page<ProductDto>> getAllProducts
+    public ResponseEntity<PagerResult<ProductDto>> getAllProducts
             (@RequestParam(required = false) String keyword,
              @RequestParam(required = false) Boolean isAvailable,
              @RequestParam Optional<Integer> page,
              @RequestParam Optional<Integer> size) {
 
         Page<ProductDto> result = productService.getAllProducts(keyword, isAvailable == null || isAvailable, page, size);
-        return ResponseEntity.ok(result);
+        PagerResult<ProductDto> pagerResult = PagerResult.of(result);
+        return ResponseEntity.ok(pagerResult);
     }
 
 

@@ -1,6 +1,7 @@
 package com.project.ecommerce.dto;
 
 import com.project.ecommerce.entitiy.Address;
+import com.project.ecommerce.entitiy.Order;
 import com.project.ecommerce.entitiy.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +33,7 @@ public class UserDto implements Serializable {
 
     private List<Address> addresses;
 
-    private long totalSpent;
+    private double totalSpent;
 
     public UserDto(User entity) {
         this.id = entity.getId();
@@ -43,6 +44,6 @@ public class UserDto implements Serializable {
         this.phone = entity.getPhoneNumber();
         this.active = entity.isActive();
         this.orders = entity.getOrders().size();
-        this.totalSpent = entity.getOrders().stream().mapToLong(order -> (long) order.getTotalPrice()).sum();
+        this.totalSpent = entity.getOrders().stream().mapToDouble(Order::getTotalPrice).sum();
     }
 }

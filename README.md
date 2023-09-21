@@ -8,10 +8,10 @@ This is a comprehensive documentation for the Ecommerce project, a web applicati
 - [x] Implement user authentication and authorization
 - [x] Add product management functionality
 - [x] Configure payment gateway with Stripe
-- [ ] Set up Docker containerization for the application
 - [x] Create API documentation using Swagger
 - [x] Implement push notifications with RabbitMQ
 - [x] Implement cron jobs for automatic balance reports
+- [ ] Set up Docker containerization for the application
 
 ### Table of Contents
 - [Technologies Used](#technologies-used)
