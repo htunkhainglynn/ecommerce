@@ -70,7 +70,7 @@ jobs:
           docker run -d --name redis -p 6380:6379 redis:6.2
 
       - name: Build and run test with Maven
-        run: mvn -B -Dspring.config.location=src/main/resources/application.yml clean package
+        run: mvn -B clean verify
 
       - name: Stop and Remove Containers
         run: |
