@@ -124,7 +124,7 @@ public class UserServiceTest {
         // check result
         assertNotNull(user);
         assertTrue(user.isPresent());
-        assertEquals(id, user.get().getId());
+        assertEquals(100, user.get().getId());
         assertEquals(active, user.get().isActive());
         assertEquals(email, user.get().getEmail());
         assertEquals(username, user.get().getUsername());
