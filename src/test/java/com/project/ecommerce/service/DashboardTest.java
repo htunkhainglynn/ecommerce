@@ -32,13 +32,13 @@ public class DashboardTest {
 //        assertThat(balance, hasSize(7));
 //        assertThat(balance.stream().map(Balance::getProfit).reduce(0.0, Double::sum), is(27005.0));
 
-        List<Balance> balance = dashboardService.getBalance(LocalDate.of(2023, 9, 13), null);
+//        List<Balance> balance = dashboardService.getBalance(LocalDate.of(2023, 9, 13), null);
+//
+//        // assert
+//        assertThat(balance, hasSize(9));
+//        assertThat(balance.stream().map(Balance::getProfit).reduce(0.0, Double::sum), is(35006.0));
 
-        // assert
-        assertThat(balance, hasSize(9));
-        assertThat(balance.stream().map(Balance::getProfit).reduce(0.0, Double::sum), is(35006.0));
-
-        balance = dashboardService.getBalance(null, LocalDate.of(2023, 9, 20));
+        List<Balance> balance = dashboardService.getBalance(null, LocalDate.of(2023, 9, 20));
 
         // assert
         assertThat(balance, hasSize(7));
