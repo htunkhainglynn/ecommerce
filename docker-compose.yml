@@ -1,0 +1,83 @@
+version: "3.8"
+services:
+    app-db:
+        container_name: app-db
+        image: mysql:8.0
+        environment:
+            MARIADB_ROOT_PASSWORD: admin
+            MARIADB_DATABASE: ecommerce
+        restart: always
+        ports:
+            - "3307:3306"
+        volumes:
+            - data-volume:/var/lib/mysql
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmin"]
+
+    app-mongodb:
+        container_name: app-mongodb
+        image: mongo:latest
+        restart: always
+        environment:
+            MONGODB_INITDB_ROOT_USERNAME: admin
+            MONGODB_INITDB_ROOT_PASSWORD: admin
+        ports:
+            - "27018:27017"
+        volumes:
+            - mongo-volume:/data/db
+        healthcheck:
+            test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+            interval: 5s
+            timeout: 20s
+            retries: 10
+
+    app-rabbitmq:
+        container_name: app-rabbitmq
+        image: custom-rabbitmq-image
+        restart: always
+        ports:
+            - "5673:5672"
+            - "15673:15672"
+        volumes:
+            - rabbitmq-volume:/var/lib/rabbitmq
+        healthcheck:
+            test: ["CMD", "rabbitmqctl", "status"]
+            interval: 5s
+            timeout: 20s
+            retries: 10
+
+    app-redis:
+        container_name: app-redis
+        image: redis:6.2
+        restart: always
+        ports:
+            - "6380:6379"
+        volumes:
+          - redis-volume:/data/db
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 5s
+            timeout: 20s
+            retries: 10
+
+    app:
+        container_name: app
+        image: ecommerce-image
+        ports:
+            - "8080:8080"
+        depends_on:
+            app-db:
+                condition: service_healthy
+            app-rabbitmq:
+                condition: service_healthy
+            app-redis:
+                condition: service_healthy
+            app-mongodb:
+                condition: service_healthy
+
+volumes:
+    data-volume: {}
+    rabbitmq-volume: {}
+    redis-volume: {}
+    mongo-volume: {}
+

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,7 +103,7 @@ public class NotificationAspect {
         String jsonNotification = objectMapper.writeValueAsString(notification);
 
         // save notification to database
-        notificationService.saveNotification(Notification.builder().orderId(orderId).message(message).build());
+        notificationService.saveNotification(Notification.builder().orderId(orderId).message(message).date(LocalDate.now()).build());
 
         // send notification to admins using topic exchange
         rabbitTemplate.convertAndSend(directExchange.getName(), routingKey, jsonNotification);

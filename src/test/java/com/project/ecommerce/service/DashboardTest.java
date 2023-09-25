@@ -26,6 +26,9 @@ public class DashboardTest {
     @Test
     @Order(1)
     void testGetBalance() {
+
+        // comments are used because it is based on LocalDate.now();
+
 //        List<Balance> balance = dashboardService.getBalance(null, null);
 //
 //        // assert
