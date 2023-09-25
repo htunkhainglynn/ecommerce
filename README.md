@@ -11,7 +11,7 @@ This is a comprehensive documentation for the Ecommerce project, a web applicati
 - [x] Create API documentation using Swagger
 - [x] Implement push notifications with RabbitMQ
 - [x] Implement cron jobs for automatic balance reports
-- [ ] Set up Docker containerization for the application
+- [x] Set up Docker containerization for the application
 
 ### Table of Contents
 - [Technologies Used](#technologies-used)
@@ -34,15 +34,32 @@ This is a comprehensive documentation for the Ecommerce project, a web applicati
 1. Clone the repository from GitHub.
 
    ```shell
-   git clone https://github.com/yourusername/your-ecommerce-project.git
+   git clone https://github.com/htunkhainglynn/ecommerce.git
 2. Configure your application properties, including database settings, Stripe API keys, Cloudinary credentials, and RabbitMQ configuration.
 3. Run the application using `mvn spring-boot:run`.
 4. Access the application at `http://localhost:8080`.
 5. Login as Admin using admin@gmail.com, password.
+6. Login as User using user@gmail.com, password.
 
 #### Using Docker
+1. Clone the repository from GitHub.
 
+   ```shell
+   git clone https://github.com/htunkhainglynn/ecommerce.git
+   ```
+2. Create a Docker image using the Dockerfile.
 
+   ```shell
+   docker build -t ecommerce-image .
+   ```
+3. Run the docker compose file.
+
+   ```shell
+    docker-compose up
+    ```
+4. Access the application at `http://localhost:8080`.
+5. Login as Admin using admin@gmail.com, password.
+6. Login as User using user@gmail.com, password.
 
 ## Usage
 
