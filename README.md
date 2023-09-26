@@ -47,9 +47,12 @@ This is a comprehensive documentation for the Ecommerce project, a web applicati
    ```shell
    git clone https://github.com/htunkhainglynn/ecommerce.git
    ```
-2. Create a Docker image using the Dockerfile.
+2. Create a Docker images using the Dockerfiles.
 
    ```shell
+   cd custom-rabbitmq-image
+   docker build -t custom-rabbitmq-image .
+   cd ../
    docker build -t ecommerce-image .
    ```
 3. Run the docker compose file.

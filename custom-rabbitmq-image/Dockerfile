@@ -1,2 +1,2 @@
 FROM rabbitmq:3.8-management
-RUN rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_federation_management rabbitmq_stomp rabbitmq_web_stomp rabbitmq_web_stomp_examples rabbitmq_web_mqtt rabbitmq_federation
+RUN rabbitmq-plugins enable --offline rabbitmq_shovel rabbitmq_shovel_management rabbitmq_mqtt rabbitmq_federation_management rabbitmq_stomp rabbitmq_web_stomp rabbitmq_web_stomp_examples rabbitmq_web_mqtt rabbitmq_federation
