@@ -62,8 +62,10 @@ This is a comprehensive documentation for the Ecommerce project, a web applicati
     docker-compose up
     ```
 4. Access the application at `http://localhost:8080`.
-5. Login as Admin using admin@gmail.com, password.
-6. Login as User using user@gmail.com, password.
+5. Access API documentation at `http://localhost:8080/swagger-ui/index.html`.
+6. Postman file for testing is in /postman.
+7. Login as Admin using admin@gmail.com, password.
+8. Login as User using user@gmail.com, password.
 
 ## Usage
 
