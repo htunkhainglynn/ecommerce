@@ -28,4 +28,7 @@ public interface ExpenseRepo extends JpaRepository<Expense, Long> {
 
     @Query("SELECT e FROM Expense e WHERE e.productVariant.id = ?1")
     List<Expense> getExpenseByProductVariantId(Integer id);
+
+    @Query("SELECT e.createdAt FROM Expense e WHERE e.id = ?1")
+    LocalDate getCreatedAtById(Integer id);
 }

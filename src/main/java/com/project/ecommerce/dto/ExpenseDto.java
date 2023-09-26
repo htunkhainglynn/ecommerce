@@ -20,8 +20,8 @@ public class ExpenseDto {
     private int quantity;
     private LocalDate createdAt;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int productVariantId;
+    private double total;
 
     public ExpenseDto(Expense expense) {
         this.id = expense.getId();
@@ -29,5 +29,6 @@ public class ExpenseDto {
         this.quantity = expense.getQuantity();
         this.createdAt = expense.getCreatedAt();
         this.productVariantId = expense.getProductVariant().getId();
+        this.total = expense.getTotal();
     }
 }

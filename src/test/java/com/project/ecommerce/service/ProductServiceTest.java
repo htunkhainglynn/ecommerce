@@ -4,14 +4,12 @@ import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.entitiy.Organization;
 import com.project.ecommerce.vo.ProductVariantVo;
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -78,14 +76,14 @@ public class ProductServiceTest {
         assertThat(result.getProductVariants().get(0).getPrice(), equalTo(price1));
         assertThat(result.getProductVariants().get(0).isInStock(), equalTo(inStock1));
         assertThat(result.getProductVariants().get(0).getQuantity(), equalTo(quantity1));
-        assertThat(result.getProductVariants().get(0).getProduct_id(), equalTo(productId1));
+        assertThat(result.getProductVariants().get(0).getProductId(), equalTo(productId1));
         assertThat(result.getProductVariants().get(0).getImageUrl(), equalTo(imageUrl1));
         assertThat(result.getProductVariants().get(1).getSize(), equalTo(size2));
         assertThat(result.getProductVariants().get(1).getColor(), equalTo(color2));
         assertThat(result.getProductVariants().get(1).getPrice(), equalTo(price2));
         assertThat(result.getProductVariants().get(1).isInStock(), equalTo(inStock2));
         assertThat(result.getProductVariants().get(1).getQuantity(), equalTo(quantity2));
-        assertThat(result.getProductVariants().get(1).getProduct_id(), equalTo(productId2));
+        assertThat(result.getProductVariants().get(1).getProductId(), equalTo(productId2));
         assertThat(result.getProductVariants().get(1).getImageUrl(), equalTo(imageUrl2));
     }
 

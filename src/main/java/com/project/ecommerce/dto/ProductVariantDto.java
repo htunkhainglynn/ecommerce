@@ -30,7 +30,7 @@ public class ProductVariantDto {
 
     private int quantity;
 
-    private Long product_id;
+    private Long productId  ;
 
     private String imageUrl;
 
@@ -60,10 +60,11 @@ public class ProductVariantDto {
         this.imageUrl = entity.getImageUrl();
         this.quantity = entity.getQuantity();
         this.name = entity.getProduct().getName();
-        this.product_id = entity.getProduct().getId();
+        this.productId = entity.getProduct().getId();
         this.inStock = entity.isInStock();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
         this.expenses = entity.getExpenses();
+        this.purchasePrice = entity.getPurchasePrice();
     }
 }

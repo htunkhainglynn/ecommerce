@@ -7,7 +7,7 @@ public class InvalidJwtAuthenticationException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public InvalidJwtAuthenticationException(String expiredOrInvalidJwtToken) {
-        super(expiredOrInvalidJwtToken);
+    public InvalidJwtAuthenticationException(String message) {
+        super(message);
     }
 }

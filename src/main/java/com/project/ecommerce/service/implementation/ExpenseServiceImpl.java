@@ -38,6 +38,11 @@ public class ExpenseServiceImpl implements ExpenseService {
         double purchasePrice = expenseDto.getPurchasePrice();
         int quantity = expenseDto.getQuantity();
         double oldTotal = expenseRepo.getTotalById(id);
+
+        // get createdAt date to track changes in balance table
+        LocalDate createdAt = expenseRepo.getCreatedAtById(id);
+        expenseDto.setCreatedAt(createdAt);
+
         double newTotal = purchasePrice * quantity;
         double difference = newTotal - oldTotal;
         expenseRepo.updateExpenseHistory(id, purchasePrice, quantity, newTotal);

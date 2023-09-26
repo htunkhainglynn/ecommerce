@@ -59,7 +59,7 @@ public class ProductVariantController {
     @Operation(summary = "Create product variant", description = "Requires ADMIN authority")
     public ResponseEntity<ProductVariantVo> createProductVariant(ProductVariantDto productVariantDto,
                                                  HttpServletRequest request){
-        Optional<ProductDto> product = productService.getProductById(productVariantDto.getProduct_id());
+        Optional<ProductDto> product = productService.getProductById(productVariantDto.getProductId());
         if (product.isEmpty()) {
             throw new ProductException("Product not found");
         }
@@ -77,7 +77,7 @@ public class ProductVariantController {
     @Operation(summary = "Update product variant", description = "Requires ADMIN authority")
     public ProductVariantVo updateProductVariant(@PathVariable Integer id, ProductVariantDto productVariantDto, HttpServletRequest request){
         productVariantDto.setId(id);
-        Optional<ProductDto> product = productService.getProductById(productVariantDto.getProduct_id());
+        Optional<ProductDto> product = productService.getProductById(productVariantDto.getProductId());
         if (product.isEmpty()) {
             throw new ProductException("Product not found");
         }

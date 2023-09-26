@@ -34,6 +34,8 @@ public class ProductVariantVo {
 
     private boolean inStock;
 
+    private double purchasePrice;
+
     public ProductVariantVo(ProductVariant entity) {
         this.id = entity.getId();
         this.size = entity.getSize();
@@ -46,5 +48,6 @@ public class ProductVariantVo {
         this.productId = entity.getProduct().getId();
         this.inStock = entity.isInStock();
         this.quantity = entity.getQuantity();
+        this.purchasePrice = entity.getPurchasePrice();
     }
 }

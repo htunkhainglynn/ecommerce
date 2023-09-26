@@ -1,6 +1,5 @@
 package com.project.ecommerce.service.implementation;
 
-import com.project.ecommerce.dto.ExpenseDto;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.entitiy.Expense;
 import com.project.ecommerce.entitiy.Product;
@@ -52,7 +51,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     @Override
     @PreAuthorize("hasAuthority('ADMIN')")
     public ProductVariantVo saveProductVariant(ProductVariantDto productVariantDto) {
-        Product product = productRepo.getReferenceById(productVariantDto.getProduct_id());
+        Product product = productRepo.getReferenceById(productVariantDto.getProductId());
         int oldQuantity = 0;
 
         // update case

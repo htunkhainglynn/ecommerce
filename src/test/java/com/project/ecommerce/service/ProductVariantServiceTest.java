@@ -51,7 +51,7 @@ public class ProductVariantServiceTest {
                                                         .price(price)
                                                         .inStock(inStock)
                                                         .quantity(quantity)
-                                                        .product_id(productId)
+                                                        .productId(productId)
                                                         .imageUrl(imageUrl)
                                                         .purchasePrice(purchasePrice)
                                                         .build();
@@ -116,7 +116,7 @@ public class ProductVariantServiceTest {
                                                         .purchasePrice(purchasePrice)
                                                         .inStock(in_stock)
                                                         .quantity(quantity)
-                                                        .product_id(product_id)
+                                                        .productId(product_id)
                                                         .imageUrl(image_url)
                                                         .purchasePrice(purchasePrice)
                                                         .build();

@@ -50,6 +50,7 @@ This is a comprehensive documentation for the Ecommerce project, a web applicati
 2. Create a Docker images using the Dockerfiles.
 
    ```shell
+   cd ecommerce
    cd custom-rabbitmq-image
    docker build -t custom-rabbitmq-image .
    cd ../
