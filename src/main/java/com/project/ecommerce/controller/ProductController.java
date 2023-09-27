@@ -65,19 +65,8 @@ public class ProductController {
     // Endpoint to create a new product
     @PostMapping
     @Operation(summary = "Create product", description = "Requires ADMIN authority")
-    public ResponseEntity<ProductDto> createProduct(ProductDto product,
-                                                    HttpServletRequest request) {
-        // upload image & set url to each product variant
-        product.getProductVariants().forEach(
-                productVariant -> {
-                    try {
-                        cloudinaryService.uploadAndSetUrl(product.getSku(), productVariant, request);
-                    } catch (Exception e) {
-                        throw new ProductException("Error uploading image");
-                    }
-                }
-        );
-
+    public ResponseEntity<ProductDto> createProduct(ProductDto product, HttpServletRequest request) {
+        /* Upload and set image using aspect */
         ProductDto result = productService.saveProduct(product);
         return ResponseEntity.ok(result);
     }
