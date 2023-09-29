@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.ExpenseDto;
 import com.project.ecommerce.dto.ProductDto;
@@ -29,7 +29,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/api/v1/product-variants")
 @Api(value = "Product Variant Management")
 @Slf4j
-public class ProductVariantController {
+public class ProductVariantApi {
     private final ProductVariantService  productVariantService;
 
     private final ProductService productService;
@@ -39,10 +39,10 @@ public class ProductVariantController {
     private final CloudinaryService cloudinaryService;
 
     @Autowired
-    public ProductVariantController(ProductVariantService productVariantService,
-                                    ProductService productService,
-                                    ExpenseService expenseService,
-                                    CloudinaryService cloudinaryService) {
+    public ProductVariantApi(ProductVariantService productVariantService,
+                             ProductService productService,
+                             ExpenseService expenseService,
+                             CloudinaryService cloudinaryService) {
         this.productVariantService = productVariantService;
         this.productService = productService;
         this.expenseService = expenseService;

@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.UserDetailDto;
 import com.project.ecommerce.dto.UserDto;
@@ -16,12 +16,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/users")
 @Api(value = "User Management")
-public class UserController {
+public class UserApi {
 
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserApi(UserService userService) {
         this.userService = userService;
     }
 

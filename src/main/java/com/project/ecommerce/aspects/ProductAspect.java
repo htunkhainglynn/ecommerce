@@ -21,7 +21,7 @@ public class ProductAspect {
         this.cloudinaryService = cloudinaryService;
     }
 
-    @Before("execution(* com.project.ecommerce.controller.ProductController.createProduct(..))")
+    @Before("execution(* com.project.ecommerce.api.ProductApi.createProduct(..))")
     public void uploadProductImage(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         ProductDto product = (ProductDto) args[0];

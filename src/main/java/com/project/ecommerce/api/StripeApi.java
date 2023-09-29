@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.ecommerce.dto.StripeDto;
@@ -19,11 +19,11 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/api/v1/stripe")
 @Api(value = "Stripe Management")
-public class StripeController {
+public class StripeApi {
 
     private final StripeService stripeService;
     @Autowired
-    public StripeController(StripeService stripeService) {
+    public StripeApi(StripeService stripeService) {
         this.stripeService = stripeService;
     }
 

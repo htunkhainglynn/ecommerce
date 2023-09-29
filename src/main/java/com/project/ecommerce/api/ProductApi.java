@@ -1,7 +1,6 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.ProductDto;
-import com.project.ecommerce.exception.ProductException;
 import com.project.ecommerce.service.CloudinaryService;
 import com.project.ecommerce.service.ProductService;
 import com.project.ecommerce.utils.PagerResult;
@@ -20,14 +19,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/products")
 @Api(value = "Product Management")
-public class ProductController {
+public class ProductApi {
 
     private final ProductService productService;
 
     private final CloudinaryService cloudinaryService;
 
     @Autowired
-    public ProductController(ProductService productService, CloudinaryService cloudinaryService) {
+    public ProductApi(ProductService productService, CloudinaryService cloudinaryService) {
         this.productService = productService;
         this.cloudinaryService = cloudinaryService;
     }

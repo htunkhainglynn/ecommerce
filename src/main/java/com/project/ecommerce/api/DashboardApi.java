@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.entitiy.balance.Balance;
 import com.project.ecommerce.service.DashboardService;
@@ -23,13 +23,13 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/dashboard")
-public class DashboardController {
+public class DashboardApi {
 
     private final DashboardService dashboardService;
     private final ReportService reportService;
 
     @Autowired
-    public DashboardController(DashboardService dashboardService, ReportService reportService) {
+    public DashboardApi(DashboardService dashboardService, ReportService reportService) {
         this.dashboardService = dashboardService;
         this.reportService = reportService;
     }

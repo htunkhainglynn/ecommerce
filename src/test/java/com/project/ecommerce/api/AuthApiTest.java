@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.AuthenticationRequest;
 import org.junit.jupiter.api.*;
@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Sql(scripts = {"/sql/init-database.sql", "/sql/user.sql"})
-public class AuthControllerTest {
+public class AuthApiTest {
 
     private WebTestClient client;
 
@@ -82,6 +82,24 @@ public class AuthControllerTest {
     @Test
     @Order(4)
     void test_sign_in_invalid_password() {
+        AuthenticationRequest request = AuthenticationRequest.builder()
+                .username("admin")
+                .password("passwordxxx")
+                .build();
+
+        Map<Object, Object> result = client.post().uri("/auth/signin")
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isUnauthorized()
+                .expectBody(Map.class).returnResult().getResponseBody();
+
+        assertThat(result, notNullValue());
+        assertThat(result.get("message"), equalTo("Invalid username/email or password supplied"));
+    }
+
+    @Test
+    @Order(5)
+    void test_invalid_email() {
         AuthenticationRequest request = AuthenticationRequest.builder()
                 .username("admin")
                 .password("passwordxxx")

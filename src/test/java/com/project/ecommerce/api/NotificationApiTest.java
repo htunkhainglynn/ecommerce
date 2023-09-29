@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 
 import static org.mockito.Mockito.when;
@@ -23,7 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-class NotificationControllerTest {
+class NotificationApiTest {
 
     private MockMvc mockMvc;
 
@@ -31,12 +31,12 @@ class NotificationControllerTest {
     private NotificationService notificationService;
 
     @InjectMocks
-    private NotificationController notificationController;
+    private NotificationApi notificationApi;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(notificationController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(notificationApi).build();
     }
 
     @Test

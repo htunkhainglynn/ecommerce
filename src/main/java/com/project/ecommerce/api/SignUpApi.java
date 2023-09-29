@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.SignUpDto;
 import com.project.ecommerce.service.UserService;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/signup")
 @Api(value = "Sign Up Management")
-public class SignUpController {
+public class SignUpApi {
 
     private final UserService userService;
 
     @Autowired
-    public SignUpController(UserService userService) {
+    public SignUpApi(UserService userService) {
         this.userService = userService;
     }
 

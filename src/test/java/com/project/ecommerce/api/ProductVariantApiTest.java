@@ -1,11 +1,10 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.ExpenseDto;
 import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.entitiy.Role;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +18,7 @@ import java.util.List;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Sql(scripts = {"/sql/init-database.sql", "/sql/product.sql"})
-public class ProductVariantControllerTest {
+public class ProductVariantApiTest {
 
     private WebTestClient client;
 

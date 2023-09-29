@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.AddressDto;
 import com.project.ecommerce.entitiy.Address;
@@ -13,12 +13,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/addresses")
-public class AddressController {
+public class AddressApi {
 
     private final AddressService addressService;
 
     @Autowired
-    public AddressController(AddressService addressService) {
+    public AddressApi(AddressService addressService) {
         this.addressService = addressService;
     }
 

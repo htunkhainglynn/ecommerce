@@ -36,7 +36,7 @@ public class ProductQuantityUpdateAspect {
     }
 
     @AfterReturning(
-            pointcut = "execution(* com.project.ecommerce.controller.OrderController.addOrder(..)) && args(orderDto)",
+            pointcut = "execution(* com.project.ecommerce.api.OrderApi.addOrder(..)) && args(orderDto)",
             returning = "result",
             argNames = "result,orderDto")
     public void updateProductVariantQuantity(Object result, OrderDetailDto orderDto) throws JsonProcessingException {

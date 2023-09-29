@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.ProductDto;
 import com.project.ecommerce.dto.ReviewDto;
@@ -18,14 +18,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/reviews")
 @Api(value = "Review Management")
-public class ReviewController {
+public class ReviewApi {
 
     private final ReviewService reviewService;
 
     private final ProductService productService;
 
     @Autowired
-    public ReviewController(ReviewService reviewService, ProductService productService) {
+    public ReviewApi(ReviewService reviewService, ProductService productService) {
         this.reviewService = reviewService;
         this.productService = productService;
     }

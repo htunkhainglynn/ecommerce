@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.UserDetailDto;
 import com.project.ecommerce.service.CloudinaryService;
@@ -22,7 +22,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @Slf4j
 @RequestMapping("/api/v1/profile")
 @Api(value = "Profile Management")
-public class ProfileController {
+public class ProfileApi {
 
     private final CloudinaryService cloudinaryService;
 
@@ -31,9 +31,9 @@ public class ProfileController {
     private final OrderService orderService;
 
     @Autowired
-    public ProfileController(CloudinaryService cloudinaryService,
-                             UserService userService,
-                             OrderService orderService) {
+    public ProfileApi(CloudinaryService cloudinaryService,
+                      UserService userService,
+                      OrderService orderService) {
         this.cloudinaryService = cloudinaryService;
         this.userService = userService;
         this.orderService = orderService;

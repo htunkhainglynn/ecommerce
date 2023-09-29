@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.UserDetailDto;
 import com.project.ecommerce.dto.UserDto;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @WithMockUser(username = "admin", authorities = {"ADMIN"})
 @Sql(scripts = {"/sql/init-database.sql", "/sql/user.sql"})
-public class UserControllerTest {
+public class UserApiTest {
 
     WebTestClient client;
 

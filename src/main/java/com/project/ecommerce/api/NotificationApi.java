@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.entitiy.Notification;
 import com.project.ecommerce.service.NotificationService;
@@ -16,12 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/notifications")
 @Api(value = "Notification Management")
-public class NotificationController {
+public class NotificationApi {
 
     private final NotificationService notificationService;
 
     @Autowired
-    public NotificationController(NotificationService notificationService) {
+    public NotificationApi(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 

@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.AuthenticationRequest;
 import com.project.ecommerce.entitiy.Role;
@@ -26,7 +26,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/auth")
 @Api(value = "Authentication Management")
-public class AuthController {
+public class AuthApi {
 
     private final AuthenticationManager authenticationManager;
 
@@ -37,7 +37,7 @@ public class AuthController {
     private final UserService userService;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users, UserService userService) {
+    public AuthApi(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = users;

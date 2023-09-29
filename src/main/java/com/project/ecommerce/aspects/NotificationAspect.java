@@ -46,7 +46,7 @@ public class NotificationAspect {
     }
 
     @AfterReturning(
-            pointcut = "execution(* com.project.ecommerce.controller.OrderController.addOrder(..)) && args(orderDto)",
+            pointcut = "execution(* com.project.ecommerce.api.OrderApi.addOrder(..)) && args(orderDto)",
             argNames = "result, orderDto",
             returning = "result"
     )
@@ -65,7 +65,7 @@ public class NotificationAspect {
     }
 
     @AfterReturning(
-            pointcut = "execution(* com.project.ecommerce.controller.OrderController.updateOrderStatus(..))",
+            pointcut = "execution(* com.project.ecommerce.api.OrderApi.updateOrderStatus(..))",
             returning = "updatedResult"
     )
     public void sendNotificationAfterOrderStatusUpdate(Object updatedResult) throws JsonProcessingException {

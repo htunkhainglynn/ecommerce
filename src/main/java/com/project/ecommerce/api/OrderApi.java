@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.dto.OrderItemDto;
@@ -23,12 +23,12 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/api/v1/orders")
 @Api(value = "Order Management")
-public class OrderController {
+public class OrderApi {
 
     private final OrderService orderService;
 
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderApi(OrderService orderService) {
         this.orderService = orderService;
     }
 

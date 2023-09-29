@@ -1,4 +1,4 @@
-package com.project.ecommerce.controller;
+package com.project.ecommerce.api;
 
 import com.project.ecommerce.service.QueueInfoService;
 import io.swagger.annotations.Api;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/queue")
 @Api(value = "Queue Management")
-public class QueueController {
+public class QueueApi {
 
     private final QueueInfoService queueInfoService;
 
     @Autowired
-    public QueueController(QueueInfoService queueInfoService) {
+    public QueueApi(QueueInfoService queueInfoService) {
         this.queueInfoService = queueInfoService;
     }
 
