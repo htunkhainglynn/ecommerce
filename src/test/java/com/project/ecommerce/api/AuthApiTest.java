@@ -1,6 +1,7 @@
 package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.AuthenticationRequest;
+import com.project.ecommerce.dto.ChangePassword;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
@@ -100,12 +101,32 @@ public class AuthApiTest {
     @Test
     @Order(5)
     void test_change_password() {
-        String newPassword = "newpassword";
-        String oldPassword = "password";
+        ChangePassword changePassword = ChangePassword.builder()
+                .oldPassword("password")
+                .newPassword("password123")
+                .build();
 
-        client.put().uri("/auth/changePassword", oldPassword, newPassword)
+        client.put().uri("/auth/changePassword", changePassword)
                 .exchange()
                 .expectStatus().isOk();
+
+        AuthenticationRequest request = AuthenticationRequest.builder().username("admin").password("password123").build();
+
+        Map<Object, Object> result = client.post().uri("/auth/signin")
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Map.class).returnResult().getResponseBody();
+
+        changePassword = ChangePassword.builder()
+                .oldPassword("password123")
+                .newPassword("password123")
+                .build();
+
+        // assert throw exception
+        client.put().uri("/auth/changePassword", changePassword)
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
 }
