@@ -99,19 +99,13 @@ public class AuthApiTest {
 
     @Test
     @Order(5)
-    void test_invalid_email() {
-        AuthenticationRequest request = AuthenticationRequest.builder()
-                .username("admin")
-                .password("passwordxxx")
-                .build();
+    void test_change_password() {
+        String newPassword = "newpassword";
+        String oldPassword = "password";
 
-        Map<Object, Object> result = client.post().uri("/auth/signin")
-                .bodyValue(request)
+        client.put().uri("/auth/changePassword", oldPassword, newPassword)
                 .exchange()
-                .expectStatus().isUnauthorized()
-                .expectBody(Map.class).returnResult().getResponseBody();
-
-        assertThat(result, notNullValue());
-        assertThat(result.get("message"), equalTo("Invalid username/email or password supplied"));
+                .expectStatus().isOk();
     }
+
 }

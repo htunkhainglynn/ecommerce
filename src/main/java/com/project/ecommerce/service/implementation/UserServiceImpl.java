@@ -157,7 +157,10 @@ public class UserServiceImpl implements UserService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.getReferenceByUsername(username);
         if (user.isPresent()) {
-            if (passwordEncoder.matches(oldPassword, user.get().getPassword())) {
+            if (oldPassword.equals(newPassword)) {
+                throw new UserException("New password cannot be the same as old password");
+            }
+            else if (passwordEncoder.matches(oldPassword, user.get().getPassword())) {
                 user.get().setPassword(passwordEncoder.encode(newPassword));
                 userRepository.save(user.get());
             } else {

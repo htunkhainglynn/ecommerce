@@ -1,6 +1,7 @@
 package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.AuthenticationRequest;
+import com.project.ecommerce.dto.ChangePassword;
 import com.project.ecommerce.entitiy.Role;
 import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.exception.UserException;
@@ -84,8 +85,8 @@ public class AuthApi {
 
     @PutMapping
     @Operation(summary = "Change Password", description = "Need Admin or User authority")
-    void changePassword(String oldPassword, String newPassword) {
-        userService.changePassword(oldPassword, newPassword);
+    void changePassword(@RequestBody ChangePassword changePassword) {
+        userService.changePassword(changePassword.getOldPassword(), changePassword.getNewPassword());
     }
 
 }

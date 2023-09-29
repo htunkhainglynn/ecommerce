@@ -227,6 +227,17 @@ public class UserServiceTest {
         assertTrue(passwordEncoder.matches("user1", user.get().getPassword()));
     }
 
+    @Order(10)
+    @Test
+    void test_change_password_same() {
+        setAuthentication("user1", Role.USER);
+        Optional<User> user = userRepository.getReferenceByUsername("user1");
+        assertTrue(user.isPresent());
+        assertTrue(passwordEncoder.matches("password", user.get().getPassword()));
+
+        assertThrows(UserException.class, () -> userService.changePassword("password", "password"));
+    }
+
     void setAuthentication(String username, Role role) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of(role::name));
         SecurityContextHolder.getContext().setAuthentication(authentication);
