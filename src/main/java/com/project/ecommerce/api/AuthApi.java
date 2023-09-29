@@ -83,7 +83,7 @@ public class AuthApi {
         }
     }
 
-    @PutMapping
+    @PutMapping("/change-password")
     @Operation(summary = "Change Password", description = "Need Admin or User authority")
     void changePassword(@RequestBody ChangePassword changePassword) {
         userService.changePassword(changePassword.getOldPassword(), changePassword.getNewPassword());

@@ -106,7 +106,7 @@ public class AuthApiTest {
                 .newPassword("password123")
                 .build();
 
-        client.put().uri("/auth/changePassword", changePassword)
+        client.put().uri("/auth/change-password", changePassword)
                 .exchange()
                 .expectStatus().isOk();
 
@@ -124,7 +124,7 @@ public class AuthApiTest {
                 .build();
 
         // assert throw exception
-        client.put().uri("/auth/changePassword", changePassword)
+        client.put().uri("/auth/change-password", changePassword)
                 .exchange()
                 .expectStatus().isBadRequest();
     }
