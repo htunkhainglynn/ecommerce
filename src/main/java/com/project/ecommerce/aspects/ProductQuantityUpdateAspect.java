@@ -1,7 +1,9 @@
 package com.project.ecommerce.aspects;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.service.ProductService;
+import com.project.ecommerce.service.ProductVariantService;
 import com.project.ecommerce.vo.OrderDetailVo;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -9,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Aspect
@@ -18,16 +22,24 @@ public class ProductQuantityUpdateAspect {
 
     private final ProductService productService;
 
+    private final ProductVariantService productVariantService;
+
+    private final NotificationAspect notificationAspect;
+
     @Autowired
-    public ProductQuantityUpdateAspect(ProductService productService) {
+    public ProductQuantityUpdateAspect(ProductService productService,
+                                       ProductVariantService productVariantService,
+                                       NotificationAspect notificationAspect) {
         this.productService = productService;
+        this.notificationAspect = notificationAspect;
+        this.productVariantService = productVariantService;
     }
 
     @AfterReturning(
             pointcut = "execution(* com.project.ecommerce.controller.OrderController.addOrder(..)) && args(orderDto)",
             returning = "result",
             argNames = "result,orderDto")
-    public void updateProductVariantQuantity(Object result, OrderDetailDto orderDto) {
+    public void updateProductVariantQuantity(Object result, OrderDetailDto orderDto) throws JsonProcessingException {
         if (result instanceof ResponseEntity) {
             ResponseEntity<OrderDetailVo> responseEntity = (ResponseEntity<OrderDetailVo>) result;
 

@@ -22,4 +22,6 @@ public interface UserService {
     void deleteUserById(Long id);
 
     Long getRoleCount();
+
+    void changePassword(String oldPassword, String newPassword);
 }

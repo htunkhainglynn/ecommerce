@@ -106,7 +106,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public Optional<ProductVariantVo> getProductVariantById(Integer id) {
         return productVariantRepository.findById(id)
                 .map(ProductVariantVo::new);

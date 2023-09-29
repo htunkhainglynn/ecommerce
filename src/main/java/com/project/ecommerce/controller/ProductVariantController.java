@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -57,7 +58,7 @@ public class ProductVariantController {
 
     @PostMapping
     @Operation(summary = "Create product variant", description = "Requires ADMIN authority")
-    public ResponseEntity<ProductVariantVo> createProductVariant(ProductVariantDto productVariantDto,
+    public ResponseEntity<ProductVariantVo> createProductVariant(@Validated ProductVariantDto productVariantDto,
                                                  HttpServletRequest request){
         Optional<ProductDto> product = productService.getProductById(productVariantDto.getProductId());
         if (product.isEmpty()) {

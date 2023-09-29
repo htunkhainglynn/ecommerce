@@ -2,6 +2,7 @@ package com.project.ecommerce.service;
 
 import com.project.ecommerce.entitiy.QueueInfo;
 import com.project.ecommerce.entitiy.User;
+import com.project.ecommerce.exception.UserException;
 import com.project.ecommerce.repo.QueueInfoRepository;
 import com.project.ecommerce.repo.UserRepository;
 import jakarta.transaction.Transactional;
@@ -44,7 +45,7 @@ public class DynamicQueueManager {
         rabbitAdmin.declareQueue(queue);
 
         // find customer
-        User user = userRepository.getReferenceByUsername(username).orElseThrow(() -> new RuntimeException("User not found."));
+        User user = userRepository.getReferenceByUsername(username).orElseThrow(() -> new UserException("User not found."));
 
         // save the queue info
         queueInfoRepository.save(QueueInfo.builder()

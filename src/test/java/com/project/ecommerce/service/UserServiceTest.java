@@ -6,6 +6,7 @@ import com.project.ecommerce.dto.UserDto;
 import com.project.ecommerce.entitiy.Role;
 import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.exception.UserException;
+import com.project.ecommerce.repo.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -36,6 +37,9 @@ public class UserServiceTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -206,6 +210,21 @@ public class UserServiceTest {
 
         assertEquals(1, userDtoPage.getTotalElements());
         assertEquals(1, userDtoPage.getContent().size());
+    }
+
+    @Order(9)
+    @Test
+    void test_change_password() {
+        setAuthentication("user1", Role.USER);
+        Optional<User> user = userRepository.getReferenceByUsername("user1");
+        assertTrue(user.isPresent());
+        assertTrue(passwordEncoder.matches("password", user.get().getPassword()));
+
+        userService.changePassword("password", "user1");
+
+        user = userRepository.getReferenceByUsername("user1");
+        assertTrue(user.isPresent());
+        assertTrue(passwordEncoder.matches("user1", user.get().getPassword()));
     }
 
     void setAuthentication(String username, Role role) {

@@ -90,12 +90,12 @@ public class ProductServiceTest {
     @Order(2)
     @Test
     void testGetAllProducts() {
-        Page<ProductDto> productDtoPage =  productService.getAllProducts(null,
+        Page<ProductDto> productDtoPage =  productService.getAllProducts("Tech",
                                         true, Optional.empty(), Optional.empty());
 
-        assertThat(productDtoPage.getTotalElements(), equalTo(2L));
+        assertThat(productDtoPage.getTotalElements(), equalTo(1L));
         assertThat(productDtoPage.getTotalPages(), equalTo(1));
-        assertThat(productDtoPage.getContent(), hasSize(2));
+        assertThat(productDtoPage.getContent(), hasSize(1));
 
         productDtoPage =  productService.getAllProducts(null,
                 false, Optional.empty(), Optional.empty());

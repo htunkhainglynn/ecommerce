@@ -6,6 +6,7 @@ import com.project.ecommerce.entitiy.User;
 import com.project.ecommerce.exception.UserException;
 import com.project.ecommerce.repo.UserRepository;
 import com.project.ecommerce.security.JwtTokenProvider;
+import com.project.ecommerce.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,16 @@ public class AuthController {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final UserRepository users;
+    private final UserRepository userRepository;
+
+    private final UserService userService;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.users = users;
+        this.userRepository = users;
+        this.userService = userService;
     }
 
     @PostMapping("/signin")
@@ -48,7 +52,7 @@ public class AuthController {
             String password = data.getPassword();
 
             // Check if the input is an email or username
-            Optional<User> userReference = this.users.getReferenceByUsernameOrEmail(usernameOrEmail);
+            Optional<User> userReference = this.userRepository.getReferenceByUsernameOrEmail(usernameOrEmail);
             if (userReference.isEmpty()) {
                 throw new BadCredentialsException("Invalid username/email or password supplied");
             }
@@ -76,6 +80,12 @@ public class AuthController {
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username/email or password supplied");
         }
+    }
+
+    @PutMapping
+    @Operation(summary = "Change Password", description = "Need Admin or User authority")
+    void changePassword(String oldPassword, String newPassword) {
+        userService.changePassword(oldPassword, newPassword);
     }
 
 }

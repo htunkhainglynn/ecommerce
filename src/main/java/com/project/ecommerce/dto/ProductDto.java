@@ -3,6 +3,7 @@ package com.project.ecommerce.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.ecommerce.entitiy.Organization;
 import com.project.ecommerce.entitiy.Product;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

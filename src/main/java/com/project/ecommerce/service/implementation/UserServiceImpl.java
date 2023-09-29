@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -149,6 +150,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long getRoleCount() {
        return userRepository.getRoleCount();
+    }
+
+    @Override
+    public void changePassword(String oldPassword, String newPassword) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> user = userRepository.getReferenceByUsername(username);
+        if (user.isPresent()) {
+            if (passwordEncoder.matches(oldPassword, user.get().getPassword())) {
+                user.get().setPassword(passwordEncoder.encode(newPassword));
+                userRepository.save(user.get());
+            } else {
+                throw new UserException("Old password is incorrect");
+            }
+        } else {
+            throw new UserException("User not found");
+        }
     }
 
 }

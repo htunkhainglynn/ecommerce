@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -54,7 +55,7 @@ public class ReviewController {
 
     @PostMapping("/product/{productId}")
     @Operation(summary = "Create review by product id", description = "Requires USER authority")
-    public ResponseEntity<ReviewDto> createReviewByProductId(@PathVariable Long productId, @RequestBody ReviewDto review) {
+    public ResponseEntity<ReviewDto> createReviewByProductId(@PathVariable Long productId, @RequestBody @Validated ReviewDto review) {
         Optional<ProductDto> product = productService.getProductById(productId);
         if (product.isPresent()) {
             review.setProductId(productId);

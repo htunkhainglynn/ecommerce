@@ -3,6 +3,7 @@ package com.project.ecommerce.aspects;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.entitiy.Notification;
 import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.service.NotificationService;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Aspect
@@ -44,10 +46,11 @@ public class NotificationAspect {
     }
 
     @AfterReturning(
-            pointcut = "execution(* com.project.ecommerce.controller.OrderController.addOrder(..))",
+            pointcut = "execution(* com.project.ecommerce.controller.OrderController.addOrder(..)) && args(orderDto)",
+            argNames = "result, orderDto",
             returning = "result"
     )
-    public void sendNotificationAfterOrderCreation(Object result) throws JsonProcessingException {
+    public void sendNotificationAfterOrderCreation(Object result, OrderDetailDto orderDto) throws JsonProcessingException {
         if (result instanceof ResponseEntity) {
             ResponseEntity<OrderDetailVo> responseEntity = (ResponseEntity<OrderDetailVo>) result;
 
