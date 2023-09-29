@@ -2,13 +2,18 @@ package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.AuthenticationRequest;
 import com.project.ecommerce.dto.ChangePassword;
+import com.project.ecommerce.entitiy.Role;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -101,16 +106,19 @@ public class AuthApiTest {
     @Test
     @Order(5)
     void test_change_password() {
+        setAuthentication("user2", Role.USER);
+
         ChangePassword changePassword = ChangePassword.builder()
                 .oldPassword("password")
                 .newPassword("password123")
                 .build();
 
-        client.put().uri("/auth/change-password", changePassword)
+        client.put().uri("/auth/change-password")
+                .bodyValue(changePassword)
                 .exchange()
                 .expectStatus().isOk();
 
-        AuthenticationRequest request = AuthenticationRequest.builder().username("admin").password("password123").build();
+        AuthenticationRequest request = AuthenticationRequest.builder().username("user2").password("password123").build();
 
         Map<Object, Object> result = client.post().uri("/auth/signin")
                 .bodyValue(request)
@@ -127,6 +135,11 @@ public class AuthApiTest {
         client.put().uri("/auth/change-password", changePassword)
                 .exchange()
                 .expectStatus().isBadRequest();
+    }
+
+    void setAuthentication(String username, Role role) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of(role::name));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 }

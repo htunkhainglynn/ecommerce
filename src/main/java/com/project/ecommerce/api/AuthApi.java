@@ -85,8 +85,9 @@ public class AuthApi {
 
     @PutMapping("/change-password")
     @Operation(summary = "Change Password", description = "Need Admin or User authority")
-    void changePassword(@RequestBody ChangePassword changePassword) {
+    ResponseEntity<Void> changePassword(@RequestBody ChangePassword changePassword) {
         userService.changePassword(changePassword.getOldPassword(), changePassword.getNewPassword());
+        return ResponseEntity.ok().build();
     }
 
 }
