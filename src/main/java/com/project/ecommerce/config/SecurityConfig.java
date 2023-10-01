@@ -1,5 +1,6 @@
 package com.project.ecommerce.config;
 
+import com.project.ecommerce.entitiy.Role;
 import com.project.ecommerce.security.JwtTokenFilter;
 import com.project.ecommerce.security.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
@@ -36,11 +37,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                     request
                             .requestMatchers("/auth/signin").permitAll()
+                            .requestMatchers("/signup").permitAll()
                             .requestMatchers("/api/v1/products").permitAll()
                             .requestMatchers("/api/v1/product-variants").permitAll()
                             .requestMatchers("api/v1/products/*/product-variants").permitAll()
-                            .requestMatchers("/api/v1/**").hasAnyAuthority("USER", "ADMIN")
-                            .anyRequest().authenticated()
+                            .requestMatchers("/api/v1/**").authenticated()
+                            .anyRequest().permitAll()
                 );
 
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
