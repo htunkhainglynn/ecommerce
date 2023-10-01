@@ -136,7 +136,7 @@ public class ProductApiTest {
 
     @Order(4)
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void test_update_product_availability() {
         client.put().uri("/api/v1/products/1/availability").exchange().expectStatus().isOk();
     }

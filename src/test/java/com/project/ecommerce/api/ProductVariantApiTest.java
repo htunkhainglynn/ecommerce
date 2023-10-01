@@ -30,6 +30,7 @@ public class ProductVariantApiTest {
 
     @Test
     @Order(1)
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void test_get_product_variant_by_id() {
         ProductVariantDto result = client.get().uri("/api/v1/product-variants/1")
                 .exchange()
@@ -46,7 +47,7 @@ public class ProductVariantApiTest {
 
     @Order(2)
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void get_expense_history() {
         List<ExpenseDto> result = client.get().uri("/api/v1/product-variants/1/expense-history")
                 .exchange()
@@ -61,7 +62,7 @@ public class ProductVariantApiTest {
 
     @Order(3)
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void update_expense_history() {
         ExpenseDto expenseDto = ExpenseDto.builder()
                 .purchasePrice(20.00)
