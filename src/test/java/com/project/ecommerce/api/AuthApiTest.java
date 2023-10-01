@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
@@ -105,9 +106,8 @@ public class AuthApiTest {
 
     @Test
     @Order(5)
+    @WithMockUser(username = "user2", authorities = {"USER"})
     void test_change_password() {
-        setAuthentication("user2", Role.USER);
-
         ChangePassword changePassword = ChangePassword.builder()
                 .oldPassword("password")
                 .newPassword("password123")
@@ -135,11 +135,6 @@ public class AuthApiTest {
         client.put().uri("/auth/change-password", changePassword)
                 .exchange()
                 .expectStatus().isBadRequest();
-    }
-
-    void setAuthentication(String username, Role role) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of(role::name));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
@@ -30,11 +31,6 @@ public class ProductApiTest {
     @BeforeEach
     void setUp(WebApplicationContext context) {
         client = MockMvcWebTestClient.bindToApplicationContext(context).build();
-    }
-
-    void setAuthentication(String username, Role role) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of(role::name));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Order(1)
@@ -140,8 +136,8 @@ public class ProductApiTest {
 
     @Order(4)
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void test_update_product_availability() {
-        setAuthentication("admin", Role.ADMIN);
         client.put().uri("/api/v1/products/1/availability").exchange().expectStatus().isOk();
     }
 

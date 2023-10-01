@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
@@ -36,16 +37,10 @@ public class OrderApiTest {
         client = MockMvcWebTestClient.bindToApplicationContext(context).build();
     }
 
-    void setAuthentication(String username, Role role) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of(role::name));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
     @Test
     @Order(1)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void test_get_all_orders() {
-        setAuthentication("admin", Role.ADMIN);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         String authority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
@@ -74,9 +69,8 @@ public class OrderApiTest {
 
     @Test
     @Order(2)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void test_get_all_orders_by_username() {
-        setAuthentication("user", Role.USER);
         PagerResult<OrderVo> result = client.get().uri("/api/v1/orders/user/user1")
                 .exchange()
                 .expectStatus().isOk()
@@ -98,9 +92,8 @@ public class OrderApiTest {
 
     @Test
     @Order(3)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void test_get_order_by_id() {
-        setAuthentication("user1", Role.USER);
         OrderDetailVo result = client.get().uri("/api/v1/orders/1")
                 .exchange()
                 .expectStatus().isOk()
@@ -115,9 +108,8 @@ public class OrderApiTest {
 
     @Test
     @Order(4)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @WithMockUser(username = "user", authorities = {"USER"})
     void test_get_order_items_by_order_id() {
-        setAuthentication("user1", Role.USER);
         List<OrderItemDto> result = client.get().uri("/api/v1/orders/order-items/1")
                 .exchange()
                 .expectStatus().isOk()
@@ -130,9 +122,8 @@ public class OrderApiTest {
 
     @Test
     @Order(5)
-    @PreAuthorize("hasAuthority('USER')")
+    @WithMockUser(username = "user", authorities = {"USER"})
     void test_update_order_status() {
-        setAuthentication("user1", Role.USER);
         OrderDetailVo result = client.put().uri("/api/v1/orders/1")
                 .exchange()
                 .expectStatus().isOk()

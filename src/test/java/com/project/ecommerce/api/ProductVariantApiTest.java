@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
@@ -22,11 +23,6 @@ public class ProductVariantApiTest {
 
     private WebTestClient client;
 
-    void setAuthentication(String username, Role role) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of(role::name));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
     @BeforeEach
     void setUp(WebApplicationContext context) {
         client = MockMvcWebTestClient.bindToApplicationContext(context).build();
@@ -35,8 +31,6 @@ public class ProductVariantApiTest {
     @Test
     @Order(1)
     void test_get_product_variant_by_id() {
-        setAuthentication("admin", Role.ADMIN);
-
         ProductVariantDto result = client.get().uri("/api/v1/product-variants/1")
                 .exchange()
                 .expectStatus().isOk()
@@ -52,9 +46,8 @@ public class ProductVariantApiTest {
 
     @Order(2)
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void get_expense_history() {
-        setAuthentication("admin", Role.ADMIN);
-
         List<ExpenseDto> result = client.get().uri("/api/v1/product-variants/1/expense-history")
                 .exchange()
                 .expectStatus().isOk()
@@ -68,9 +61,8 @@ public class ProductVariantApiTest {
 
     @Order(3)
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void update_expense_history() {
-        setAuthentication("admin", Role.ADMIN);
-
         ExpenseDto expenseDto = ExpenseDto.builder()
                 .purchasePrice(20.00)
                 .quantity(2)
