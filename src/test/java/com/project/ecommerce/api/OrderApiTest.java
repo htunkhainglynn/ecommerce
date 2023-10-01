@@ -44,6 +44,14 @@ public class OrderApiTest {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void test_get_all_orders() {
         setAuthentication("admin", Role.ADMIN);
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String authority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
+
+        System.out.println("authority " + authority);
+        System.out.println("username " + username);
+
+
         PagerResult<OrderVo> result = client.get().uri("/api/v1/orders")
                 .exchange()
                 .expectStatus().isOk()
