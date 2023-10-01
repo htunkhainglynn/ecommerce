@@ -144,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
                 page.orElse(0),
                 size.orElse(10));
 
-        return orderRepository.findAllByUserUsername(username, pageRequest).map(OrderVo::new);
+        return orderRepository.findAllByUserUsernameLike(username, pageRequest).map(OrderVo::new);
     }
 
     @PreAuthorize("hasAnyAuthority('USER')")

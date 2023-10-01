@@ -21,7 +21,7 @@ public class QueueInfoServiceImpl implements QueueInfoService {
     @Transactional(readOnly = true)
     @Override
     public String getRoutingKeyByUsername(String username) {
-        return queueInfoRepository.findRoutingKeyByUsername(username).orElseThrow(() -> new RuntimeException("User not found."));
+        return queueInfoRepository.findRoutingKeyByUsername(username).orElseThrow(() -> new RuntimeException("Queue not found."));
     }
 
     @Transactional(readOnly = true)

@@ -40,6 +40,6 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     @Query("SELECT o.orderItems FROM Order o WHERE o.id = ?1")
     List<OrderItem> getOrderItemsByOrderId(Long id);
 
-    @Query("SELECT o FROM Order o WHERE o.user.username = ?1")
-    Page<Order> findAllByUserUsername(String username, PageRequest pageRequest);
+    @Query("SELECT o FROM Order o WHERE o.user.username LIKE %?1%")
+    Page<Order> findAllByUserUsernameLike(String username, PageRequest pageRequest);
 }

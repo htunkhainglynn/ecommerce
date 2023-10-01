@@ -16,7 +16,6 @@ public class OrderItemDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer productVariantId;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String productName;
 
     private int quantity;

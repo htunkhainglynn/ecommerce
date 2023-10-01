@@ -4,6 +4,7 @@ import com.project.ecommerce.dto.OrderDetailDto;
 import com.project.ecommerce.dto.OrderItemDto;
 import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.service.OrderService;
+import com.project.ecommerce.utils.PagerResult;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
 import io.swagger.annotations.Api;
@@ -34,10 +35,12 @@ public class OrderApi {
 
     @GetMapping
     @Operation(summary = "Get all orders", description = "Requires ADMIN authority")
-    public Page<OrderVo> getAllOrders(@RequestParam(required = false) String keyword,
+    public ResponseEntity<PagerResult<OrderVo>> getAllOrders(@RequestParam(required = false) String keyword,
                                       @RequestParam Optional<Integer> page,
                                       @RequestParam Optional<Integer> size) {
-        return orderService.getAllOrders(keyword, page, size);
+        Page<OrderVo> pageResult =  orderService.getAllOrders(keyword, page, size);
+        PagerResult<OrderVo> pagerResult = PagerResult.of(pageResult);
+        return ok(pagerResult);
     }
 
     @PostMapping
@@ -48,10 +51,12 @@ public class OrderApi {
 
     @GetMapping("/user/{username}")
     @Operation(summary = "Get all orders by username", description = "Requires ADMIN or USER authority")
-    public Page<OrderVo> getAllOrdersByUsername(@PathVariable String username,
-                                                 @RequestParam Optional<Integer> page,
-                                                 @RequestParam Optional<Integer> size) {
-        return orderService.getAllOrdersByUsername(username, page, size);
+    public ResponseEntity<PagerResult<OrderVo>> getAllOrdersByUsername(@PathVariable String username,
+                                                                       @RequestParam Optional<Integer> page,
+                                                                       @RequestParam Optional<Integer> size) {
+        Page<OrderVo> pageResult =  orderService.getAllOrdersByUsername(username, page, size);
+        PagerResult<OrderVo> pagerResult = PagerResult.of(pageResult);
+        return ok(pagerResult);
     }
 
     @GetMapping("/{id}")
