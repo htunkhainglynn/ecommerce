@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class DashboardTest {
 
     @Test
     @Order(1)
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testGetBalance() {
 
         // comments are used because it is based on LocalDate.now();
@@ -50,6 +52,7 @@ public class DashboardTest {
 
     @Test
     @Order(2)
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testMonthlyBalance() {
 //        List<Balance> balance = dashboardService.getMonthlyBalance(null);
 //
@@ -66,6 +69,7 @@ public class DashboardTest {
 
     @Test
     @Order(3)
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testYearlyBalance() {
 //        List<Balance> balance = dashboardService.getYearlyBalance(0, 0);
 //

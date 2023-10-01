@@ -56,7 +56,6 @@ public class  ProductServiceImpl implements ProductService {
 
     @Transactional(readOnly = true)
     @Override
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<ProductDto> getAllProducts(String keyword,
                                            Boolean isAvailable,
                                            Optional<Integer> page,
@@ -89,7 +88,6 @@ public class  ProductServiceImpl implements ProductService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Override
     public Optional<ProductDto> getProductById(Long id) {
         Optional<Product> optionalProduct = repo.findById(id);

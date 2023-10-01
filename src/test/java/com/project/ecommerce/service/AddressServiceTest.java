@@ -85,6 +85,7 @@ public class AddressServiceTest {
 
     @Order(4)
     @Test
+    @WithMockUser(authorities = {"USER"})
     void testGetAddressById() {
         Optional<Address> address = addressService.getAddressById(1L);
         assertTrue(address.isPresent());

@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -50,6 +51,7 @@ public class UserServiceTest {
     @Order(1)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/user/creation.txt", delimiter = ',')
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testCreate(boolean active, String email, String name, String password, String phoneNumber, String profilePictureURL, String username, int id) {
 
         SignUpDto signUpDto = SignUpDto.builder()
@@ -86,6 +88,7 @@ public class UserServiceTest {
     @Order(2)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/user/creation-duplicate.txt", delimiter = ',')
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testCreateDuplicate(boolean active, String email, String name, String password, String phoneNumber, String profilePictureURL, String username) {
         SignUpDto signUpDto = SignUpDto.builder()
                 .active(active)
@@ -103,6 +106,7 @@ public class UserServiceTest {
     @Order(3)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/user/find-one.txt", delimiter = ',')
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testFindOne(String email, String name, String password, String phoneNumber, String profilePictureURL, String username, boolean active, int id) {
         Optional<UserDetailDto> user = userService.getUserByUsername(username);
 
@@ -122,6 +126,7 @@ public class UserServiceTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/user/find-one-with-null.txt", delimiter = ',')
     @Order(4)
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testFindOneWithNull(String email, String name, String password, String username, boolean active, int id) {
         Optional<UserDetailDto> user = userService.getUserByUsername(username);
 
@@ -140,6 +145,7 @@ public class UserServiceTest {
 
     @Order(5)
     @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testNotFound() {
         Optional<UserDetailDto> user = userService.getUserByUsername("notfound");
 
@@ -151,6 +157,7 @@ public class UserServiceTest {
     @Order(6)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/user/update.txt", delimiter = ',')
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testUpdate(String email, String name, String password, String phoneNumber, String profilePictureURL, String username, boolean active, long id) {
         UserDetailDto userDetailDto = UserDetailDto.builder()
                 .active(active)
@@ -179,6 +186,7 @@ public class UserServiceTest {
 
     @Test
     @Order(7)
+    @WithMockUser(username = "user", authorities = {"USER"})
     void testDelete() {
         Long beforeDelete = userService.getRoleCount();
         userService.deleteUserById(1L);
@@ -191,10 +199,8 @@ public class UserServiceTest {
     @Test
     @Order(8)
     @PreAuthorize("hasAuthority('ADMIN')")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testGetAllUsers() {
-
-        setAuthentication("admin", Role.ADMIN);
-
         Page<UserDto> userDtoPage =  userService.getAllUsers(null, Optional.empty(), Optional.empty());
 
         assertEquals(3, userDtoPage.getTotalElements());
@@ -214,8 +220,8 @@ public class UserServiceTest {
 
     @Order(9)
     @Test
+    @WithMockUser(username = "user1", authorities = {"USER"})
     void test_change_password() {
-        setAuthentication("user1", Role.USER);
         Optional<User> user = userRepository.getReferenceByUsername("user1");
         assertTrue(user.isPresent());
         assertTrue(passwordEncoder.matches("password", user.get().getPassword()));
@@ -229,18 +235,13 @@ public class UserServiceTest {
 
     @Order(10)
     @Test
+    @WithMockUser(username = "user1", authorities = {"USER"})
     void test_change_password_same() {
-        setAuthentication("user1", Role.USER);
         Optional<User> user = userRepository.getReferenceByUsername("user1");
         assertTrue(user.isPresent());
         assertTrue(passwordEncoder.matches("password", user.get().getPassword()));
 
         assertThrows(UserException.class, () -> userService.changePassword("password", "password"));
-    }
-
-    void setAuthentication(String username, Role role) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, List.of(role::name));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 }

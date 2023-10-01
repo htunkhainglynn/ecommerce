@@ -36,7 +36,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<ReviewDto> getAllReviews() {
         return reviewRepo.findAll().stream()
                 .map(ReviewDto::new)  // custom mapper
@@ -45,7 +44,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Optional<ReviewDto> getReviewById(int id) {
         Optional<Review> optionalReview = reviewRepo.findById((long)id);
         return optionalReview.map(ReviewDto::new);
@@ -71,7 +69,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<ReviewDto> getReviewsByProductId(Long productId) {
         return reviewRepo.findByProductId(productId)
                 .stream()

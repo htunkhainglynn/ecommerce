@@ -112,7 +112,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public User saveUser(SignUpDto signUpDto) {
         Optional<User> optionalUser = userRepository.getReferenceByUsername(signUpDto.getUsername());
         if (optionalUser.isPresent()) {

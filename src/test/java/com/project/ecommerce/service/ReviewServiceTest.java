@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class ReviewServiceTest {
     @Order(2)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/review/update.txt")
+    @WithMockUser(username = "user", authorities = {"USER"})
     void testUpdateReview(Integer id, Integer rating, Integer productId, String content) {
         ReviewDto reviewDto = ReviewDto.builder()
                 .id(id)
@@ -59,6 +61,7 @@ public class ReviewServiceTest {
     @Order(3)
     @ParameterizedTest
     @CsvFileSource(resources = "/csv/review/create.txt")
+    @WithMockUser(username = "user", authorities = {"USER"})
     void testCreateReview(Integer rating, Integer productId, String content) {
         ReviewDto reviewDto = ReviewDto.builder()
                 .rating(rating)
@@ -75,6 +78,7 @@ public class ReviewServiceTest {
 
     @Order(4)
     @Test
+    @WithMockUser(username = "user", authorities = {"USER"})
     void testDeleteReviewById() {
         reviewService.deleteReview(1L);
         List<ReviewDto> reviews = reviewService.getReviewsByProductId(1L);
