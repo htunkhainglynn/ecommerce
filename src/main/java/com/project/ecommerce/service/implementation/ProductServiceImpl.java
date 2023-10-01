@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -55,6 +56,7 @@ public class  ProductServiceImpl implements ProductService {
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<ProductDto> getAllProducts(String keyword,
                                            Boolean isAvailable,
                                            Optional<Integer> page,
@@ -87,6 +89,7 @@ public class  ProductServiceImpl implements ProductService {
     }
 
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Override
     public Optional<ProductDto> getProductById(Long id) {
         Optional<Product> optionalProduct = repo.findById(id);
@@ -176,7 +179,7 @@ public class  ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<List<ProductVariantVo>> getProductVariantById(Integer id) {
+    public Optional<List<ProductVariantVo>> getProductVariantByProductId(Integer id) {
         List<ProductVariant> productVariants = repo.getProductVariantById(id);
         return Optional.of(productVariants.stream().map(ProductVariantVo::new).toList());
     }

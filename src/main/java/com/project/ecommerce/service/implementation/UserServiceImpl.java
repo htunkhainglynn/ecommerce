@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,6 +104,7 @@ public class UserServiceImpl implements UserService {
                 .map(UserDto::new);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Transactional(readOnly = true)
     @Override
     public Optional<UserDetailDto> getUserById(Long id) {
@@ -110,6 +112,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public User saveUser(SignUpDto signUpDto) {
         Optional<User> optionalUser = userRepository.getReferenceByUsername(signUpDto.getUsername());
         if (optionalUser.isPresent()) {
@@ -127,6 +130,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Override
     public UserDetailDto updateUser(UserDetailDto userDetailDto) {
         User originalUser = userRepository.getReferenceById(userDetailDto.getId());
@@ -136,22 +140,26 @@ public class UserServiceImpl implements UserService {
         return mapper.map(userRepository.save(user), UserDetailDto.class);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Transactional(readOnly = true)
     @Override
     public Optional<UserDetailDto> getUserByUsername(String username) {
         return userRepository.findByUsername(username).map(UserDetailDto::new);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Override
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Override
     public Long getRoleCount() {
        return userRepository.getRoleCount();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Override
     public void changePassword(String oldPassword, String newPassword) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

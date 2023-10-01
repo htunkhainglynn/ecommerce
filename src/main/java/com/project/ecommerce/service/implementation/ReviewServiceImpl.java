@@ -8,6 +8,7 @@ import com.project.ecommerce.repo.ReviewRepository;
 import com.project.ecommerce.service.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<ReviewDto> getAllReviews() {
         return reviewRepo.findAll().stream()
                 .map(ReviewDto::new)  // custom mapper
@@ -43,12 +45,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Optional<ReviewDto> getReviewById(int id) {
         Optional<Review> optionalReview = reviewRepo.findById((long)id);
         return optionalReview.map(ReviewDto::new);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('USER')")
     public ReviewDto saveReview(ReviewDto review) {
         Product product = productRepo.getReferenceById(review.getProductId());
 
@@ -60,12 +64,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasAuthority('USER')")
     public void deleteReview(Long id) {
         reviewRepo.deleteById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<ReviewDto> getReviewsByProductId(Long productId) {
         return reviewRepo.findByProductId(productId)
                 .stream()

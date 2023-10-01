@@ -8,6 +8,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class StripeServiceImpl implements StripeService {
     @Value("${base.url}")
     private String baseURL;
 
+    @PreAuthorize("hasAuthority('USER')")
+    @Override
     public Session createSession(StripeDto stripeDto) throws StripeException {
         String successURL = baseURL + "/payment/success";
 

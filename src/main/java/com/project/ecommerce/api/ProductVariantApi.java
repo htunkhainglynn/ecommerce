@@ -100,7 +100,7 @@ public class ProductVariantApi {
         return productVariantService.saveProductVariant(productVariantDto);
     }
 
-    @GetMapping("{id}/expense-history")
+    @GetMapping("/{id}/expense-history")
     @Operation(summary = "Get expense history of a product variant", description = "Requires ADMIN authority")
     public ResponseEntity<List<ExpenseDto>> getExpenseHistory(@PathVariable(value = "id") Integer id){
         return ResponseEntity.ok(expenseService.getExpenseByProductVariantId(id));
@@ -120,7 +120,7 @@ public class ProductVariantApi {
 
         // if all product variants of a product are deleted, set product to unavailable
         Long productId = productVariantService.getProductIdByPvId(id);
-        productService.getProductVariantById(productId.intValue()).ifPresent(productVariantVos -> {
+        productService.getProductVariantByProductId(productId.intValue()).ifPresent(productVariantVos -> {
             if (productVariantVos.size() == 1) {
                 productService.updateProductAvailability(productId);
             }

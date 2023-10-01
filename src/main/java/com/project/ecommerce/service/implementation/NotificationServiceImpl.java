@@ -4,6 +4,7 @@ import com.project.ecommerce.entitiy.Notification;
 import com.project.ecommerce.repo.NotificationRepo;
 import com.project.ecommerce.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<Notification> getNotificationByUsername(String username) {
         return notificationRepo.findByUsername(username);
     }

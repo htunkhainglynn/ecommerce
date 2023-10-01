@@ -11,6 +11,7 @@ import com.project.ecommerce.service.DashboardService;
 import com.project.ecommerce.vo.DashBoardSummaryVo;
 import com.project.ecommerce.vo.GraphDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -86,6 +87,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Balance> getBalance(LocalDate startDate, LocalDate endDate) {
         if (startDate == null && endDate == null) {
             endDate = LocalDate.now();
@@ -105,6 +107,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Balance> getMonthlyBalance(Integer year) {
         if (year == null) {
             year = LocalDate.now().getYear();
@@ -114,6 +117,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Balance> getYearlyBalance(int startYear, int endYear) {
         if (startYear == 0 && endYear == 0) {
             endYear = LocalDate.now().getYear();

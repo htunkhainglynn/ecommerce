@@ -5,6 +5,7 @@ import com.project.ecommerce.security.JwtTokenFilter;
 import com.project.ecommerce.security.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -34,37 +35,9 @@ public class SecurityConfig {
         http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(request -> request
-                        .requestMatchers(
-                                "/auth/signin",
-                                "/signup",
-                                "/api/v1/products",
-                                "/api/v1/reviews/**",
-                                "/api/v1/product-variants",
-                                "/api/v1/products/*/product-variants")
-                        .permitAll()
-
-                        .requestMatchers(
-                                "/api/v1/product-variants/*/expense-history",
-                                "/api/v1/roles/**",
-                                "/api/v1/dashboard/**",
-                                "/api/v1/products/*/availability",
-                                "/api/v1/product-variants/expense-history/*")
-                        .hasAuthority(Role.ADMIN.name())
-
-                        .requestMatchers(
-                                "/api/v1/orders/**",
-                                "/api/v1/users/**",
-                                "/api/v1/addresses/**",
-                                "/api/v1/queue-info/**",
-                                "/api/v1/notifications/**",
-                                "/api/v1/profile/**")
-                        .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-
-                        .requestMatchers("/api/v1/stripe/**")
-                        .hasAuthority(Role.USER.name())
-
-                        .anyRequest().authenticated()
-                );
+                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/signin").permitAll()
+        );
 
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();

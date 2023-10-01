@@ -49,6 +49,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('USER')")
     public Optional<Address> getAddressById(Long id) {
         return addressRepo.findById(id);
     }

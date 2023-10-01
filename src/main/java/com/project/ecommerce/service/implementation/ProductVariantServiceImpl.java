@@ -115,12 +115,14 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public Optional<String> getProductVariantImageUrl(Integer id) {
         return productVariantRepository.findImageUrlById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public Long getProductIdByPvId(Integer id) {
         return productVariantRepository.findProductIdById(id);
     }

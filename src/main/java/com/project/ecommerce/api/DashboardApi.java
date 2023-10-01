@@ -34,42 +34,6 @@ public class DashboardApi {
         this.reportService = reportService;
     }
 
-    // get dashboard summary
-    @GetMapping("/summary")
-    public ResponseEntity<DashBoardSummaryVo> getSummary() {
-        return ok(dashboardService.getSummary());
-    }
-
-    @GetMapping("/graph/daily")
-    public ResponseEntity<Map<String, Object>> getDailyGraphData() {
-        Map<String, Object> result = new HashMap<>();
-        result.put("title", "hello, world!");
-        result.put("revenue", List.of(1, 2, 3, 4, 5));
-        result.put("sales", List.of(5, 4, 3, 2, 1));
-        return ok(result);
-    }
-
-    @GetMapping("/graph/monthly")
-    public ResponseEntity<Map<String, Object>> getMonthlyGraphData(@RequestParam(value = "year", required = false) Integer year) {
-        Optional<GraphDataVo> graphData = dashboardService.getMonthlyGraphData(year);
-
-        if (graphData.isPresent()) {
-            Map<String, Object> result = new HashMap<>();
-            result.put("title", "%d Monthly Report".formatted(year));
-            result.put("revenue", graphData.get().getRevenue());
-            result.put("sales", graphData.get().getSales());
-            return ok(result);
-        }
-
-        return ok(null);
-    }
-
-    @GetMapping("/graph/yearly")
-    public ResponseEntity<List<GraphDataVo>> getYearlyGraphData() {
-        return ok(dashboardService.getYearlyGraphData());
-    }
-
-
     @GetMapping("/balance")
     public ResponseEntity<Map<String, Object>> getBalance(@RequestParam(value = "startDate", required = false) LocalDate startDate,
                                                           @RequestParam(value = "endDate", required = false) LocalDate endDate) {

@@ -57,7 +57,7 @@ public class ProductApi {
     @GetMapping("/{id}/product-variants")
     @Operation(summary = "Get product variants by product id", description = "Requires ADMIN authority")
     public ResponseEntity<List<ProductVariantVo>> getProductVariantById(@PathVariable Integer id) {
-        Optional<List<ProductVariantVo>> result = productService.getProductVariantById(id);
+        Optional<List<ProductVariantVo>> result = productService.getProductVariantByProductId(id);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

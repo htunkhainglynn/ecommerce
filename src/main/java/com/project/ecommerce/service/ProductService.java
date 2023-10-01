@@ -20,5 +20,5 @@ public interface ProductService {
 
     void updateProductAvailability(Long id);
 
-    Optional<List<ProductVariantVo>> getProductVariantById(Integer id);
+    Optional<List<ProductVariantVo>> getProductVariantByProductId(Integer id);
 }
