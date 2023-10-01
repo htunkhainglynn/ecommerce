@@ -1,7 +1,6 @@
 package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.OrderItemDto;
-import com.project.ecommerce.entitiy.Role;
 import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.utils.PagerResult;
 import com.project.ecommerce.vo.OrderDetailVo;
@@ -9,9 +8,6 @@ import com.project.ecommerce.vo.OrderVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;

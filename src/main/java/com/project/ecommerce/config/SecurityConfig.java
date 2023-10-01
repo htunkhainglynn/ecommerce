@@ -34,24 +34,35 @@ public class SecurityConfig {
         http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/signin").permitAll()
-                        .requestMatchers("/signup").permitAll()
-                        .requestMatchers("/api/v1/products").permitAll()
-                        .requestMatchers("/api/v1/reviews/**").permitAll()
-                        .requestMatchers("/api/v1/product-variants").permitAll()
-                        .requestMatchers("/api/v1/products/*/availability").permitAll()
-                        .requestMatchers("api/v1/products/*/product-variants").permitAll()
-                        .requestMatchers(("/api/v1/product-variants/*/expense-history")).hasAuthority(Role.ADMIN.name())
-                        .requestMatchers(("/api/v1/product-variants/expense-history/*")).hasAuthority(Role.ADMIN.name())
-                        .requestMatchers("/api/v1/orders/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-                        .requestMatchers("/api/v1/users/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-                        .requestMatchers("/api/v1/addresses/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-                        .requestMatchers("/api/v1/queue-info/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-                        .requestMatchers("/api/v1/roles/**").hasAuthority(Role.ADMIN.name())
-                        .requestMatchers("/api/v1/stripe/**").hasAuthority(Role.USER.name())
-                        .requestMatchers("/api/v1/notifications/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-                        .requestMatchers("/api/v1/profile/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-                        .requestMatchers("/api/v1/dashboard/**").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(
+                                "/auth/signin",
+                                "/signup",
+                                "/api/v1/products",
+                                "/api/v1/reviews/**",
+                                "/api/v1/product-variants",
+                                "/api/v1/products/*/product-variants")
+                        .permitAll()
+
+                        .requestMatchers(
+                                "/api/v1/product-variants/*/expense-history",
+                                "/api/v1/roles/**",
+                                "/api/v1/dashboard/**",
+                                "/api/v1/products/*/availability",
+                                "/api/v1/product-variants/expense-history/*")
+                        .hasAuthority(Role.ADMIN.name())
+
+                        .requestMatchers(
+                                "/api/v1/orders/**",
+                                "/api/v1/users/**",
+                                "/api/v1/addresses/**",
+                                "/api/v1/queue-info/**",
+                                "/api/v1/notifications/**",
+                                "/api/v1/profile/**")
+                        .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+
+                        .requestMatchers("/api/v1/stripe/**")
+                        .hasAuthority(Role.USER.name())
+
                         .anyRequest().authenticated()
                 );
 

@@ -2,12 +2,8 @@ package com.project.ecommerce.api;
 
 import com.project.ecommerce.dto.ExpenseDto;
 import com.project.ecommerce.dto.ProductVariantDto;
-import com.project.ecommerce.entitiy.Role;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;

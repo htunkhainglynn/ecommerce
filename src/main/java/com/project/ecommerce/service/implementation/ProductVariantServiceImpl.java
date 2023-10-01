@@ -4,7 +4,6 @@ import com.project.ecommerce.dto.ProductVariantDto;
 import com.project.ecommerce.entitiy.Expense;
 import com.project.ecommerce.entitiy.Product;
 import com.project.ecommerce.entitiy.ProductVariant;
-import com.project.ecommerce.repo.BalanceRepo;
 import com.project.ecommerce.repo.ExpenseRepo;
 import com.project.ecommerce.repo.ProductRepository;
 import com.project.ecommerce.repo.ProductVariantRepository;
@@ -33,19 +32,15 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     private final ExpenseRepo expenseRepo;
 
-    private final BalanceRepo balanceRepo;
-
     @Autowired
     public ProductVariantServiceImpl(ModelMapper modelMapper,
                                      ProductVariantRepository productVariantRepository,
                                      ProductRepository productRepo,
-                                     ExpenseRepo expenseRepo,
-                                     BalanceRepo balanceRepo) {
+                                     ExpenseRepo expenseRepo) {
         this.modelMapper = modelMapper;
         this.productVariantRepository = productVariantRepository;
         this.productRepo = productRepo;
         this.expenseRepo = expenseRepo;
-        this.balanceRepo = balanceRepo;
     }
 
     @Override
