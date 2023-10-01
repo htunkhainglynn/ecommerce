@@ -6,6 +6,7 @@ import com.project.ecommerce.entitiy.Status;
 import com.project.ecommerce.utils.PagerResult;
 import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +23,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+@Slf4j
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Sql(scripts = {"/sql/init-database.sql", "/sql/product.sql", "/sql/user.sql", "/sql/queue-info.sql", "/sql/address.sql", "/sql/orders.sql"})
@@ -48,9 +50,8 @@ public class OrderApiTest {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         String authority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 
-        System.out.println("authority " + authority);
-        System.out.println("username " + username);
-
+        log.info("username: {}", username);
+        log.info("authority: {}", authority);
 
         PagerResult<OrderVo> result = client.get().uri("/api/v1/orders")
                 .exchange()
