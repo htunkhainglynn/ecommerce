@@ -8,6 +8,7 @@ import com.project.ecommerce.vo.OrderDetailVo;
 import com.project.ecommerce.vo.OrderVo;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,31 +39,33 @@ public class OrderApiTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-//    @Test
-//    @Order(1)
-//    public void test_get_all_orders() {
-//        setAuthentication("admin", Role.ADMIN);
-//        PagerResult<OrderVo> result = client.get().uri("/api/v1/orders")
-//                .exchange()
-//                .expectStatus().isOk()
-//                .expectBody(PagerResult.class)
-//                .returnResult().getResponseBody();
-//
-//        assertThat(result, notNullValue());
-//        assertThat(result.getPager().getTotalElements(), equalTo(3L));
-//
-//        result = client.get().uri("/api/v1/orders?keyword=99.99")
-//                .exchange()
-//                .expectStatus().isOk()
-//                .expectBody(PagerResult.class)
-//                .returnResult().getResponseBody();
-//
-//        assertThat(result, notNullValue());
-//        assertThat(result.getPager().getTotalElements(), equalTo(2L));
-//    }
+    @Test
+    @Order(1)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void test_get_all_orders() {
+        setAuthentication("admin", Role.ADMIN);
+        PagerResult<OrderVo> result = client.get().uri("/api/v1/orders")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(PagerResult.class)
+                .returnResult().getResponseBody();
+
+        assertThat(result, notNullValue());
+        assertThat(result.getPager().getTotalElements(), equalTo(3L));
+
+        result = client.get().uri("/api/v1/orders?keyword=99.99")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(PagerResult.class)
+                .returnResult().getResponseBody();
+
+        assertThat(result, notNullValue());
+        assertThat(result.getPager().getTotalElements(), equalTo(2L));
+    }
 
     @Test
     @Order(2)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public void test_get_all_orders_by_username() {
         setAuthentication("user", Role.USER);
         PagerResult<OrderVo> result = client.get().uri("/api/v1/orders/user/user1")
@@ -86,6 +89,7 @@ public class OrderApiTest {
 
     @Test
     @Order(3)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public void test_get_order_by_id() {
         setAuthentication("user1", Role.USER);
         OrderDetailVo result = client.get().uri("/api/v1/orders/1")
@@ -102,6 +106,7 @@ public class OrderApiTest {
 
     @Test
     @Order(4)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     void test_get_order_items_by_order_id() {
         setAuthentication("user1", Role.USER);
         List<OrderItemDto> result = client.get().uri("/api/v1/orders/order-items/1")
@@ -116,6 +121,7 @@ public class OrderApiTest {
 
     @Test
     @Order(5)
+    @PreAuthorize("hasAuthority('USER')")
     void test_update_order_status() {
         setAuthentication("user1", Role.USER);
         OrderDetailVo result = client.put().uri("/api/v1/orders/1")
