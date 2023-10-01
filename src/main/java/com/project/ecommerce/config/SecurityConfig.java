@@ -39,8 +39,8 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/products").permitAll()
                             .requestMatchers("/api/v1/product-variants").permitAll()
                             .requestMatchers("api/v1/products/*/product-variants").permitAll()
-                            .requestMatchers("/api/v1/**").authenticated()
-                            .anyRequest().permitAll()
+                            .requestMatchers("/api/v1/**").hasAnyAuthority("USER", "ADMIN")
+                            .anyRequest().authenticated()
                 );
 
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
