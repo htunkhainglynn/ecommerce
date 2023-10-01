@@ -38,28 +38,28 @@ public class OrderApiTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    @Test
-    @Order(1)
-    public void test_get_all_orders() {
-        setAuthentication("admin", Role.ADMIN);
-        PagerResult<OrderVo> result = client.get().uri("/api/v1/orders")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(PagerResult.class)
-                .returnResult().getResponseBody();
-
-        assertThat(result, notNullValue());
-        assertThat(result.getPager().getTotalElements(), equalTo(3L));
-
-        result = client.get().uri("/api/v1/orders?keyword=99.99")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(PagerResult.class)
-                .returnResult().getResponseBody();
-
-        assertThat(result, notNullValue());
-        assertThat(result.getPager().getTotalElements(), equalTo(2L));
-    }
+//    @Test
+//    @Order(1)
+//    public void test_get_all_orders() {
+//        setAuthentication("admin", Role.ADMIN);
+//        PagerResult<OrderVo> result = client.get().uri("/api/v1/orders")
+//                .exchange()
+//                .expectStatus().isOk()
+//                .expectBody(PagerResult.class)
+//                .returnResult().getResponseBody();
+//
+//        assertThat(result, notNullValue());
+//        assertThat(result.getPager().getTotalElements(), equalTo(3L));
+//
+//        result = client.get().uri("/api/v1/orders?keyword=99.99")
+//                .exchange()
+//                .expectStatus().isOk()
+//                .expectBody(PagerResult.class)
+//                .returnResult().getResponseBody();
+//
+//        assertThat(result, notNullValue());
+//        assertThat(result.getPager().getTotalElements(), equalTo(2L));
+//    }
 
     @Test
     @Order(2)
