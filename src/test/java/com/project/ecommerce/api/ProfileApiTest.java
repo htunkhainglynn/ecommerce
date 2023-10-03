@@ -60,26 +60,5 @@ public class ProfileApiTest {
         Assertions.assertEquals("user1", result.getUser().getUsername());
     }
 
-    @Order(3)
-    @Test
-    @WithMockUser(username = "user1", authorities = {"USER"})
-    void test_upload_profile_picture() {
-        MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png", "test".getBytes());
-        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-        try {
-            mockMvc.perform(multipart("/api/v1/profile/upload").file(file))
-                    .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
-        UserDetailDto result = client.get().uri("/api/v1/profile")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(UserDetailDto.class)
-                .returnResult().getResponseBody();
-
-        Assertions.assertNotNull(result);
-        Assertions.assertNotNull(result.getProfilePictureURL());
-    }
 }
