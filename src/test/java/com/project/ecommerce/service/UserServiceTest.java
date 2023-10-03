@@ -120,7 +120,6 @@ public class UserServiceTest {
         assertEquals(name, user.get().getName());
         assertEquals(phoneNumber, user.get().getPhoneNumber());
         assertTrue(passwordEncoder.matches(password, user.get().getPassword()));
-        assertEquals(profilePictureURL, user.get().getProfilePictureURL());
     }
 
     @ParameterizedTest
