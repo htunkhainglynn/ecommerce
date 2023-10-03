@@ -31,7 +31,7 @@ public class AddressApi {
 
     // create address by username
     @PostMapping
-    public ResponseEntity<Long> createAddressByUsername(AddressDto addressDto) {
+    public ResponseEntity<Long> createAddressByUsername(@RequestBody AddressDto addressDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Address address = addressService.saveAddressByUsername(addressDto, username);
         return ResponseEntity.ok(address.getId());

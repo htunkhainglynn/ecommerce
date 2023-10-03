@@ -136,6 +136,10 @@ public class UserServiceImpl implements UserService {
         User user = mapper.map(userDetailDto, User.class);
         user.setPassword(originalUser.getPassword());
         user.setAddresses(originalUser.getAddresses());
+        user.setRoles(originalUser.getRoles());
+        user.setOrders(originalUser.getOrders());
+        user.setWishList(originalUser.getWishList());
+        user.setQueueInfo(originalUser.getQueueInfo());
         return mapper.map(userRepository.save(user), UserDetailDto.class);
     }
 
@@ -173,6 +177,30 @@ public class UserServiceImpl implements UserService {
             } else {
                 throw new UserException("Old password is incorrect");
             }
+        } else {
+            throw new UserException("User not found");
+        }
+    }
+
+    @Override
+    public void uploadProfilePicture(String imageUrl) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> user = userRepository.getReferenceByUsername(username);
+        if (user.isPresent()) {
+            user.get().setProfilePictureURL(imageUrl);
+            userRepository.save(user.get());
+        } else {
+            throw new UserException("User not found");
+        }
+    }
+
+    @Override
+    public void updatePhoneNumber(String phoneNumber) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> user = userRepository.getReferenceByUsername(username);
+        if (user.isPresent()) {
+            user.get().setPhoneNumber(phoneNumber);
+            userRepository.save(user.get());
         } else {
             throw new UserException("User not found");
         }

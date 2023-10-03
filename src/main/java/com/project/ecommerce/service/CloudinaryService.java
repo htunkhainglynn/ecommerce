@@ -77,6 +77,8 @@ public class CloudinaryService {
             Map<String, String> uploadOptions = new HashMap<>();
             uploadOptions.put("folder", folderName);
 
+            log.info("File type: {}", file.getClass().getName());
+
             String url = cloudinary.uploader().upload(file, uploadOptions).get("url").toString();
             boolean isDeleted = file.delete();  // delete image after upload
 

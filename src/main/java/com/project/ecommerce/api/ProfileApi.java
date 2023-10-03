@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -68,8 +69,7 @@ public class ProfileApi {
             }
 
             imageUrl = cloudinaryService.uploadFile("profile", file);
-            user.get().setProfilePictureURL(imageUrl);
-            updateProfile(user.get());
+            userService.uploadProfilePicture(imageUrl);
         }
         return ok(imageUrl);
     }
@@ -86,24 +86,29 @@ public class ProfileApi {
             }
 
             // set profile picture url to null
-            user.get().setProfilePictureURL(null);
-            updateProfile(user.get());
+            userService.uploadProfilePicture(null);
         }
     }
+
+    @PostMapping("/phone-number")
+    @Operation(summary = "Update phone number", description = "Requires USER authority")
+    public ResponseEntity<Void> updatePhoneNumber(@RequestBody Map<String, String> phoneNumber) {
+        userService.updatePhoneNumber(phoneNumber.get("phoneNumber"));
+        return ok().build();
+    }
+
+    @DeleteMapping("/phone-number")
+    @Operation(summary = "Delete profile", description = "Requires USER authority")
+    public ResponseEntity<Void> deletePhone() {
+        userService.updatePhoneNumber(null);
+        return ok().build();
+    }
+
 
     private Optional<UserDetailDto> getUserDetailDto() {
         // get user id from security context
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         // get user by id
         return userService.getUserByUsername(username);
-    }
-
-    private void updateProfile(UserDetailDto userDetailDto) {
-        Optional<UserDetailDto> user = getUserDetailDto();
-
-        if (user.isPresent()) {
-            userDetailDto.setId(user.get().getId());
-            userService.updateUser(userDetailDto);
-        }
     }
 }

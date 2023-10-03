@@ -31,8 +31,6 @@ public class UserDetailDto {
 
     private String phoneNumber;
 
-    private String address;
-
     private boolean active;
 
     private List<OrderVo> orders = new ArrayList<>();

@@ -115,3 +115,40 @@ spring:
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
     virtual-host: ${RABBITMQ_VIRTUAL_HOST:/}
+
+# Properties for the "test" profile
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+      url: jdbc:h2:mem:ecommerce
+      username: sa
+      password: sa
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+      timeout: 60000ms
+
+    mongodb:
+      uri: mongodb://localhost:27017/ecommerce
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:/}

@@ -24,4 +24,8 @@ public interface UserService {
     Long getRoleCount();
 
     void changePassword(String oldPassword, String newPassword);
+
+    void uploadProfilePicture(String imageUrl);
+
+    void updatePhoneNumber(String phoneNumber);
 }
