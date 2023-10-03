@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Map;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,5 +62,45 @@ public class ProfileApiTest {
         Assertions.assertEquals("user1", result.getUser().getUsername());
     }
 
+    @Order(3)
+    @Test
+    @WithMockUser(username = "user1", authorities = {"USER"})
+    void test_update_phone_number() {
+
+        Map<String, String > phoneNumber = Map.of("phoneNumber", "081234567890");
+
+        client.post().uri("/api/v1/profile/phone-number")
+                .bodyValue(phoneNumber)
+                .exchange()
+                .expectStatus().isOk();
+
+        UserDetailDto result = client.get().uri("/api/v1/profile")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(UserDetailDto.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("081234567890", result.getPhoneNumber());
+    }
+
+    @Order(4)
+    @Test
+    @WithMockUser(username = "user1", authorities = {"USER"})
+    void test_delete_phone_number() {
+
+        client.delete().uri("/api/v1/profile/phone-number")
+                .exchange()
+                .expectStatus().isOk();
+
+        UserDetailDto result = client.get().uri("/api/v1/profile")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(UserDetailDto.class)
+                .returnResult().getResponseBody();
+
+        Assertions.assertNotNull(result);
+        Assertions.assertNull(result.getPhoneNumber());
+    }
 
 }
